@@ -87,8 +87,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * @param question
      */
     private void getChatBotResponse(String question){
-        // If question has not value assigned 'empty' to it
-
         String response = "";
         String questionType = "";
 
@@ -105,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             solutionIntent.putExtra("solution", response);
             startActivity(solutionIntent);
         }
-
 
     }
 }

@@ -89,37 +89,22 @@ public class SolutionActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void getChatBotResponse(String question){
-        // If question has not value assigned 'empty' to it
-
         String response = "";
         String questionType = "";
 
         question = question.toLowerCase();
 
-        /*ChatBot cb = new ChatBot();
-        response = cb.askQuestion(question);
-        questionType = cb.getQuestionType();*/
+        ChatBot cb = new ChatBot();
+        response = cb.checkResponseToQuestion(question);
+        questionType = cb.getQuestionType();
 
-        if (question.contains("no") || question.contains("not")) {
-
-            String notSuccessfulResponse = "Sorry, let me check Stack Overflow";
-            layout.addView(createNewTextView(notSuccessfulResponse));
-
-            // TODO - show Stack Overflow page
-        }
-        else if(question.contains("yes") || question.contains("yeah") || question.contains("yep")){
-            String successfulResponse = "Great!";
-            layout.addView(createNewTextView(successfulResponse));
-        }
-
-        /*if(questionType != "solution question") {
+        if(questionType != "solution question") {
             layout.addView(createNewTextView(response));
         }else{
             Intent solutionIntent = new Intent(this, SolutionActivity.class);
             solutionIntent.putExtra("solution", response);
             startActivity(solutionIntent);
-        }*/
-
+        }
 
     }
 

@@ -1,5 +1,7 @@
 package abertay.ac.uk.java_bot_app;
 
+import android.widget.Toast;
+
 import java.util.HashMap;
 
 /**
@@ -16,11 +18,12 @@ public class ChatBot {
     private HashMap<String, String> solutionQuestions;
     private HashMap<String, String> commonQuestions;
     private HashMap<String, String> systemQuestions;
+    private HashMap<String, String> userResponses;
     private String questionType;
     private String NOTHING_FETCHED_MESSAGE = "Sorry I don't have a response to that";
 
     public enum questionTypes {
-        SYSTEM("system question"), COMMON("common question"), SOLUTION("solution question");
+        SYSTEM("system question"), COMMON("common question"), SOLUTION("solution question"), RESPONSE("response to question");
 
         private String type;
 
@@ -37,11 +40,13 @@ public class ChatBot {
         solutionQuestions = new HashMap<String, String>();
         commonQuestions = new HashMap<String, String>();
         systemQuestions = new HashMap<String, String>();
+        userResponses = new HashMap<String, String>();
         questionType = "";
 
         populateSolutions();
         populateCommonQuestions();
         populateSystemQuestions();
+        populateUserResponses();
     }
 
     private void populateSolutions(){
@@ -65,6 +70,18 @@ public class ChatBot {
         systemQuestions.put("resumed", "Hello again");
         systemQuestions.put("error", "Sorry something went wrong");
     }
+
+    private void populateUserResponses() {
+        // TODO - populate HashMap from database userResponses table
+        userResponses.put("no", "Sorry let me check Stack Overflow");
+        userResponses.put("nope", "Sorry let me check Stack Overflow");
+        userResponses.put("not", "Sorry let me check Stack Overflow");
+        userResponses.put("yes", "Great!");
+        userResponses.put("yep", "Great!");
+        userResponses.put("yeah", "Great!");
+    }
+
+
 
     public String askQuestion(String question){
         String response = "";
@@ -103,6 +120,20 @@ public class ChatBot {
         }
 
         return response;
+    }
+
+    public String checkResponseToQuestion(String responseToQuestion){
+        String chatBotResponse = "";
+
+        for(String key : userResponses.keySet()){
+            if(responseToQuestion.contains(key)){
+                // If question does match a key, set solution to value for key
+                chatBotResponse = userResponses.get(key);
+                setQuestionType(questionTypes.RESPONSE.getType());
+            }
+        }
+
+        return chatBotResponse;
     }
 
     public void setQuestionType(String type){
