@@ -113,18 +113,5 @@ public class ChatBot {
         return questionType;
     }
 
-    private String getSolution(String question){
-        String solution = "";
-
-        // Check if question contains any matching text against keys held for solutionQuestions in solutionQuestions hash map
-        for(String key : solutionQuestions.keySet()){
-            if(question.contains(key)){
-                // If question does match a key, set solution to value for key
-                solution = solutionQuestions.get(key);
-            }
-        }
-
-        return solution;
-    }
 
 }

@@ -34,4 +34,45 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/solution_txt_page_header" />
+
+    <EditText
+        android:id="@+id/solution_et_question_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:layout_marginStart="28dp"
+        android:background="@android:color/darker_gray"
+        android:ems="10"
+        android:hint="@string/enter_question"
+        android:inputType="text"
+        android:outlineProvider="bounds"
+        android:selectAllOnFocus="false"
+        android:singleLine="false"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/solution_btn_ask"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:text="@string/ask_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/solution_et_question_field" />
+
+    <LinearLayout
+        android:id="@+id/solution_ll_question_layout"
+        android:layout_width="352dp"
+        android:layout_height="180dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="180dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/solution_txt_solution"></LinearLayout>
 </android.support.constraint.ConstraintLayout>
