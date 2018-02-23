@@ -4,4 +4,5 @@
     <string name="chat_welcome">Hey, how can i help?</string>
     <string name="enter_question">enter question</string>
     <string name="ask_button">ask</string>
+    <string name="solution_header">Solution</string>
 </resources>

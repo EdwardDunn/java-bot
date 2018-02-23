@@ -13,14 +13,31 @@ import java.util.HashMap;
 
 public class ChatBot {
 
-    private HashMap<String, String> solutions;
+    private HashMap<String, String> solutionQuestions;
     private HashMap<String, String> commonQuestions;
     private HashMap<String, String> systemQuestions;
+    private String questionType;
+    private String NOTHING_FETCHED_MESSAGE = "Sorry I don't have a response to that";
+
+    public enum questionTypes {
+        SYSTEM("system question"), COMMON("common question"), SOLUTION("solution question");
+
+        private String type;
+
+        questionTypes(String type) {
+            this.type = type;
+        }
+
+        public String getType() {
+            return type;
+        }
+    }
 
     public ChatBot(){
-        solutions = new HashMap<String, String>();
+        solutionQuestions = new HashMap<String, String>();
         commonQuestions = new HashMap<String, String>();
         systemQuestions = new HashMap<String, String>();
+        questionType = "";
 
         populateSolutions();
         populateCommonQuestions();
@@ -29,7 +46,7 @@ public class ChatBot {
 
     private void populateSolutions(){
         // TODO - populate HashMap from database questions table
-        solutions.put("parse int", "int x = Integer.parseInt(\"9\")");
+        solutionQuestions.put("parse int", "int x = Integer.parseInt(\"9\")");
 
     }
 
@@ -45,6 +62,7 @@ public class ChatBot {
     private void populateSystemQuestions() {
         // TODO - populate HashMap from database systemQuestions table
         systemQuestions.put("onstart", "Welcome back!");
+        systemQuestions.put("resumed", "Hello again");
         systemQuestions.put("error", "Sorry something went wrong");
     }
 
@@ -56,6 +74,7 @@ public class ChatBot {
             if(question.contains(key)){
                 // If question does match a key, set solution to value for key
                 response = commonQuestions.get(key);
+                setQuestionType(questionTypes.COMMON.getType());
             }
         }
 
@@ -64,25 +83,44 @@ public class ChatBot {
             if(question.contains(key)){
                 // If question does match a key, set solution to value for key
                 response = systemQuestions.get(key);
+                setQuestionType(questionTypes.SYSTEM.getType());
             }
         }
 
-        // If not defined as system or common question - pass to get solution for programming question
+        // Check if question is a system question
+        for(String key : solutionQuestions.keySet()){
+            if(question.contains(key)){
+                // If question does match a key, set solution to value for key
+                response = solutionQuestions.get(key);
+                setQuestionType(questionTypes.SOLUTION.getType());
+            }
+        }
+
+        // If not defined as system, common or solution question - display message
         if(response == ""){
-            response = getSolution(question);
+            response = NOTHING_FETCHED_MESSAGE;
+            setQuestionType(questionTypes.SYSTEM.getType());
         }
 
         return response;
     }
 
+    public void setQuestionType(String type){
+        questionType = type;
+    }
+
+    public String getQuestionType(){
+        return questionType;
+    }
+
     private String getSolution(String question){
         String solution = "";
 
-        // Check if question contains any matching text against keys held for solutions in solutions hash map
-        for(String key : solutions.keySet()){
+        // Check if question contains any matching text against keys held for solutionQuestions in solutionQuestions hash map
+        for(String key : solutionQuestions.keySet()){
             if(question.contains(key)){
                 // If question does match a key, set solution to value for key
-                solution = solutions.get(key);
+                solution = solutionQuestions.get(key);
             }
         }
 

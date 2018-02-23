@@ -9,6 +9,7 @@ package abertay.ac.uk.java_bot_app;
  * @version 1.0
  */
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ViewGroup.LayoutParams;
@@ -17,6 +18,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -43,11 +46,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         question_field = findViewById(R.id.main_et_question_field);
     }
 
-    public void onPause(){
+    protected void onPause(){
         super.onPause();
     }
 
-    public void onResume(){
+    protected void onResume(){
         super.onResume();
         // Display 'welcome back' chat bot message when resumed
         getChatBotResponse("resumed");
@@ -88,25 +91,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // If question has not value assigned 'empty' to it
 
         String response = "";
+        String questionType = "";
 
         question = question.toLowerCase();
 
         ChatBot cb = new ChatBot();
         response = cb.askQuestion(question);
+        questionType = cb.getQuestionType();
 
-        layout.addView(createNewTextView(response));
-
-       /*if(question.contains("onstart")){
-            layout.addView(createNewTextView("Hey, how can I help?"));
+        if(questionType != "solution question") {
+            layout.addView(createNewTextView(response));
+        }else{
+            Intent solutionIntent = new Intent(this, SolutionActivity.class);
+            solutionIntent.putExtra("solution", response);
+            startActivity(solutionIntent);
         }
-        else if(question.contains("resumed")){
-            layout.addView(createNewTextView("Welcome back!"));
-        }
-        else if(question.contains("parse") && question.contains("int")) {
-           layout.addView(createNewTextView("Let me chat for a solution"));
 
-           // TODO - open SolutionActivity to display answer - pass in "parse int"
-        }*/
 
     }
 }
