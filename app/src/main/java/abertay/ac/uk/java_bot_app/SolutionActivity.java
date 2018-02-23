@@ -1,3 +1,5 @@
+package abertay.ac.uk.java_bot_app;
+
 /**
  * SolutionActivity
  * The SolutionActivity provides a solution fetched from the database and displays
@@ -7,8 +9,6 @@
  * @author  Edward Dunn
  * @version 1.0
  */
-
-package abertay.ac.uk.java_bot_app;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
