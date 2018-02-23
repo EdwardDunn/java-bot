@@ -9,9 +9,11 @@ package abertay.ac.uk.java_bot_app;
  * @version 1.0
  */
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ViewGroup.LayoutParams;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout layout;
     private Button ask_btn;
     private EditText question_field;
+    private ProgressDialog progressDialog;
+    public String result = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ask_btn = findViewById(R.id.main_btn_ask);
         question_field = findViewById(R.id.main_et_question_field);
     }
+
+    // Runnable which will process the result
+    public final Runnable resultRunnable = new Runnable(){
+        @Override
+        public void run() {
+            Log.e("PROCESSING RESULT", "...");
+            // Display progress dialog
+            progressDialog.setMessage("Processing results...");
+            progressDialog.show();
+            // Dismiss the dialog
+            progressDialog.dismiss();
+        }
+    };
 
     protected void onPause(){
         super.onPause();

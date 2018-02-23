@@ -1,5 +1,7 @@
 package abertay.ac.uk.java_bot_app;
 
+import android.app.ProgressDialog;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -21,6 +23,7 @@ public class ChatBot {
     private HashMap<String, String> userResponses;
     private String questionType;
     private String NOTHING_FETCHED_MESSAGE = "Sorry I don't have a response to that";
+
 
     public enum questionTypes {
         SYSTEM("system question"), COMMON("common question"), SOLUTION("solution question"), RESPONSE("response to question");
@@ -48,6 +51,7 @@ public class ChatBot {
         populateSystemQuestions();
         populateUserResponses();
     }
+
 
     private void populateSolutions(){
         // TODO - populate HashMap from database questions table
