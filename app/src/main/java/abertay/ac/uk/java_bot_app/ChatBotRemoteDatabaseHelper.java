@@ -23,11 +23,11 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ResponsesRemoteDatabaseHelper {
+public class ChatBotRemoteDatabaseHelper {
 
     private final String rootURL = "edwarddunn.pipeten.co.uk/"; // replace this with your server address
     private final String insertSolutionURL = rootURL + "java-bot-insert-solution.php";
-    private final String getSolutionsURL = rootURL + "java-bot-get-solutions-list.php";
+    private final String getSolutionsURL = rootURL + "java-bot-get-solutions.php";
     private final String getSystemResponsesURL = rootURL + "java-bot-get-system-responses.php";
     private final String getCommonResponsesURL = rootURL + "java-bot-get-common-responses.php";
     private final String getCheckResponsesURL = rootURL + "java-bot-get-check-responses.php";
@@ -39,7 +39,7 @@ public class ResponsesRemoteDatabaseHelper {
         will need to modify this to be a generic Activity class instead.
     */
     private final MainActivity parentActivity;
-    ResponsesRemoteDatabaseHelper(MainActivity context) {
+    ChatBotRemoteDatabaseHelper(MainActivity context) {
         parentActivity = context;
     }
 

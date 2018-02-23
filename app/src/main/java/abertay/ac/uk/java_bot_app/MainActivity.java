@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         ChatBot cb = new ChatBot();
         response = cb.askQuestion(question);
-        questionType = cb.getQuestionType();
+        questionType = cb.getSolutionType();
 
         if(questionType != "solution question") {
             layout.addView(createNewTextView(response));

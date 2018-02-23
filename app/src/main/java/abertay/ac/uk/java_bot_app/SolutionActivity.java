@@ -19,7 +19,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class SolutionActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -96,7 +95,7 @@ public class SolutionActivity extends AppCompatActivity implements View.OnClickL
 
         ChatBot cb = new ChatBot();
         response = cb.checkResponseToQuestion(question);
-        questionType = cb.getQuestionType();
+        questionType = cb.getSolutionType();
 
         if(questionType != "solution question") {
             layout.addView(createNewTextView(response));
