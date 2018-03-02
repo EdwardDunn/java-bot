@@ -5,4 +5,8 @@
     <string name="enter_question">enter question</string>
     <string name="ask_button">ask</string>
     <string name="solution_header">Solution</string>
+    <string name="menu_action_training">Training</string>
+    <string name="menu_action_tech_meetups">Tech Meetups</string>
+    <string name="menu_action_setup">Setup</string>
+    <string name="menu_action_home">Home</string>
 </resources>

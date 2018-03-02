@@ -1,5 +1,13 @@
 package abertay.ac.uk.java_bot_app;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
 /**
@@ -11,16 +19,45 @@ import java.util.HashMap;
  * @version 1.0
  */
 
-public class ChatBot {
+public class ChatBot extends Activity {
 
     private HashMap<String, String> solutions;
     private HashMap<String, String> commonResponses;
     private HashMap<String, String> systemResponses;
     private HashMap<String, String> checkResponses;
+
     private String solutionType;
+    // Getter setters for solutionType
+    public void setSolutionType(String type){
+        solutionType = type;
+    }
+    public String getSolutionType(){
+        return solutionType;
+    }
+
     private String NOTHING_FETCHED_MESSAGE = "Sorry I don't have a response to that";
 
+  /* private ProgressDialog progressDialog;
+   public String result = "";
 
+   private ChatBotRemoteDatabaseHelper chatBotRemoteDatabaseHelper;
+
+   //Runnable which will process the result
+    public final Runnable resultRunnable = new Runnable(){
+        @Override
+        public void run() {
+            Log.e("PROCESSING RESULT", "...");
+            // Display progress dialog
+            progressDialog.setMessage("Processing results...");
+            progressDialog.show();
+            // Dismiss the dialog
+            progressDialog.dismiss();
+        }
+    };*/
+
+    /**
+     * Method used to provide easy setting of question types
+     */
     public enum questionTypes {
         SYSTEM("system question"), COMMON("common question"), SOLUTION("solution question"), CHECK("response to question");
 
@@ -35,6 +72,11 @@ public class ChatBot {
         }
     }
 
+
+
+    /**
+     * Constructor
+     */
     public ChatBot(){
         solutions = new HashMap<String, String>();
         commonResponses = new HashMap<String, String>();
@@ -46,15 +88,50 @@ public class ChatBot {
         populateCommonResponses();
         populateSystemResponses();
         populateCheckResponses();
+
+         //Initialise the progress dialog for result processing
+        //progressDialog = new ProgressDialog(this);
+
+        //chatBotRemoteDatabaseHelper = new ChatBotRemoteDatabaseHelper(this);
     }
 
-
+    /**
+     * Method used to populate the solutions hash map from the database
+     */
     private void populateSolutions(){
         // TODO - populate HashMap from database solutions table
+        //chatBotRemoteDatabaseHelper.addSolution(new Solution("key test", "solution test"));
+       /* try{
+            // Call getSolutions method
+            String solutionsReturned = chatBotRemoteDatabaseHelper.getSolutions();
+
+            // Create JSON array for response from database
+            JSONArray ja = new JSONArray(solutionsReturned);
+
+            JSONObject jo = null;
+
+            for(int i = 0; i < ja.length(); i++){
+                jo = ja.getJSONObject(i);
+
+                // Get values from object
+                String solutionKey = jo.getString("solution_key");
+                String solution = jo.getString("solution");
+
+                // Add to solutions map
+                solutions.put(solutionKey, solution);
+            }
+
+        }catch(JSONException e){
+            e.printStackTrace();
+        }*/
+
         solutions.put("parse int", "int x = Integer.parseInt(\"9\")");
 
     }
 
+    /**
+     * Method used to populate the commonResponses hash map from the database
+     */
     private void populateCommonResponses(){
         // TODO - populate HashMap from database common_responses table
         commonResponses.put("how are you", "great thanks, can I help with a question?");
@@ -64,6 +141,9 @@ public class ChatBot {
         commonResponses.put("hi", "hey, can I help?");
     }
 
+    /**
+     * Method used to populate the systemResponses hash map from the database
+     */
     private void populateSystemResponses() {
         // TODO - populate HashMap from database system_responses table
         systemResponses.put("onstart", "Welcome back!");
@@ -71,6 +151,9 @@ public class ChatBot {
         systemResponses.put("error", "Sorry something went wrong");
     }
 
+    /**
+     * Method used to populate the checkResponses hash map from the database
+     */
     private void populateCheckResponses() {
         // TODO - populate HashMap from database check-responses table
         checkResponses.put("no", "Sorry let me check Stack Overflow");
@@ -81,8 +164,12 @@ public class ChatBot {
         checkResponses.put("yeah", "Great!");
     }
 
-
-
+    /**
+     * Method used to evaluate the questions asked by the user, decides what type the questions is.
+     * Returns the correct response after for type
+     * @param question
+     * @return response
+     */
     public String askQuestion(String question){
         String response = "";
 
@@ -122,6 +209,12 @@ public class ChatBot {
         return response;
     }
 
+    /**
+     * Method used to evaluate the response to a question asked by by the chat bot.
+     * The main function is to identify if the user is happy or not with the chat bots response
+     * @param responseToQuestion
+     * @return chatBotResponse
+     */
     public String checkResponseToQuestion(String responseToQuestion){
         String chatBotResponse = "";
 
@@ -135,14 +228,5 @@ public class ChatBot {
 
         return chatBotResponse;
     }
-
-    public void setSolutionType(String type){
-        solutionType = type;
-    }
-
-    public String getSolutionType(){
-        return solutionType;
-    }
-
 
 }

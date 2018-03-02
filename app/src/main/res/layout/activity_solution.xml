@@ -36,33 +36,38 @@
         app:layout_constraintTop_toBottomOf="@+id/solution_txt_page_header" />
 
     <EditText
-        android:id="@+id/solution_et_question_field"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
-        android:layout_marginStart="28dp"
-        android:background="@android:color/darker_gray"
+        android:id="@+id/_et_question_field"
+        android:layout_width="235dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/lightGray"
         android:ems="10"
         android:hint="@string/enter_question"
         android:inputType="text"
         android:outlineProvider="bounds"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="5dp"
         android:selectAllOnFocus="false"
         android:singleLine="false"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/solution_ll_question_layout" />
     <Button
         android:id="@+id/solution_btn_ask"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="44dp"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:text="@string/ask_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/solution_et_question_field" />
+
 
     <LinearLayout
         android:id="@+id/solution_ll_question_layout"
@@ -72,6 +77,8 @@
         android:layout_marginStart="100dp"
         android:layout_marginTop="180dp"
         android:orientation="vertical"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/solution_txt_solution"></LinearLayout>

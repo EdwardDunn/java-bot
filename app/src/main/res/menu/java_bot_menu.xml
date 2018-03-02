@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_home"
+        android:icon="@drawable/icon_home"
+        android:title="@string/menu_action_home"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_training"
+        android:icon="@drawable/icon_training"
+        android:title="@string/menu_action_training"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_tech_meetups"
+        android:icon="@drawable/icon_tech_meetups"
+        android:title="@string/menu_action_tech_meetups"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_setup"
+        android:icon="@drawable/icon_settings"
+        android:title="@string/menu_action_setup"
+        app:showAsAction="always"/>
+
+</menu>
