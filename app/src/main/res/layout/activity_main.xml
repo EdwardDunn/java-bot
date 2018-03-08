@@ -15,40 +15,38 @@
 
     <ImageView
         android:id="@+id/main_img_java_bot"
-        android:layout_width="77dp"
-        android:layout_height="86dp"
+        android:layout_width="97dp"
+        android:layout_height="100dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:contentDescription="JavaBot Image"
         app:layout_constraintEnd_toStartOf="@+id/main_txt_welcome_message"
-        app:layout_constraintHorizontal_bias="0.803"
+        app:layout_constraintHorizontal_bias="0.511"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/customToolbar"
         app:srcCompat="@mipmap/img_java_bot_foreground" />
 
     <TextView
         android:id="@+id/main_txt_welcome_message"
         android:layout_width="180dp"
         android:layout_height="65dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginEnd="52dp"
         android:layout_marginTop="28dp"
         android:text="@string/welcome_messsage"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/customToolbar" />
 
     <EditText
         android:id="@+id/main_et_question_field"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="10dp"
         android:background="@color/lightGray"
         android:ems="10"
         android:hint="@string/enter_question"
@@ -61,16 +59,14 @@
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/main_btn_ask"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_ll_question_layout"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.242"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/main_btn_ask"
         android:layout_width="wrap_content"
-        android:layout_height="44dp"
-        android:layout_marginBottom="16dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="11dp"
         android:layout_marginEnd="16dp"
         android:text="@string/ask_button"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -82,7 +78,7 @@
         android:layout_height="328dp"
         android:layout_marginEnd="100dp"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:orientation="vertical"
         android:paddingHorizontal="10dp"
         android:paddingVertical="10dp"
@@ -90,7 +86,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_img_java_bot"></LinearLayout>
 
+    <ImageView
+        android:id="@+id/main_img_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/main_img_java_bot"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/icon_menu_white" />
 
+    <ImageView
+        android:id="@+id/main_img_options_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/customToolbar"
+        app:srcCompat="@drawable/icon_options_menu" />
 
 
 </android.support.constraint.ConstraintLayout>

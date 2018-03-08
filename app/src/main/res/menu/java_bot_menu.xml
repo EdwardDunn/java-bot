@@ -1,29 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item android:title="Main Menu"
+        app:showAsAction="always">
 
-    <item
-        android:id="@+id/action_home"
-        android:icon="@drawable/icon_home"
-        android:title="@string/menu_action_home"
-        app:showAsAction="ifRoom"/>
+        <menu>
+            <item
+                android:id="@+id/action_home"
+                android:orderInCategory="100"
+                android:icon="@drawable/icon_home"
+                android:title="@string/menu_action_home"
+                app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_training"
-        android:icon="@drawable/icon_training"
-        android:title="@string/menu_action_training"
-        app:showAsAction="ifRoom"/>
+            <item
+                android:orderInCategory="100"
+                android:id="@+id/action_training"
+                android:icon="@drawable/icon_training"
+                android:title="@string/menu_action_training"
+                app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/action_tech_meetups"
-        android:icon="@drawable/icon_tech_meetups"
-        android:title="@string/menu_action_tech_meetups"
-        app:showAsAction="ifRoom"/>
+            <item
+                android:orderInCategory="100"
+                android:id="@+id/action_tech_meetups"
+                android:icon="@drawable/icon_tech_meetups"
+                android:title="@string/menu_action_tech_meetups"
+                app:showAsAction="never"/>
 
-    <item
-        android:id="@+id/action_setup"
-        android:icon="@drawable/icon_settings"
-        android:title="@string/menu_action_setup"
-        app:showAsAction="always"/>
+            <item
+                android:orderInCategory="100"
+                android:id="@+id/action_setup"
+                android:icon="@drawable/icon_settings"
+                android:title="@string/menu_action_setup"
+                app:showAsAction="never"/>
+        </menu>
+
+    </item>
+
 
 </menu>

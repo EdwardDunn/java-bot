@@ -1,12 +1,6 @@
 package abertay.ac.uk.java_bot_app;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.util.Log;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -159,9 +153,9 @@ public class ChatBot extends Activity {
         checkResponses.put("no", "Sorry let me check Stack Overflow");
         checkResponses.put("nope", "Sorry let me check Stack Overflow");
         checkResponses.put("not", "Sorry let me check Stack Overflow");
-        checkResponses.put("yes", "Great!");
-        checkResponses.put("yep", "Great!");
-        checkResponses.put("yeah", "Great!");
+        checkResponses.put("yes", "Happy to help!");
+        checkResponses.put("yep", "Happy to help!");
+        checkResponses.put("yeah", "Happy to help!");
     }
 
     /**
@@ -223,6 +217,8 @@ public class ChatBot extends Activity {
                 // If question does match a key, set solution to value for key
                 chatBotResponse = checkResponses.get(key);
                 setSolutionType(questionTypes.CHECK.getType());
+            }else{
+                // TODO - if the response if not in checkResponses, send to askQuestion()
             }
         }
 

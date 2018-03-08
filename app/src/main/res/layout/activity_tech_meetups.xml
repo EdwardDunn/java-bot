@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context="abertay.ac.uk.java_bot_app.TechMeetupsActivity">
 
 </android.support.constraint.ConstraintLayout>

@@ -9,4 +9,6 @@
     <string name="menu_action_tech_meetups">Tech Meetups</string>
     <string name="menu_action_setup">Setup</string>
     <string name="menu_action_home">Home</string>
+    <string name="options_menu_action_refresh">option_menu_action_refresh</string>
+    <string name="options_menu_action_close">options_menu_action_refresh</string>
 </resources>

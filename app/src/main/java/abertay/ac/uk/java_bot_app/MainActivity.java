@@ -9,55 +9,50 @@ package abertay.ac.uk.java_bot_app;
  * @version 1.0
  */
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.ViewGroup.LayoutParams;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, android.widget.PopupMenu.OnMenuItemClickListener
 {
-    /* Current issues
-    * Tool bar not working for getSupportActionBar (MainActivity)
-    * Items not sitting under toolbar
-    * Remote DB not working (ChatBot and ChatBotRemoteDatabaseHelper)
-     */
-
-
     private LinearLayout layout;
     private Button ask_btn;
     private EditText question_field;
+    private ImageView menu;
+    private ImageView optionsMenu;
+
+    // Used for Stack Overflow search if solution not found
+    private String initialQuestion;
+    // Used to set initial question
+    private int questionCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*Toolbar customToolbar = (Toolbar) findViewById(R.id.customToolbar);
-        setSupportActionBar(customToolbar);
-        getSupportActionBar().setTitle("Java Bot");
-        getSupportActionBar().setIcon(getDrawable(R.drawable.clip_art_desktop));*/
-
         setupUIViews();
 
         ask_btn.setOnClickListener(this);
 
-        // Initiates chat bot with param indicating start of chat
+        menu.setOnClickListener(this);
+
+        optionsMenu.setOnClickListener(this);
+
+        // Initiates ChatBot with param indicating start of chat
         getChatBotResponse("onstart");
     }
 
@@ -67,28 +62,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     protected void onResume(){
         super.onResume();
-        // Display 'welcome back' chat bot message when resumed
-        getChatBotResponse("resumed");
     }
 
     private void setupUIViews(){
         layout = findViewById(R.id.main_ll_question_layout);
         ask_btn = findViewById(R.id.main_btn_ask);
         question_field = findViewById(R.id.main_et_question_field);
+        menu = findViewById(R.id.main_img_menu);
+        optionsMenu = findViewById(R.id.main_img_options_menu);
+        questionCounter = 0;
+        initialQuestion = "";
     }
 
     @Override
     public void onClick(View view){
         if(view.getId() == R.id.main_btn_ask){
+            // Used to set initialQuestion variable
+            questionCounter++;
+
             // Create new TextView with text entered into question field in questions layout
             String question = "";
             question  = question_field.getText().toString();
+
+            if(questionCounter == 1){
+                initialQuestion = question;
+            }
+
             getChatBotResponse(question);
             question_field.setText("");
-            showPopup(view);
 
-        }else{
-            // TODO - populate with other UI clicks
+        }else if (view.getId() == R.id.main_img_menu){
+            showPopup(view);
+        }else if (view.getId() == R.id.main_img_options_menu){
+            // Show options menu here
         }
     }
 
@@ -102,6 +108,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         popup.inflate(R.menu.java_bot_menu);
         popup.show();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+       MenuInflater inflater = getMenuInflater();
+       inflater.inflate(R.menu.options_menu, menu);
+       return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        // Take item click
+        switch (item.getItemId()){
+            case R.id.action_refresh:
+                //Refresh page
+                Intent refresh = new Intent(this, MainActivity.class);
+                startActivity(refresh);
+                this.finish();
+
+             default:
+                 return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     /**
      * Method used provide onclick actions for menu items
@@ -159,18 +188,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void getChatBotResponse(String question){
         String response = "";
         String questionType = "";
-
         question = question.toLowerCase();
 
+        // Create a new ChatBot object for getting response to the users question
         ChatBot cb = new ChatBot();
         response = cb.askQuestion(question);
         questionType = cb.getSolutionType();
 
+        // If question is not a solution type, e.g. not a programming question
         if(questionType != "solution question") {
             layout.addView(createNewTextView(response));
         }else{
+            // If question is a programming one e.g. 'how do I parse an int?'
             Intent solutionIntent = new Intent(this, SolutionActivity.class);
             solutionIntent.putExtra("solution", response);
+            solutionIntent.putExtra("initialQuestion", initialQuestion);
             startActivity(solutionIntent);
         }
 
