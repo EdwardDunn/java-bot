@@ -4,28 +4,9 @@ package abertay.ac.uk.java_bot_app;
  * Created by edward on 23/02/2018.
  */
 
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
-import android.util.Log;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-
 public class ChatBotRemoteDatabaseHelper{
-
-    /*private final String rootURL = "edwarddunn.pipeten.co.uk/"; // replace this with your server address
+/*
+    private final String rootURL = "edwarddunn.pipeten.co.uk/"; // replace this with your server address
     private final String insertSolutionURL = rootURL + "java-bot-insert-solution.php";
     private final String getSolutionsURL = rootURL + "java-bot-get-solutions.php";
     private final String getSystemResponsesURL = rootURL + "java-bot-get-system-responses.php";
@@ -72,7 +53,7 @@ public class ChatBotRemoteDatabaseHelper{
 
         boolean first = true; // is it the first parameter?
 
-        *//* Encode POST data. *//*
+        // Encode POST data.
         for (AbstractMap.SimpleEntry param : params)
         {
             if (first)
@@ -104,7 +85,7 @@ public class ChatBotRemoteDatabaseHelper{
     private class AddSolutionTask extends AsyncTask<Solution, Void, String> {
         private final ProgressDialog progressDialog = new ProgressDialog(parentActivity);
 
-        *//* Before executing this task, set the progressDialog message and show it. *//*
+        // Before executing this task, set the progressDialog message and show it.
         @Override
         protected void onPreExecute() {
             Log.e("INSERT_RESULT", "adding solution...");
@@ -112,7 +93,7 @@ public class ChatBotRemoteDatabaseHelper{
             this.progressDialog.show();
         }
 
-        *//* This is what is done in the background. *//*
+        // This is what is done in the background.
         // This function requires a list of parameters, but we will be using only one [0].
         @Override
         protected String doInBackground(Solution... solutions) {
@@ -124,7 +105,7 @@ public class ChatBotRemoteDatabaseHelper{
             String result = "";
 
             try {
-                *//* Get HTTP connection. *//*
+                // Get HTTP connection.
                 url = new URL(insertSolutionURL);
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
@@ -133,20 +114,20 @@ public class ChatBotRemoteDatabaseHelper{
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
 
-                *//* Add POST parameters to list. *//*
+                // Add POST parameters to list.
                 List<AbstractMap.SimpleEntry> params = new ArrayList<>();
                 params.add(new AbstractMap.SimpleEntry("solution_key", solutions[0].solution_key));
                 params.add(new AbstractMap.SimpleEntry("solution", solutions[0].solution));
 
-                *//* Generate request params string *//*
+                // Generate request params string
                 String request = generateRequest(params);
 
-                *//* Set length of the streamed data *//*
+                // Set length of the streamed data
                 conn.setFixedLengthStreamingMode(request.getBytes().length);
 
                 Log.e("INSERT_RESULT", "Requesting: " + request);
 
-                *//* Write HTTP request *//*
+                // Write HTTP request
                 OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
 
@@ -155,7 +136,7 @@ public class ChatBotRemoteDatabaseHelper{
                 writer.close();
                 os.close();
 
-                *//* Read Response *//*
+                // Read Response
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 String response = readResult(reader);
                 return response.toString();
@@ -172,7 +153,7 @@ public class ChatBotRemoteDatabaseHelper{
             return null; // Make sure to handle this in onPostExecute
         }
 
-        *//* After the task is finished, dismiss the progressDialog.*//*
+        // After the task is finished, dismiss the progressDialog.
         @Override
         protected void onPostExecute(String result) {
             this.progressDialog.dismiss();
@@ -185,14 +166,14 @@ public class ChatBotRemoteDatabaseHelper{
     public class GetSolutionsTask extends AsyncTask<Void, Void, String> {
         private final ProgressDialog progressDialog = new ProgressDialog(parentActivity);
 
-        *//* Before executing this task, set the progressDialog message and show it. *//*
+        // Before executing this task, set the progressDialog message and show it.
         @Override
         protected void onPreExecute() {
             this.progressDialog.setMessage("Getting solutions list...");
             this.progressDialog.show();
         }
 
-        *//* This is what is done in the background. *//*
+        // This is what is done in the background.
         // This time we don't need to pass any parameters to the task, hence using Void.
         @Override
         protected String doInBackground(Void... v) {
@@ -200,7 +181,7 @@ public class ChatBotRemoteDatabaseHelper{
             HttpURLConnection conn = null;
 
             try {
-                *//* Get HTTP connection. *//*
+                // Get HTTP connection.
                 url = new URL(getSolutionsURL);
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
@@ -212,7 +193,7 @@ public class ChatBotRemoteDatabaseHelper{
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 String responseString = readResult(reader);
 
-                *//* Return the contacts JSON. *//*
+                // Return the contacts JSON.
                 return responseString;
 
                 // handle exceptions
@@ -228,7 +209,7 @@ public class ChatBotRemoteDatabaseHelper{
             return null; // if something fails, make sure to handle this
         }
 
-        *//* After the task is finished, dismiss the progressDialog.*//*
+        // After the task is finished, dismiss the progressDialog.
         @Override
         protected void onPostExecute(String result) {
             Log.i("RESULT:", result.toString());
@@ -245,14 +226,14 @@ public class ChatBotRemoteDatabaseHelper{
     private class GetSystemResponsesTask extends AsyncTask<Void, Void, String> {
         private final ProgressDialog progressDialog = new ProgressDialog(parentActivity);
 
-        *//* Before executing this task, set the progressDialog message and show it. *//*
+        // Before executing this task, set the progressDialog message and show it.
         @Override
         protected void onPreExecute() {
             this.progressDialog.setMessage("Getting system responses list...");
             this.progressDialog.show();
         }
 
-        *//* This is what is done in the background. *//*
+        // This is what is done in the background.
         // This time we don't need to pass any parameters to the task, hence using Void.
         @Override
         protected String doInBackground(Void... v) {
@@ -260,7 +241,7 @@ public class ChatBotRemoteDatabaseHelper{
             HttpURLConnection conn = null;
 
             try {
-                *//* Get HTTP connection. *//*
+                // Get HTTP connection.
                 url = new URL(getSystemResponsesURL);
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
@@ -272,7 +253,7 @@ public class ChatBotRemoteDatabaseHelper{
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 String responseString = readResult(reader);
 
-                *//* Return the contacts JSON. *//*
+                // Return the contacts JSON.
                 return responseString;
 
                 // handle exceptions
@@ -288,7 +269,7 @@ public class ChatBotRemoteDatabaseHelper{
             return null; // if something fails, make sure to handle this
         }
 
-        *//* After the task is finished, dismiss the progressDialog.*//*
+        // After the task is finished, dismiss the progressDialog.
         @Override
         protected void onPostExecute(String result) {
             Log.i("RESULT:", result.toString());
@@ -305,14 +286,14 @@ public class ChatBotRemoteDatabaseHelper{
     private class GetCommonResponsesTask extends AsyncTask<Void, Void, String> {
         private final ProgressDialog progressDialog = new ProgressDialog(parentActivity);
 
-        *//* Before executing this task, set the progressDialog message and show it. *//*
+        // Before executing this task, set the progressDialog message and show it.
         @Override
         protected void onPreExecute() {
             this.progressDialog.setMessage("Getting common responses list...");
             this.progressDialog.show();
         }
 
-        *//* This is what is done in the background. *//*
+        // This is what is done in the background.
         // This time we don't need to pass any parameters to the task, hence using Void.
         @Override
         protected String doInBackground(Void... v) {
@@ -320,7 +301,7 @@ public class ChatBotRemoteDatabaseHelper{
             HttpURLConnection conn = null;
 
             try {
-                *//* Get HTTP connection. *//*
+                // Get HTTP connection.
                 url = new URL(getCommonResponsesURL);
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
@@ -332,7 +313,7 @@ public class ChatBotRemoteDatabaseHelper{
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 String responseString = readResult(reader);
 
-                *//* Return the contacts JSON. *//*
+                // Return the contacts JSON.
                 return responseString;
 
                 // handle exceptions
@@ -348,7 +329,7 @@ public class ChatBotRemoteDatabaseHelper{
             return null; // if something fails, make sure to handle this
         }
 
-        *//* After the task is finished, dismiss the progressDialog.*//*
+        // After the task is finished, dismiss the progressDialog.
         @Override
         protected void onPostExecute(String result) {
             Log.i("RESULT:", result.toString());
@@ -365,14 +346,14 @@ public class ChatBotRemoteDatabaseHelper{
     private class GetCheckResponsesTask extends AsyncTask<Void, Void, String> {
         private final ProgressDialog progressDialog = new ProgressDialog(parentActivity);
 
-        *//* Before executing this task, set the progressDialog message and show it. *//*
+        // Before executing this task, set the progressDialog message and show it.
         @Override
         protected void onPreExecute() {
             this.progressDialog.setMessage("Getting check responses list...");
             this.progressDialog.show();
         }
 
-        *//* This is what is done in the background. *//*
+        // This is what is done in the background.
         // This time we don't need to pass any parameters to the task, hence using Void.
         @Override
         protected String doInBackground(Void... v) {
@@ -380,7 +361,7 @@ public class ChatBotRemoteDatabaseHelper{
             HttpURLConnection conn = null;
 
             try {
-                *//* Get HTTP connection. *//*
+                // Get HTTP connection.
                 url = new URL(getCheckResponsesURL);
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
@@ -392,7 +373,7 @@ public class ChatBotRemoteDatabaseHelper{
                 BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 String responseString = readResult(reader);
 
-                *//* Return the contacts JSON. *//*
+                // Return the contacts JSON.
                 return responseString;
 
                 // handle exceptions
@@ -408,7 +389,7 @@ public class ChatBotRemoteDatabaseHelper{
             return null; // if something fails, make sure to handle this
         }
 
-        *//* After the task is finished, dismiss the progressDialog.*//*
+        // After the task is finished, dismiss the progressDialog.
         @Override
         protected void onPostExecute(String result) {
             Log.i("RESULT:", result.toString());

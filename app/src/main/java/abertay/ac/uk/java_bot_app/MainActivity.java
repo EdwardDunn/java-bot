@@ -9,9 +9,13 @@ package abertay.ac.uk.java_bot_app;
  * @version 1.0
  */
 
+import android.Manifest;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +28,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, android.widget.PopupMenu.OnMenuItemClickListener
@@ -38,6 +45,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String initialQuestion;
     // Used to set initial question
     private int questionCounter;
+
+    // Used for training session notification
+    NotificationCompat.Builder notification;
+    private static final int uniqueID = 001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +65,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Initiates ChatBot with param indicating start of chat
         getChatBotResponse("onstart");
+
+        // DEBUG - used for testing
+        // TODO - remove
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
+
+        //---------------Training Session Notification--------------///
+
+        // Initialise notification object
+        notification = new NotificationCompat.Builder(this);
+        notification.setAutoCancel(true);
+
+        // This object is used to extend the timer class
+        NotificationTimer notificationTask = new NotificationTimer();
+
+        // Create timer object
+        Timer notificationTimer = new Timer();
+
+        // TODO - for completed app set time to 7 days (604800000 milliseconds)
+        // For demonstration purposes 2 minutes is used (120000 milliseconds)
+        notificationTimer.schedule(notificationTask, 5000, 120000);
     }
 
     protected void onPause(){
@@ -207,4 +238,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
+    /**
+     * Class used to extend TimerTask for displaying the training session notification
+     */
+    class NotificationTimer extends TimerTask {
+        public void run() {
+            generateNotification();
+        }
+    }
+
+    /**
+     * Generate notification for alerting user that weeks training session is available
+     */
+    public void generateNotification(){
+        //Build the notification
+        notification.setSmallIcon(R.drawable.ic_launcher_foreground);
+        notification.setWhen(System.currentTimeMillis());
+        notification.setContentTitle(getString(R.string.training_session_notification_title));
+        notification.setContentText(getString(R.string.training_session_notification_content));
+
+        // Onclick of notification, go to the training activity
+        Intent trainingIntent = new Intent(this, TrainingActivity.class);
+        // Give phone access to intent
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, trainingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notification.setContentIntent(pendingIntent);
+
+        // Build notification and issues it
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        nm.notify(uniqueID, notification.build());
+    }
+
 }

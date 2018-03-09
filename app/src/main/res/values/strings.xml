@@ -11,4 +11,8 @@
     <string name="menu_action_home">Home</string>
     <string name="options_menu_action_refresh">option_menu_action_refresh</string>
     <string name="options_menu_action_close">options_menu_action_refresh</string>
-</resources>
+    <string name="training_session_notification_title">Training Session</string>
+    <string name="training_session_notification_content">Hey, a new training session is available!</string>
+    <string name="training_header">Training</string>
+
+    </resources>

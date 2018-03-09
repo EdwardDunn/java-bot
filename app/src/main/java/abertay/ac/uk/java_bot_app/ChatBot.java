@@ -31,13 +31,16 @@ public class ChatBot extends Activity {
 
     private String NOTHING_FETCHED_MESSAGE = "Sorry I don't have a response to that";
 
-  /* private ProgressDialog progressDialog;
-   public String result = "";
 
-   private ChatBotRemoteDatabaseHelper chatBotRemoteDatabaseHelper;
+    //private ProgressDialog progressDialog;
+    // public String result = "";
 
-   //Runnable which will process the result
-    public final Runnable resultRunnable = new Runnable(){
+    //private ChatBotRemoteDatabaseHelper chatBotRemoteDatabaseHelper;
+
+    /**
+     *  Runnable which will process the result
+     */
+    /*public final Runnable resultRunnable = new Runnable(){
         @Override
         public void run() {
             Log.e("PROCESSING RESULT", "...");
@@ -47,7 +50,8 @@ public class ChatBot extends Activity {
             // Dismiss the dialog
             progressDialog.dismiss();
         }
-    };*/
+    };
+    */
 
     /**
      * Method used to provide easy setting of question types
@@ -66,8 +70,6 @@ public class ChatBot extends Activity {
         }
     }
 
-
-
     /**
      * Constructor
      */
@@ -83,9 +85,8 @@ public class ChatBot extends Activity {
         populateSystemResponses();
         populateCheckResponses();
 
-         //Initialise the progress dialog for result processing
+        //Initialise the progress dialog for result processing
         //progressDialog = new ProgressDialog(this);
-
         //chatBotRemoteDatabaseHelper = new ChatBotRemoteDatabaseHelper(this);
     }
 
@@ -93,9 +94,10 @@ public class ChatBot extends Activity {
      * Method used to populate the solutions hash map from the database
      */
     private void populateSolutions(){
-        // TODO - populate HashMap from database solutions table
         //chatBotRemoteDatabaseHelper.addSolution(new Solution("key test", "solution test"));
-       /* try{
+        /*
+        try{
+
             // Call getSolutions method
             String solutionsReturned = chatBotRemoteDatabaseHelper.getSolutions();
 
@@ -117,10 +119,12 @@ public class ChatBot extends Activity {
 
         }catch(JSONException e){
             e.printStackTrace();
-        }*/
+        }
 
-        solutions.put("parse int", "int x = Integer.parseInt(\"9\")");
+        */
 
+        // Used for initial development - TODO - remove after debug
+        //solutions.put("parse int", "int x = Integer.parseInt(\"9\")");
     }
 
     /**
