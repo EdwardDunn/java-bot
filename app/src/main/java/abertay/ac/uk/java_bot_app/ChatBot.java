@@ -1,6 +1,11 @@
 package abertay.ac.uk.java_bot_app;
 
 import android.app.Activity;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -14,6 +19,8 @@ import java.util.HashMap;
  */
 
 public class ChatBot extends Activity {
+
+    protected ChatBotRemoteDatabaseHelper chatBotRemoteDatabaseHelper;
 
     private HashMap<String, String> solutions;
     private HashMap<String, String> commonResponses;
@@ -30,28 +37,6 @@ public class ChatBot extends Activity {
     }
 
     private String NOTHING_FETCHED_MESSAGE = "Sorry I don't have a response to that";
-
-
-    //private ProgressDialog progressDialog;
-    // public String result = "";
-
-    //private ChatBotRemoteDatabaseHelper chatBotRemoteDatabaseHelper;
-
-    /**
-     *  Runnable which will process the result
-     */
-    /*public final Runnable resultRunnable = new Runnable(){
-        @Override
-        public void run() {
-            Log.e("PROCESSING RESULT", "...");
-            // Display progress dialog
-            progressDialog.setMessage("Processing results...");
-            progressDialog.show();
-            // Dismiss the dialog
-            progressDialog.dismiss();
-        }
-    };
-    */
 
     /**
      * Method used to provide easy setting of question types
@@ -80,29 +65,27 @@ public class ChatBot extends Activity {
         checkResponses = new HashMap<String, String>();
         solutionType = "";
 
-        populateSolutions();
-        populateCommonResponses();
-        populateSystemResponses();
-        populateCheckResponses();
+        chatBotRemoteDatabaseHelper = new ChatBotRemoteDatabaseHelper(this);
 
-        //Initialise the progress dialog for result processing
-        //progressDialog = new ProgressDialog(this);
-        //chatBotRemoteDatabaseHelper = new ChatBotRemoteDatabaseHelper(this);
+        try {
+            chatBotRemoteDatabaseHelper.getSolutions();
+            chatBotRemoteDatabaseHelper.getCommonResponses();
+            chatBotRemoteDatabaseHelper.getSystemResponses();
+            chatBotRemoteDatabaseHelper.getCheckResponses();
+
+        }
+        catch (Exception e){
+            Log.d("Error", e.getMessage());
+        }
     }
 
     /**
      * Method used to populate the solutions hash map from the database
      */
-    private void populateSolutions(){
-        //chatBotRemoteDatabaseHelper.addSolution(new Solution("key test", "solution test"));
-        /*
+    public void populateSolutions(String result){
         try{
-
-            // Call getSolutions method
-            String solutionsReturned = chatBotRemoteDatabaseHelper.getSolutions();
-
             // Create JSON array for response from database
-            JSONArray ja = new JSONArray(solutionsReturned);
+            JSONArray ja = new JSONArray(result);
 
             JSONObject jo = null;
 
@@ -117,49 +100,91 @@ public class ChatBot extends Activity {
                 solutions.put(solutionKey, solution);
             }
 
-        }catch(JSONException e){
+        }
+        catch(JSONException e){
             e.printStackTrace();
         }
-
-        */
-
-        // Used for initial development - TODO - remove after debug
-        //solutions.put("parse int", "int x = Integer.parseInt(\"9\")");
     }
 
     /**
      * Method used to populate the commonResponses hash map from the database
      */
-    private void populateCommonResponses(){
-        // TODO - populate HashMap from database common_responses table
-        commonResponses.put("how are you", "great thanks, can I help with a question?");
-        commonResponses.put("what is your name", "my name is Java Bot");
-        commonResponses.put("why is java so difficult", "its not difficult, if i can do it anyone can");
-        commonResponses.put("bye", "bye bye");
-        commonResponses.put("hi", "hey, can I help?");
+    public void populateCommonResponses(String result){
+        try{
+            // Create JSON array for response from database
+            JSONArray ja = new JSONArray(result);
+
+            JSONObject jo = null;
+
+            for(int i = 0; i < ja.length(); i++){
+                jo = ja.getJSONObject(i);
+
+                // Get values from object
+                String responseKey = jo.getString("response_key");
+                String response = jo.getString("response");
+
+                // Add to solutions map
+                commonResponses.put(responseKey, response);
+            }
+
+        }
+        catch(JSONException e){
+            e.printStackTrace();
+        }
     }
 
     /**
      * Method used to populate the systemResponses hash map from the database
      */
-    private void populateSystemResponses() {
-        // TODO - populate HashMap from database system_responses table
-        systemResponses.put("onstart", "Welcome back!");
-        systemResponses.put("resumed", "Hello again");
-        systemResponses.put("error", "Sorry something went wrong");
+    public void populateSystemResponses(String result){
+        try{
+            // Create JSON array for response from database
+            JSONArray ja = new JSONArray(result);
+
+            JSONObject jo = null;
+
+            for(int i = 0; i < ja.length(); i++){
+                jo = ja.getJSONObject(i);
+
+                // Get values from object
+                String responseKey = jo.getString("response_key");
+                String response = jo.getString("response");
+
+                // Add to solutions map
+                systemResponses.put(responseKey, response);
+            }
+
+        }
+        catch(JSONException e){
+            e.printStackTrace();
+        }
     }
 
     /**
      * Method used to populate the checkResponses hash map from the database
      */
-    private void populateCheckResponses() {
-        // TODO - populate HashMap from database check-responses table
-        checkResponses.put("no", "Sorry let me check Stack Overflow");
-        checkResponses.put("nope", "Sorry let me check Stack Overflow");
-        checkResponses.put("not", "Sorry let me check Stack Overflow");
-        checkResponses.put("yes", "Happy to help!");
-        checkResponses.put("yep", "Happy to help!");
-        checkResponses.put("yeah", "Happy to help!");
+    public void populateCheckResponses(String result){
+        try{
+            // Create JSON array for response from database
+            JSONArray ja = new JSONArray(result);
+
+            JSONObject jo = null;
+
+            for(int i = 0; i < ja.length(); i++){
+                jo = ja.getJSONObject(i);
+
+                // Get values from object
+                String responseKey = jo.getString("response_key");
+                String response = jo.getString("response");
+
+                // Add to solutions map
+                checkResponses.put(responseKey, response);
+            }
+
+        }
+        catch(JSONException e){
+            e.printStackTrace();
+        }
     }
 
     /**

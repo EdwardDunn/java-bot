@@ -35,6 +35,8 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, android.widget.PopupMenu.OnMenuItemClickListener
 {
+    private ChatBot cb;
+
     private LinearLayout layout;
     private Button ask_btn;
     private EditText question_field;
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // Used for training session notification
     NotificationCompat.Builder notification;
     private static final int uniqueID = 001;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +69,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Initiates ChatBot with param indicating start of chat
         getChatBotResponse("onstart");
 
-        // DEBUG - used for testing
+        //-------------------Permissions----------------------------//
+
+        // DEBUG - used for testing - need to implement correctly
         // TODO - remove
         requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
+        requestPermissions(new String[]{Manifest.permission.INTERNET}, 5);
+        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
 
-        //---------------Training Session Notification--------------///
+
+        //---------------Training Session Notification--------------//
 
         // Initialise notification object
         notification = new NotificationCompat.Builder(this);
@@ -85,7 +93,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // TODO - for completed app set time to 7 days (604800000 milliseconds)
         // For demonstration purposes 2 minutes is used (120000 milliseconds)
         notificationTimer.schedule(notificationTask, 5000, 120000);
+
     }
+
 
     protected void onPause(){
         super.onPause();
@@ -93,9 +103,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     protected void onResume(){
         super.onResume();
+        // Initiates ChatBot with param indicating response
+        //getChatBotResponse("resumed");
     }
 
     private void setupUIViews(){
+        cb = new ChatBot();
+
         layout = findViewById(R.id.main_ll_question_layout);
         ask_btn = findViewById(R.id.main_btn_ask);
         question_field = findViewById(R.id.main_et_question_field);
@@ -103,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         optionsMenu = findViewById(R.id.main_img_options_menu);
         questionCounter = 0;
         initialQuestion = "";
+
     }
 
     @Override
@@ -221,8 +236,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String questionType = "";
         question = question.toLowerCase();
 
-        // Create a new ChatBot object for getting response to the users question
-        ChatBot cb = new ChatBot();
+        // Get response to the users question
         response = cb.askQuestion(question);
         questionType = cb.getSolutionType();
 

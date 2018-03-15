@@ -1,406 +1,251 @@
 package abertay.ac.uk.java_bot_app;
 
-/**
- * Created by edward on 23/02/2018.
- */
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.util.Log;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Scanner;
+
 
 public class ChatBotRemoteDatabaseHelper{
-/*
-    private final String rootURL = "edwarddunn.pipeten.co.uk/"; // replace this with your server address
-    private final String insertSolutionURL = rootURL + "java-bot-insert-solution.php";
-    private final String getSolutionsURL = rootURL + "java-bot-get-solutions.php";
-    private final String getSystemResponsesURL = rootURL + "java-bot-get-system-responses.php";
-    private final String getCommonResponsesURL = rootURL + "java-bot-get-common-responses.php";
-    private final String getCheckResponsesURL = rootURL + "java-bot-get-check-responses.php";
 
     private final ChatBot parentActivity;
     ChatBotRemoteDatabaseHelper(ChatBot context) {
         parentActivity = context;
     }
 
-    // adds contact to the remote database using AddContactTask
-    public void addSolution(Solution solution) {
-        AddSolutionTask task = new AddSolutionTask();
-        task.execute(solution);
-    }
-    // pulls the list of solutions from the remote database using GetSolutionsTask
-    public void getSolutions() {
-        GetSolutionsTask task = new GetSolutionsTask();
-        task.execute();
-    }
+    public static final String BASE_API_URL = "http://edwarddunn.pipeten.co.uk/";
+    private final String GET_SOLUTIONS_FILE_NAME = "java-bot-get-solutions.php";
+    private final String GET_COMMON_RESPONSES_FILE_NAME = "java-bot-get-common-responses.php";
+    private final String GET_SYSTEM_RESPONSES_FILE_NAME = "java-bot-get-system-responses.php";
+    private final String GET_CHECK_RESPONSES_FILE_NAME = "java-bot-get-check-responses.php";
 
-    // pulls the list of system responses from the remote database using GetSystemResponsesTask
-    public void getSystemResponses() {
-       GetSystemResponsesTask task = new GetSystemResponsesTask();
-        task.execute();
+    public void getSolutions(){
+        URL getSolutionsUrl = ChatBotRemoteDatabaseHelper.buildURL(GET_SOLUTIONS_FILE_NAME);
+        new GetSolutionsTask().execute(getSolutionsUrl);
     }
 
-    // pulls the list of common responses from the remote database using GetCommonResponsesTask
-    public void getCommonResponses() {
-        GetCommonResponsesTask task = new GetCommonResponsesTask();
-        task.execute();
+    public void getCommonResponses(){
+        URL getCommonResponsesUrl = ChatBotRemoteDatabaseHelper.buildURL(GET_COMMON_RESPONSES_FILE_NAME);
+        new GetCommonResponsesTask().execute(getCommonResponsesUrl);
     }
 
-    // pulls the list of check responses from the remote database using GetCheckResponsesTask
-    public void getCheckResponses() {
-        GetCheckResponsesTask task = new GetCheckResponsesTask();
-        task.execute();
+    public void getSystemResponses(){
+        URL getSystemResponsesUrl = ChatBotRemoteDatabaseHelper.buildURL(GET_SYSTEM_RESPONSES_FILE_NAME);
+        new GetSystemResponsesTask().execute(getSystemResponsesUrl);
     }
 
-    // Helper function to generate request string
-    private String generateRequest(List<AbstractMap.SimpleEntry> params) throws UnsupportedEncodingException {
-        StringBuilder request = new StringBuilder();
+    public void getCheckResponses(){
+        URL getCheckResponsesUrl = ChatBotRemoteDatabaseHelper.buildURL(GET_CHECK_RESPONSES_FILE_NAME);
+        new GetCheckResponsesTask().execute(getCheckResponsesUrl);
+    }
 
-        boolean first = true; // is it the first parameter?
+    public static URL buildURL(String fileName){
 
-        // Encode POST data.
-        for (AbstractMap.SimpleEntry param : params)
-        {
-            if (first)
-                first = false;
-            else
-                request.append("&"); // add param separator
-
-            request.append(URLEncoder.encode((String)param.getKey(), "UTF-8"));
-            request.append("=");
-            request.append(URLEncoder.encode((String)param.getValue(), "UTF-8"));
+        URL url = null;
+        Uri uri = Uri.parse(BASE_API_URL).buildUpon()
+                .appendPath(fileName)
+                .build();
+        try {
+            url = new URL(uri.toString());
         }
-
-        return request.toString();
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return url;
     }
 
-    // Helper function to read result into a string
-    private String readResult(BufferedReader reader) throws IOException {
-        StringBuilder result = new StringBuilder();
-        String line;
-        // read line-by-line while line isn't empty
-        while ((line = reader.readLine()) != null){
-            result.append(line).append('\n');
-        }
+    public static String getJson(URL url) throws IOException{
 
-        return result.toString();
-    }
+        // Create connection object
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-    // Asynchronous task for adding a contact to DB. Runs on a background thread.
-    private class AddSolutionTask extends AsyncTask<Solution, Void, String> {
-        private final ProgressDialog progressDialog = new ProgressDialog(parentActivity);
+        try {
+            InputStream stream = connection.getInputStream();
+            Scanner scanner = new Scanner(stream);
 
-        // Before executing this task, set the progressDialog message and show it.
-        @Override
-        protected void onPreExecute() {
-            Log.e("INSERT_RESULT", "adding solution...");
-            this.progressDialog.setMessage("adding solution...");
-            this.progressDialog.show();
-        }
+            // Read everything
+            scanner.useDelimiter("\\A");
 
-        // This is what is done in the background.
-        // This function requires a list of parameters, but we will be using only one [0].
-        @Override
-        protected String doInBackground(Solution... solutions) {
-            Solution q = solutions[0];
-
-            URL url;
-            HttpURLConnection conn = null;
-
-            String result = "";
-
-            try {
-                // Get HTTP connection.
-                url = new URL(insertSolutionURL);
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setConnectTimeout(15000);
-                conn.setReadTimeout(10000);
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-
-                // Add POST parameters to list.
-                List<AbstractMap.SimpleEntry> params = new ArrayList<>();
-                params.add(new AbstractMap.SimpleEntry("solution_key", solutions[0].solution_key));
-                params.add(new AbstractMap.SimpleEntry("solution", solutions[0].solution));
-
-                // Generate request params string
-                String request = generateRequest(params);
-
-                // Set length of the streamed data
-                conn.setFixedLengthStreamingMode(request.getBytes().length);
-
-                Log.e("INSERT_RESULT", "Requesting: " + request);
-
-                // Write HTTP request
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-
-                writer.write(request);
-                writer.flush();
-                writer.close();
-                os.close();
-
-                // Read Response
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String response = readResult(reader);
-                return response.toString();
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (conn != null)
-                    conn.disconnect();
+            // Check if there is more data
+            boolean hasData = scanner.hasNext();
+            if (hasData) {
+                return scanner.next();
+            } else {
+                return null;
             }
-
-            return null; // Make sure to handle this in onPostExecute
+        }
+        catch (Exception e){
+            Log.d("Error", e.toString());
+            return null;
+        }
+        finally {
+            connection.disconnect();
         }
 
-        // After the task is finished, dismiss the progressDialog.
-        @Override
-        protected void onPostExecute(String result) {
-            this.progressDialog.dismiss();
-            //Log.e("INSERT_RESULT", result);
-        }
     }
 
+    public class GetSolutionsTask extends AsyncTask<URL, Void, String> {
 
-    // Asynchronous task for getting the list of solutions from the remote DB. Runs on a background thread.
-    public class GetSolutionsTask extends AsyncTask<Void, Void, String> {
-        private final ProgressDialog progressDialog = new ProgressDialog(parentActivity);
-
-        // Before executing this task, set the progressDialog message and show it.
         @Override
-        protected void onPreExecute() {
-            this.progressDialog.setMessage("Getting solutions list...");
-            this.progressDialog.show();
-        }
-
-        // This is what is done in the background.
-        // This time we don't need to pass any parameters to the task, hence using Void.
-        @Override
-        protected String doInBackground(Void... v) {
-            URL url;
-            HttpURLConnection conn = null;
-
-            try {
-                // Get HTTP connection.
-                url = new URL(getSolutionsURL);
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setConnectTimeout(2000);
-                conn.setReadTimeout(10000);
-                conn.setDoInput(true); // we only need input here as we are not sending any data to the server
-
-                // Read server response string
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String responseString = readResult(reader);
-
-                // Return the contacts JSON.
-                return responseString;
-
-                // handle exceptions
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (conn != null)
-                    conn.disconnect();
+        protected String doInBackground(URL... urls) {
+            URL searchURL = urls[0];
+            String result = null;
+            try{
+                result = ChatBotRemoteDatabaseHelper.getJson(searchURL);
             }
-
-            return null; // if something fails, make sure to handle this
-        }
-
-        // After the task is finished, dismiss the progressDialog.
-        @Override
-        protected void onPostExecute(String result) {
-            Log.i("RESULT:", result.toString());
-            // send the result to the main activity
-            parentActivity.result = result;
-            // process it
-            parentActivity.resultRunnable.run();
-
-            this.progressDialog.dismiss();
-        }
-    }
-
-    // Asynchronous task for getting the list of system responses from the remote DB. Runs on a background thread.
-    private class GetSystemResponsesTask extends AsyncTask<Void, Void, String> {
-        private final ProgressDialog progressDialog = new ProgressDialog(parentActivity);
-
-        // Before executing this task, set the progressDialog message and show it.
-        @Override
-        protected void onPreExecute() {
-            this.progressDialog.setMessage("Getting system responses list...");
-            this.progressDialog.show();
-        }
-
-        // This is what is done in the background.
-        // This time we don't need to pass any parameters to the task, hence using Void.
-        @Override
-        protected String doInBackground(Void... v) {
-            URL url;
-            HttpURLConnection conn = null;
-
-            try {
-                // Get HTTP connection.
-                url = new URL(getSystemResponsesURL);
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setConnectTimeout(2000);
-                conn.setReadTimeout(10000);
-                conn.setDoInput(true); // we only need input here as we are not sending any data to the server
-
-                // Read server response string
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String responseString = readResult(reader);
-
-                // Return the contacts JSON.
-                return responseString;
-
-                // handle exceptions
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (conn != null)
-                    conn.disconnect();
+            catch (Exception e){
+                Log.d("Error", e.getMessage());
             }
-
-            return null; // if something fails, make sure to handle this
+            return result;
         }
 
-        // After the task is finished, dismiss the progressDialog.
         @Override
-        protected void onPostExecute(String result) {
-            Log.i("RESULT:", result.toString());
-            // send the result to the main activity
-            parentActivity.result = result;
-            // process it
-            parentActivity.resultRunnable.run();
+        protected void onPostExecute(String result){
 
-            this.progressDialog.dismiss();
-        }
-    }
+            //parentActivity.loadingProgressBar.setVisibility(View.INVISIBLE);
 
-    // Asynchronous task for getting the list of common responses from the remote DB. Runs on a background thread.
-    private class GetCommonResponsesTask extends AsyncTask<Void, Void, String> {
-        private final ProgressDialog progressDialog = new ProgressDialog(parentActivity);
-
-        // Before executing this task, set the progressDialog message and show it.
-        @Override
-        protected void onPreExecute() {
-            this.progressDialog.setMessage("Getting common responses list...");
-            this.progressDialog.show();
-        }
-
-        // This is what is done in the background.
-        // This time we don't need to pass any parameters to the task, hence using Void.
-        @Override
-        protected String doInBackground(Void... v) {
-            URL url;
-            HttpURLConnection conn = null;
-
-            try {
-                // Get HTTP connection.
-                url = new URL(getCommonResponsesURL);
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setConnectTimeout(2000);
-                conn.setReadTimeout(10000);
-                conn.setDoInput(true); // we only need input here as we are not sending any data to the server
-
-                // Read server response string
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String responseString = readResult(reader);
-
-                // Return the contacts JSON.
-                return responseString;
-
-                // handle exceptions
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (conn != null)
-                    conn.disconnect();
+            if(result == null) {
+                //parentActivity.tvResult.setVisibility(View.INVISIBLE);
+                //parentActivity.tvError.setVisibility(View.VISIBLE);
             }
+            else{
+                parentActivity.populateSolutions(result);
 
-            return null; // if something fails, make sure to handle this
-        }
-
-        // After the task is finished, dismiss the progressDialog.
-        @Override
-        protected void onPostExecute(String result) {
-            Log.i("RESULT:", result.toString());
-            // send the result to the main activity
-            parentActivity.result = result;
-            // process it
-            parentActivity.resultRunnable.run();
-
-            this.progressDialog.dismiss();
-        }
-    }
-
-    // Asynchronous task for getting the list of check responses from the remote DB. Runs on a background thread.
-    private class GetCheckResponsesTask extends AsyncTask<Void, Void, String> {
-        private final ProgressDialog progressDialog = new ProgressDialog(parentActivity);
-
-        // Before executing this task, set the progressDialog message and show it.
-        @Override
-        protected void onPreExecute() {
-            this.progressDialog.setMessage("Getting check responses list...");
-            this.progressDialog.show();
-        }
-
-        // This is what is done in the background.
-        // This time we don't need to pass any parameters to the task, hence using Void.
-        @Override
-        protected String doInBackground(Void... v) {
-            URL url;
-            HttpURLConnection conn = null;
-
-            try {
-                // Get HTTP connection.
-                url = new URL(getCheckResponsesURL);
-                conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setConnectTimeout(2000);
-                conn.setReadTimeout(10000);
-                conn.setDoInput(true); // we only need input here as we are not sending any data to the server
-
-                // Read server response string
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                String responseString = readResult(reader);
-
-                // Return the contacts JSON.
-                return responseString;
-
-                // handle exceptions
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (conn != null)
-                    conn.disconnect();
+                //parentActivity.tvResult.setVisibility(View.VISIBLE);
+                //parentActivity.tvError.setVisibility(View.INVISIBLE);
             }
-
-            return null; // if something fails, make sure to handle this
+            //parentActivity.tvResult.setText(result);
         }
 
-        // After the task is finished, dismiss the progressDialog.
         @Override
-        protected void onPostExecute(String result) {
-            Log.i("RESULT:", result.toString());
-            // send the result to the main activity
-            parentActivity.result = result;
-            // process it
-            parentActivity.resultRunnable.run();
-
-            this.progressDialog.dismiss();
+        protected void onPreExecute(){
+            super.onPreExecute();
+            //parentActivity.loadingProgressBar.setVisibility(View.VISIBLE);
         }
     }
 
-*/
+    public class GetCommonResponsesTask extends AsyncTask<URL, Void, String> {
+
+        @Override
+        protected String doInBackground(URL... urls) {
+            URL searchURL = urls[0];
+            String result = null;
+            try{
+                result = ChatBotRemoteDatabaseHelper.getJson(searchURL);
+            }
+            catch (Exception e){
+                Log.d("Error", e.getMessage());
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result){
+
+            //parentActivity.loadingProgressBar.setVisibility(View.INVISIBLE);
+
+            if(result == null) {
+                //parentActivity.tvResult.setVisibility(View.INVISIBLE);
+                //parentActivity.tvError.setVisibility(View.VISIBLE);
+            }
+            else{
+                parentActivity.populateCommonResponses(result);
+
+                //parentActivity.tvResult.setVisibility(View.VISIBLE);
+                //parentActivity.tvError.setVisibility(View.INVISIBLE);
+            }
+            //parentActivity.tvResult.setText(result);
+        }
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            //parentActivity.loadingProgressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public class GetSystemResponsesTask extends AsyncTask<URL, Void, String> {
+
+        @Override
+        protected String doInBackground(URL... urls) {
+            URL searchURL = urls[0];
+            String result = null;
+            try{
+                result = ChatBotRemoteDatabaseHelper.getJson(searchURL);
+            }
+            catch (Exception e){
+                Log.d("Error", e.getMessage());
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result){
+
+            //parentActivity.loadingProgressBar.setVisibility(View.INVISIBLE);
+
+            if(result == null) {
+                //parentActivity.tvResult.setVisibility(View.INVISIBLE);
+                //parentActivity.tvError.setVisibility(View.VISIBLE);
+            }
+            else{
+                parentActivity.populateSystemResponses(result);
+
+                //parentActivity.tvResult.setVisibility(View.VISIBLE);
+                //parentActivity.tvError.setVisibility(View.INVISIBLE);
+            }
+            //parentActivity.tvResult.setText(result);
+        }
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            //parentActivity.loadingProgressBar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public class GetCheckResponsesTask extends AsyncTask<URL, Void, String> {
+
+        @Override
+        protected String doInBackground(URL... urls) {
+            URL searchURL = urls[0];
+            String result = null;
+            try{
+                result = ChatBotRemoteDatabaseHelper.getJson(searchURL);
+            }
+            catch (Exception e){
+                Log.d("Error", e.getMessage());
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result){
+
+            //parentActivity.loadingProgressBar.setVisibility(View.INVISIBLE);
+
+            if(result == null) {
+                //parentActivity.tvResult.setVisibility(View.INVISIBLE);
+                //parentActivity.tvError.setVisibility(View.VISIBLE);
+            }
+            else{
+                parentActivity.populateCheckResponses(result);
+
+                //parentActivity.tvResult.setVisibility(View.VISIBLE);
+                //parentActivity.tvError.setVisibility(View.INVISIBLE);
+            }
+            //parentActivity.tvResult.setText(result);
+        }
+
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            //parentActivity.loadingProgressBar.setVisibility(View.VISIBLE);
+        }
+    }
 }
