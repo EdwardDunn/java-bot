@@ -90,6 +90,7 @@ public class ChatBotRemoteDatabaseHelper{
     }
 
     public class GetSolutionsTask extends AsyncTask<URL, Void, String> {
+        MainActivity mainActivity = new MainActivity();
 
         @Override
         protected String doInBackground(URL... urls) {
@@ -107,30 +108,29 @@ public class ChatBotRemoteDatabaseHelper{
         @Override
         protected void onPostExecute(String result){
 
-            //parentActivity.loadingProgressBar.setVisibility(View.INVISIBLE);
+            mainActivity.setLoadingProgressBarVisibility(false);
 
             if(result == null) {
-                //parentActivity.tvResult.setVisibility(View.INVISIBLE);
-                //parentActivity.tvError.setVisibility(View.VISIBLE);
+                mainActivity.setErrorMessageVisibility(true);
             }
             else{
                 parentActivity.populateSolutions(result);
-
-                //parentActivity.tvResult.setVisibility(View.VISIBLE);
-                //parentActivity.tvError.setVisibility(View.INVISIBLE);
+                mainActivity.setErrorMessageVisibility(false);
             }
-            //parentActivity.tvResult.setText(result);
+
         }
 
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
-            //parentActivity.loadingProgressBar.setVisibility(View.VISIBLE);
+            mainActivity.setLoadingProgressBarVisibility(true);
         }
     }
 
     public class GetCommonResponsesTask extends AsyncTask<URL, Void, String> {
 
+        MainActivity mainActivity = new MainActivity();
+
         @Override
         protected String doInBackground(URL... urls) {
             URL searchURL = urls[0];
@@ -147,30 +147,29 @@ public class ChatBotRemoteDatabaseHelper{
         @Override
         protected void onPostExecute(String result){
 
-            //parentActivity.loadingProgressBar.setVisibility(View.INVISIBLE);
+            mainActivity.setLoadingProgressBarVisibility(false);
 
             if(result == null) {
-                //parentActivity.tvResult.setVisibility(View.INVISIBLE);
-                //parentActivity.tvError.setVisibility(View.VISIBLE);
+                mainActivity.setErrorMessageVisibility(true);
             }
             else{
                 parentActivity.populateCommonResponses(result);
-
-                //parentActivity.tvResult.setVisibility(View.VISIBLE);
-                //parentActivity.tvError.setVisibility(View.INVISIBLE);
+                mainActivity.setErrorMessageVisibility(false);
             }
-            //parentActivity.tvResult.setText(result);
+
         }
 
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
-            //parentActivity.loadingProgressBar.setVisibility(View.VISIBLE);
+            mainActivity.setLoadingProgressBarVisibility(true);
         }
     }
 
     public class GetSystemResponsesTask extends AsyncTask<URL, Void, String> {
 
+        MainActivity mainActivity = new MainActivity();
+
         @Override
         protected String doInBackground(URL... urls) {
             URL searchURL = urls[0];
@@ -187,30 +186,29 @@ public class ChatBotRemoteDatabaseHelper{
         @Override
         protected void onPostExecute(String result){
 
-            //parentActivity.loadingProgressBar.setVisibility(View.INVISIBLE);
+            mainActivity.setLoadingProgressBarVisibility(false);
 
             if(result == null) {
-                //parentActivity.tvResult.setVisibility(View.INVISIBLE);
-                //parentActivity.tvError.setVisibility(View.VISIBLE);
+                mainActivity.setErrorMessageVisibility(true);
             }
             else{
                 parentActivity.populateSystemResponses(result);
-
-                //parentActivity.tvResult.setVisibility(View.VISIBLE);
-                //parentActivity.tvError.setVisibility(View.INVISIBLE);
+                mainActivity.setErrorMessageVisibility(false);
             }
-            //parentActivity.tvResult.setText(result);
+
         }
 
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
-            //parentActivity.loadingProgressBar.setVisibility(View.VISIBLE);
+            mainActivity.setLoadingProgressBarVisibility(true);
         }
     }
 
     public class GetCheckResponsesTask extends AsyncTask<URL, Void, String> {
 
+        MainActivity mainActivity = new MainActivity();
+
         @Override
         protected String doInBackground(URL... urls) {
             URL searchURL = urls[0];
@@ -227,25 +225,22 @@ public class ChatBotRemoteDatabaseHelper{
         @Override
         protected void onPostExecute(String result){
 
-            //parentActivity.loadingProgressBar.setVisibility(View.INVISIBLE);
+            mainActivity.setLoadingProgressBarVisibility(false);
 
             if(result == null) {
-                //parentActivity.tvResult.setVisibility(View.INVISIBLE);
-                //parentActivity.tvError.setVisibility(View.VISIBLE);
+                mainActivity.setErrorMessageVisibility(true);
             }
             else{
                 parentActivity.populateCheckResponses(result);
-
-                //parentActivity.tvResult.setVisibility(View.VISIBLE);
-                //parentActivity.tvError.setVisibility(View.INVISIBLE);
+                mainActivity.setErrorMessageVisibility(false);
             }
-            //parentActivity.tvResult.setText(result);
+
         }
 
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
-            //parentActivity.loadingProgressBar.setVisibility(View.VISIBLE);
+            mainActivity.setLoadingProgressBarVisibility(true);
         }
     }
 }

@@ -14,5 +14,5 @@
     <string name="training_session_notification_title">Training Session</string>
     <string name="training_session_notification_content">Hey, a new training session is available!</string>
     <string name="training_header">Training</string>
-
+    <string name="main_error_message">Problem connecting to database</string>
     </resources>

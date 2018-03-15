@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.Timer;
@@ -36,6 +37,26 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, android.widget.PopupMenu.OnMenuItemClickListener
 {
     private ChatBot cb;
+
+    public static ProgressBar loadingProgressBar;
+    public void setLoadingProgressBarVisibility(Boolean visible){
+        if(visible){
+            loadingProgressBar.setVisibility(View.VISIBLE);
+        }
+        else{
+            loadingProgressBar.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private static TextView errorMessage;
+    public void setErrorMessageVisibility(Boolean visible){
+        if(visible){
+            errorMessage.setVisibility(View.VISIBLE);
+        }
+        else{
+            errorMessage.setVisibility(View.INVISIBLE);
+        }
+    }
 
     private LinearLayout layout;
     private Button ask_btn;
@@ -108,7 +129,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setupUIViews(){
-        cb = new ChatBot();
+        loadingProgressBar = (ProgressBar) findViewById(R.id.main_pb_progress_bar);
+
+        errorMessage = (TextView) findViewById(R.id.main_txt_error_message);
 
         layout = findViewById(R.id.main_ll_question_layout);
         ask_btn = findViewById(R.id.main_btn_ask);
@@ -117,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         optionsMenu = findViewById(R.id.main_img_options_menu);
         questionCounter = 0;
         initialQuestion = "";
+        cb = new ChatBot();
 
     }
 
