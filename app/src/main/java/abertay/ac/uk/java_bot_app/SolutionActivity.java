@@ -5,7 +5,6 @@ package abertay.ac.uk.java_bot_app;
  * The SolutionActivity provides a solution fetched from the database and displays
  * it to the user with a small chat window at the bottom for comments on solution.
  *
- **
  * @author  Edward Dunn
  * @version 1.0
  */

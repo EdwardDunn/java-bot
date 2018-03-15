@@ -37,7 +37,11 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, android.widget.PopupMenu.OnMenuItemClickListener
 {
     private ChatBot cb;
+    private final String WELCOME_MESSAGE = "Hey, how can I help";
+    private final String WELCOME_BACK_MESSAGE = "Great, your back";
 
+    // Progress Bar
+    // setLoodingProgressBarVisibility() allows this variable to be easily set by other classes (ChatBotRemoteDatabaseHelper)
     public static ProgressBar loadingProgressBar;
     public void setLoadingProgressBarVisibility(Boolean visible){
         if(visible){
@@ -48,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    // Error Message (when connection is not available
+    // setErrorMessageVisibility() allows this variable to be easily set by other classes (ChatBotRemoteDatabaseHelper)
     private static TextView errorMessage;
     public void setErrorMessageVisibility(Boolean visible){
         if(visible){
@@ -87,8 +93,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         optionsMenu.setOnClickListener(this);
 
-        // Initiates ChatBot with param indicating start of chat
-        getChatBotResponse("onstart");
+        // Show ChatBot welcome message on start
+        layout.addView(createNewTextView(WELCOME_MESSAGE));
 
         //-------------------Permissions----------------------------//
 
@@ -124,13 +130,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     protected void onResume(){
         super.onResume();
-        // Initiates ChatBot with param indicating response
-        //getChatBotResponse("resumed");
+        // Clear any previous ChatBot discussion
+        layout.removeAllViews();
+        // Display welcome back message
+        layout.addView(createNewTextView(WELCOME_BACK_MESSAGE));
     }
 
     private void setupUIViews(){
         loadingProgressBar = (ProgressBar) findViewById(R.id.main_pb_progress_bar);
-
         errorMessage = (TextView) findViewById(R.id.main_txt_error_message);
 
         layout = findViewById(R.id.main_ll_question_layout);
@@ -154,11 +161,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             String question = "";
             question  = question_field.getText().toString();
 
+            // If first question asked, set initialQuestion
             if(questionCounter == 1){
                 initialQuestion = question;
             }
 
             getChatBotResponse(question);
+
+            // Clear question box
             question_field.setText("");
 
         }else if (view.getId() == R.id.main_img_menu){
