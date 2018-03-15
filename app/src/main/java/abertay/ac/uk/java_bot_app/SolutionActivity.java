@@ -22,6 +22,8 @@ import android.widget.TextView;
 
 public class SolutionActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private ChatBot cb;
+
     private TextView solutionText;
     private LinearLayout layout;
     private String SUCCESS_QUESTION = "Did that help?";
@@ -52,6 +54,8 @@ public class SolutionActivity extends AppCompatActivity implements View.OnClickL
         question_field = findViewById(R.id.solution_et_question_field);
         solution = "";
         initialQuestion = "";
+
+        cb = ChatBot.getInstance();
     }
 
     protected void onPause(){
@@ -100,14 +104,14 @@ public class SolutionActivity extends AppCompatActivity implements View.OnClickL
 
         question = question.toLowerCase();
 
-        ChatBot cb = new ChatBot();
         response = cb.checkResponseToQuestion(question);
         questionType = cb.getSolutionType();
 
         // If response from user is not another question
         if(questionType != "solution question") {
-            // If the returned response from ChatBot equals user is haapy with solution
-            if (response == "Happy to help!") {
+            // If the returned response from ChatBot equals user is happy with solution
+            // TODO - this response 'Great' would have to made in to loop checking for other positive responses if app was released (as app is for educational purposes, this will suffice)
+            if (response.contains("Great")) {
                 layout.addView(createNewTextView(response));
             }else{
                 // If user is not happy with response, search Stack Overflow with initial question
@@ -117,9 +121,7 @@ public class SolutionActivity extends AppCompatActivity implements View.OnClickL
                 startActivity(stackOverflowIntent);
             }
         }else{
-
             // TODO - if a new question is asked, refresh page with new question
-
             // If question is a programming one e.g. 'how do I parse an int?'
             //Intent solutionIntent = new Intent(this, SolutionActivity.class);
             //solutionIntent.putExtra("solution", response);

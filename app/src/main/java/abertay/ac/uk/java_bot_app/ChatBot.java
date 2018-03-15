@@ -22,43 +22,43 @@ public class ChatBot extends Activity {
 
     protected ChatBotRemoteDatabaseHelper chatBotRemoteDatabaseHelper;
 
-    private HashMap<String, String> solutions;
-    private HashMap<String, String> commonResponses;
-    private HashMap<String, String> systemResponses;
-    private HashMap<String, String> checkResponses;
+    private static HashMap<String, String> solutions;
+    private static HashMap<String, String> commonResponses;
+    private static HashMap<String, String> systemResponses;
+    private static HashMap<String, String> checkResponses;
 
-    private String solutionType;
+    private static String solutionType;
     // Getter setters for solutionType
-    public void setSolutionType(String type){
+    public static void setSolutionType(String type){
         solutionType = type;
     }
-    public String getSolutionType(){
+    public static String getSolutionType(){
         return solutionType;
     }
 
-    private String NOTHING_FETCHED_MESSAGE = "Sorry I don't have a response to that";
+    private static String NOTHING_FETCHED_MESSAGE = "Sorry I don't have a response to that";
 
     /**
      * Method used to provide easy setting of question types
      */
     public enum questionTypes {
         SYSTEM("system question"), COMMON("common question"), SOLUTION("solution question"), CHECK("response to question");
-
         private String type;
-
         questionTypes(String type) {
             this.type = type;
         }
-
         public String getType() {
             return type;
         }
     }
 
+    // Used for singleton pattern
+    private static ChatBot instance = null;
+
     /**
-     * Constructor
+     * Private Constructor (singleton pattern)
      */
-    public ChatBot(){
+    private ChatBot(){
         solutions = new HashMap<String, String>();
         commonResponses = new HashMap<String, String>();
         systemResponses = new HashMap<String, String>();
@@ -80,9 +80,19 @@ public class ChatBot extends Activity {
     }
 
     /**
+     *  Used for singleton pattern
+     */
+    public static ChatBot getInstance( ){
+        if(instance == null) {
+            instance = new ChatBot();
+        }
+        return instance;
+    }
+
+    /**
      * Method used to populate the solutions hash map from the database
      */
-    public void populateSolutions(String result){
+    public static void populateSolutions(String result){
         try{
             // Create JSON array for response from database
             JSONArray ja = new JSONArray(result);
@@ -109,7 +119,7 @@ public class ChatBot extends Activity {
     /**
      * Method used to populate the commonResponses hash map from the database
      */
-    public void populateCommonResponses(String result){
+    public static void populateCommonResponses(String result){
         try{
             // Create JSON array for response from database
             JSONArray ja = new JSONArray(result);
@@ -136,7 +146,7 @@ public class ChatBot extends Activity {
     /**
      * Method used to populate the systemResponses hash map from the database
      */
-    public void populateSystemResponses(String result){
+    public static void populateSystemResponses(String result){
         try{
             // Create JSON array for response from database
             JSONArray ja = new JSONArray(result);
@@ -163,7 +173,7 @@ public class ChatBot extends Activity {
     /**
      * Method used to populate the checkResponses hash map from the database
      */
-    public void populateCheckResponses(String result){
+    public static void populateCheckResponses(String result){
         try{
             // Create JSON array for response from database
             JSONArray ja = new JSONArray(result);
@@ -193,7 +203,7 @@ public class ChatBot extends Activity {
      * @param question
      * @return response
      */
-    public String askQuestion(String question){
+    public static String askQuestion(String question){
         String response = "";
 
         // Check if question is a common question
@@ -238,7 +248,7 @@ public class ChatBot extends Activity {
      * @param responseToQuestion
      * @return chatBotResponse
      */
-    public String checkResponseToQuestion(String responseToQuestion){
+    public static String checkResponseToQuestion(String responseToQuestion){
         String chatBotResponse = "";
 
         for(String key : checkResponses.keySet()){

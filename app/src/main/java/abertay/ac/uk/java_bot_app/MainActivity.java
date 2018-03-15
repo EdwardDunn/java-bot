@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         optionsMenu = findViewById(R.id.main_img_options_menu);
         questionCounter = 0;
         initialQuestion = "";
-        cb = new ChatBot();
+        cb = ChatBot.getInstance();
 
     }
 
