@@ -1,8 +1,10 @@
 package abertay.ac.uk.java_bot_app;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -11,86 +13,79 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 
-public class TechMeetupsActivity extends AppCompatActivity implements LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener  {
+public class TechMeetupsActivity extends AppCompatActivity implements LocationListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    //GET LOCATION VARIABLE
     private GoogleApiClient googleAPIClient;
     private LocationManager locationManager;
-
     private Double latitude;
     private Double longitude;
-
     private final int REQUEST_LOCATION = 1;
+
+    // GET ADDRESS VARIABLES
+    protected Location mLastLocation;
+    //private AddressResultReceiver mResultReceiver;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private Location mLastKnownLocation;
+    private String mAddressOutput;
+    private TextView userAddress;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tech_meetups);
 
+
+
         latitude = 0.0;
         longitude = 0.0;
 
-        getPermissions();
+        mAddressOutput = "";
 
-        /*
-        // if googleAPI client is null, initialise new instance
-        if (googleAPIClient == null) {
-            googleAPIClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
+        // TODO - implement permissions properly
+        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 5 );
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
+        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
+        mFusedLocationClient = new FusedLocationProviderClient(this);
 
-        // Initialise new LocationManager
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        //mResultReceiver = new AddressResultReceiver(new Handler(), this, );
 
-        // Connect to Google API
-        googleAPIClient.connect();
-        */
-    }
-
-    public void getPermissions(){
-
-        if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            getLocation();
-        }
-        else{
-            if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)){
-                Toast.makeText(this, "Location is needed to find tech meetups near you", Toast.LENGTH_LONG).show();
-            }
-
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
-
-        }
+        getLocation();
+        fetchAddressHandler();
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+    protected void onResume() {
+        super.onResume();
+        setupUIViews();
+    }
 
-        if(requestCode == REQUEST_LOCATION){
-
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                getLocation();
-            }
-            else{
-                Toast.makeText(this, "Permission was not granted", Toast.LENGTH_LONG).show();
-            }
-        }
-        else{
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    private void setupUIViews() {
+        userAddress = (TextView) findViewById(R.id.tech_meetups_txt_user_address);
+        if(this.getIntent().hasExtra("test")){
+            userAddress.setText(this.getIntent().getExtras().getString("test", "unknown"));
         }
 
     }
 
+
+    //-------------------------------Get Location Methods-------------------------------//
     public void getLocation(){
 
-        Toast.makeText(this, "success", Toast.LENGTH_LONG).show();
+        // DEBUG
+        Toast.makeText(this, "entered getLocation()", Toast.LENGTH_LONG).show();
+
         // if googleAPI client is null, initialise new instance
         if (googleAPIClient == null) {
             googleAPIClient = new GoogleApiClient.Builder(this)
@@ -133,10 +128,15 @@ public class TechMeetupsActivity extends AppCompatActivity implements LocationLi
 
         // DEBUG - Output location as toast
         // TODO - remove debug toast
-        Toast.makeText(this, lastLocation.toString(), Toast.LENGTH_SHORT).show();
+        if(lastLocation != null) {
+            Toast.makeText(this, lastLocation.toString(), Toast.LENGTH_SHORT).show();
 
-        latitude = lastLocation.getLatitude();
-        longitude = lastLocation.getLongitude();
+            // For address lookup - DEBUG
+            mLastLocation = lastLocation;
+
+            latitude = lastLocation.getLatitude();
+            longitude = lastLocation.getLongitude();
+        }
     }
 
     @Override
@@ -180,5 +180,94 @@ public class TechMeetupsActivity extends AppCompatActivity implements LocationLi
     }
 
 
+    //--------------------------Get Address from Location Methods-----------------------//
+
+    protected void startIntentService() {
+        // DEBUG
+        Toast.makeText(TechMeetupsActivity.this,"entered startIntentService", Toast.LENGTH_LONG ).show();
+
+        Intent intent = new Intent(this, FetchAddressIntentService.class);
+        //intent.putExtra(FetchAddressIntentService.Constants.RECEIVER, mResultReceiver);
+        intent.putExtra(FetchAddressIntentService.Constants.LOCATION_DATA_EXTRA, mLastKnownLocation);
+        startService(intent);
+    }
+
+
+    private void fetchAddressHandler() {
+        // DEBUG
+        Toast.makeText(TechMeetupsActivity.this,"entered fetchAddressHandler", Toast.LENGTH_LONG ).show();
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+
+                    public void onSuccess(Location location) {
+                        mLastKnownLocation = location;
+
+                        // In some rare cases the location returned can be null
+                        if (mLastKnownLocation == null) {
+                            return;
+                        }
+
+                        if (!Geocoder.isPresent()) {
+                            Toast.makeText(TechMeetupsActivity.this,
+                                    R.string.no_geocoder_available,
+                                    Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        // Start service and update UI to reflect new location
+                        startIntentService();
+                        //updateUI();
+                    }
+                });
+    }
+
+
+
+
+
 
 }
+
+//class AddressResultReceiver extends ResultReceiver {
+//    public AddressResultReceiver(Handler handler, Context context, String addressOutput, TextView userAddress) {
+//        super(handler);
+//    }
+//
+//
+//
+//    @Override
+//    protected void onReceiveResult(int resultCode, Bundle resultData) {
+//
+//        // DEBUG
+//        Toast.makeText(TechMeetupsActivity.this,"entered onRecieveResult", Toast.LENGTH_LONG ).show();
+//
+//        if (resultData == null) {
+//            return;
+//        }
+//
+//        // Display the address string
+//        // or an error message sent from the intent service.
+//        mAddressOutput = resultData.getString(FetchAddressIntentService.Constants.RESULT_DATA_KEY);
+//        if (mAddressOutput == null) {
+//            mAddressOutput = "";
+//        }
+//        displayAddressOutput(mAddressOutput);
+//
+//        // Show a toast message if an address was found.
+//        if (resultCode == FetchAddressIntentService.Constants.SUCCESS_RESULT) {
+//            Toast.makeText(TechMeetupsActivity.this,getString(R.string.address_found), Toast.LENGTH_LONG ).show();
+//        }
+//
+//    }
+//
+//    public void displayAddressOutput(String result){
+//        userAddress.setText(result);
+//    }
+//}
