@@ -4,12 +4,15 @@ package abertay.ac.uk.java_bot_app;
  * MainActivity
  * The MainActivity class provides the chat bot features to the app.
  * The user can enter a question and a response is calculated and sent back.
- **
+ *
+ * References:
+ *  Notifications
+ *  https://www.youtube.com/watch?v=SWsuijO5NGE&list=PL6gx4Cwl9DGBsvRxJJOzG4r4k_zLKrnxl&index=61
+ *
  * @author  Edward Dunn
  * @version 1.0
  */
 
-import android.Manifest;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -100,9 +103,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // DEBUG - used for testing - need to implement correctly
         // TODO - remove
-        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
-        requestPermissions(new String[]{Manifest.permission.INTERNET}, 5);
-        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
+        //requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
+        //requestPermissions(new String[]{Manifest.permission.INTERNET}, 5);
+        //requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
 
 
         //---------------Training Session Notification--------------//
@@ -297,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * Generate notification for alerting user that weeks training session is available
+     * Generate notification for alerting user that this weeks training session is available
      */
     public void generateNotification(){
         //Build the notification

@@ -1,5 +1,6 @@
 package abertay.ac.uk.java_bot_app;
 
+import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -18,11 +19,13 @@ import com.google.android.gms.location.LocationServices;
 
 public class TechMeetupsActivity extends AppCompatActivity implements LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener  {
 
-    GoogleApiClient googleAPIClient;
-    LocationManager locationManager;
+    private GoogleApiClient googleAPIClient;
+    private LocationManager locationManager;
 
-    Double latitude;
-    Double longitude;
+    private Double latitude;
+    private Double longitude;
+
+    private final int REQUEST_LOCATION = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,9 @@ public class TechMeetupsActivity extends AppCompatActivity implements LocationLi
         latitude = 0.0;
         longitude = 0.0;
 
+        getPermissions();
+
+        /*
         // if googleAPI client is null, initialise new instance
         if (googleAPIClient == null) {
             googleAPIClient = new GoogleApiClient.Builder(this)
@@ -46,6 +52,60 @@ public class TechMeetupsActivity extends AppCompatActivity implements LocationLi
 
         // Connect to Google API
         googleAPIClient.connect();
+        */
+    }
+
+    public void getPermissions(){
+
+        if(checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            getLocation();
+        }
+        else{
+            if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)){
+                Toast.makeText(this, "Location is needed to find tech meetups near you", Toast.LENGTH_LONG).show();
+            }
+
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
+
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
+
+        if(requestCode == REQUEST_LOCATION){
+
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                getLocation();
+            }
+            else{
+                Toast.makeText(this, "Permission was not granted", Toast.LENGTH_LONG).show();
+            }
+        }
+        else{
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+    }
+
+    public void getLocation(){
+
+        Toast.makeText(this, "success", Toast.LENGTH_LONG).show();
+        // if googleAPI client is null, initialise new instance
+        if (googleAPIClient == null) {
+            googleAPIClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+
+        // Initialise new LocationManager
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        // Connect to Google API
+        googleAPIClient.connect();
+
     }
 
     @Override
@@ -118,5 +178,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements LocationLi
         locationManager.removeUpdates(this);
         super.onStop();
     }
+
+
 
 }
