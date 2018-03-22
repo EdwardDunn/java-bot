@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,15 +52,39 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
     private String currentCity;
     private TextView cityField;
 
+    // Progress Bar
+    // setLoodingProgressBarVisibility() allows this variable to be easily set by other classes
+    public static ProgressBar loadingProgressBar;
+    public void setLoadingProgressBarVisibility(Boolean visible){
+        if(visible){
+            loadingProgressBar.setVisibility(View.VISIBLE);
+        }
+        else{
+            loadingProgressBar.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    // Loading Message (when connection is not available
+    // setLoadingMessageVisibility() allows this variable to be easily set by other classes
+    private static TextView loadingMessage;
+    public void setLoadingMessageVisibility(Boolean visible){
+        if(visible){
+            loadingMessage.setVisibility(View.VISIBLE);
+        }
+        else{
+            loadingMessage.setVisibility(View.INVISIBLE);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tech_meetups);
 
-//        // TODO - implement permissions properly
+        // TODO - implement permissions properly
         requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 5 );
-       requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
-       requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
+        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
 
         latitude = 0.0;
         longitude = 0.0;
@@ -68,19 +93,17 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
 
         menu.setOnClickListener(this);
 
-
         mFusedLocationClient = new FusedLocationProviderClient(this);
 
         techMeetupsAPIHelper = new TechMeetupsAPIHelper(this);
-        
+
         if(currentCity.isEmpty()){
             techMeetupsAPIHelper.getTechMeetups("unknown");
         }
         else{
             techMeetupsAPIHelper.getTechMeetups("" + currentCity);
         }
-
-
+        
         getLocation();
         fetchAddressHandler();
     }
@@ -110,6 +133,9 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
 
         menu = findViewById(R.id.tech_meetups_img_menu);
         apiResponse = findViewById(R.id.tech_meetups_txt_api_response);
+
+        loadingProgressBar = (ProgressBar) findViewById(R.id.tech_meetups_pb_progress_bar);
+        loadingMessage = (TextView) findViewById(R.id.tech_meetups_txt_error_message);
 
     }
 
@@ -262,9 +288,9 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
     //--------------------------Get Address from Location Methods-----------------------//
 
     protected void startIntentService() {
-        Intent intent = new Intent(this, FetchAddressIntentService.class);
-        //intent.putExtra(FetchAddressIntentService.Constants.RECEIVER, mResultReceiver);
-        intent.putExtra(FetchAddressIntentService.Constants.LOCATION_DATA_EXTRA, mLastKnownLocation);
+        Intent intent = new Intent(this, FetchAddressService.class);
+        //intent.putExtra(FetchAddressService.Constants.RECEIVER, mResultReceiver);
+        intent.putExtra(FetchAddressService.Constants.LOCATION_DATA_EXTRA, mLastKnownLocation);
         startService(intent);
     }
 

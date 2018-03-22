@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     // Error Message (when connection is not available
-    // setErrorMessageVisibility() allows this variable to be easily set by other classes (ChatBotRemoteDatabaseHelper)
+    // setLoadingMessageVisibility() allows this variable to be easily set by other classes (ChatBotRemoteDatabaseHelper)
     private static TextView errorMessage;
     public void setErrorMessageVisibility(Boolean visible){
         if(visible){

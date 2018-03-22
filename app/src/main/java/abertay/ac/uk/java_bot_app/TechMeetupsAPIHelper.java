@@ -149,7 +149,6 @@ public class TechMeetupsAPIHelper {
     }
 
     public class GetNearestMeetupsTask extends AsyncTask<URL, Void, String> {
-        ///MainActivity mainActivity = new MainActivity();
 
         @Override
         protected String doInBackground(URL... urls) {
@@ -167,15 +166,14 @@ public class TechMeetupsAPIHelper {
         @Override
         protected void onPostExecute(String result){
 
-            //mainActivity.setLoadingProgressBarVisibility(false);
+            parentActivity.setLoadingProgressBarVisibility(false);
 
             if(result == null) {
-                //mainActivity.setErrorMessageVisibility(true);
+                parentActivity.setLoadingMessageVisibility(true);
             }
             else{
-                //parentActivity.populateSolutions(result);
                 parentActivity.populateAPIResponse(result);
-                //mainActivity.setErrorMessageVisibility(false);
+                parentActivity.setLoadingMessageVisibility(false);
             }
 
         }
@@ -183,7 +181,7 @@ public class TechMeetupsAPIHelper {
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
-            //mainActivity.setLoadingProgressBarVisibility(true);
+            parentActivity.setLoadingProgressBarVisibility(true);
         }
     }
 }

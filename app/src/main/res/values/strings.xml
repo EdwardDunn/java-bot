@@ -15,6 +15,7 @@
     <string name="training_session_notification_content">Hey, a new training session is available!</string>
     <string name="training_header">Training</string>
     <string name="main_error_message">Connecting to database</string>
+    <string name="tech_meetups_error_message">Connecting to Open Tech Calendar</string>
     <string name="service_not_available">Location service not available</string>
     <string name="invalid_lat_long_used">latitude or longitude invalid</string>
     <string name="no_address_found">No address found for location</string>

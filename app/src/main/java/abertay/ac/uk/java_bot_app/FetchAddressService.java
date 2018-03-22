@@ -23,18 +23,18 @@ import static android.content.ContentValues.TAG;
  *  https://developer.android.com/training/location/display-address.html#java
  */
 
-public class FetchAddressIntentService extends IntentService {
+public class FetchAddressService extends IntentService {
 
-    public FetchAddressIntentService(){
+    public FetchAddressService(){
         super(IntentService.class.getSimpleName());
     }
 
 
-    private void deliverResultToReceiver(int resultCode, String message, String city) {
+    private void deliverResultToTechMeetupsActivity(int resultCode, String message, String city) {
         // DEBUG
         Bundle bundle = new Bundle();
         bundle.putString(Constants.RESULT_DATA_KEY, message);
-        Intent intent = new Intent(FetchAddressIntentService.this, TechMeetupsActivity.class);
+        Intent intent = new Intent(FetchAddressService.this, TechMeetupsActivity.class);
         intent.putExtra("address", "" + message);
         intent.putExtra("city", "" + city);
         startActivity(intent);
@@ -43,7 +43,7 @@ public class FetchAddressIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         // DEBUG
-        Toast.makeText(FetchAddressIntentService.this,"entered onHandleIntent", Toast.LENGTH_LONG ).show();
+        Toast.makeText(FetchAddressService.this,"entered onHandleIntent", Toast.LENGTH_LONG ).show();
 
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 
@@ -88,7 +88,7 @@ public class FetchAddressIntentService extends IntentService {
                 city = "No city found";
                 Log.e(TAG, errorMessage);
             }
-            deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage, city);
+            deliverResultToTechMeetupsActivity(Constants.FAILURE_RESULT, errorMessage, city);
         } else {
             Address address = addresses.get(0);
             ArrayList<String> addressFragments = new ArrayList<String>();
@@ -101,7 +101,7 @@ public class FetchAddressIntentService extends IntentService {
                 addressFragments.add(address.getAddressLine(i));
             }
             Log.i(TAG, getString(R.string.address_found));
-            deliverResultToReceiver(Constants.SUCCESS_RESULT,
+            deliverResultToTechMeetupsActivity(Constants.SUCCESS_RESULT,
                     TextUtils.join(System.getProperty("line.separator"),
                             addressFragments), city);
         }
