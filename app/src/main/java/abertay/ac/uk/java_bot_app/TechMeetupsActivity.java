@@ -27,6 +27,12 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 public class TechMeetupsActivity extends AppCompatActivity implements View.OnClickListener, LocationListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, android.widget.PopupMenu.OnMenuItemClickListener {
 
@@ -103,7 +109,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
         else{
             techMeetupsAPIHelper.getTechMeetups("" + currentCity);
         }
-        
+
         getLocation();
         fetchAddressHandler();
     }
@@ -140,7 +146,67 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
     }
 
     public void populateAPIResponse(String response){
-        apiResponse.setText(response);
+
+        /**
+         //Reference - https://stackoverflow.com/questions/11579693/how-to-get-json-data-from-php-server-to-android-mobile#11579742
+         */
+
+        String test = "";
+        //String jsonStr = "[{\"pmid\":\"2\",\"name\":\" MANAGEMENT\",\"result\":\"1\",\"properties\":[{\"prop_id\":\"32\",\"prop_name\":\"Bonneville\",\"address\":\"122 Lakeshore\",\"city\":\"Ripley\",\"state\":\"OH\",\"zip\":\"11454\",\"lat\":\"41.123\",\"long\":\"-85.5034\"}]}]";
+        //String jsonStr = "[" + response + "]";
+
+        //String jsonStr = "{'data' : [{ 'name : 'Edward'}, { 'name' : 'Claire' }]";
+
+        try{
+            // Create JSON array for response from database
+            //JSONArray ja = new JSONArray(jsonStr);
+
+            //JSONObject jo = null;
+
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("data");
+
+            int size = jsonArray.length();
+            //ArrayList<JSONObject> meetupArray = new ArrayList<JSONObject>();
+            ArrayList<TechMeetup> meetupArray = new ArrayList<TechMeetup>();
+
+            for (int i = 0; i < size; i++) {
+                JSONObject meetupObject = jsonArray.getJSONObject(i);
+
+                String summary = meetupObject.getString("summary");
+                String description = meetupObject.getString("description");
+                //String date = meetupObject.getString("date");
+
+                TechMeetup techMeetup = new TechMeetup(summary, description);
+
+                meetupArray.add(techMeetup);
+                //meetupArray.add(meetupObject);
+            }
+
+            //Finally
+            JSONObject[] jsons = new JSONObject[meetupArray.size()];
+            meetupArray.toArray(jsons);
+
+
+
+
+/*
+            for(int i = 0; i < ja.length(); i++){
+                jo = ja.getJSONObject(i);
+
+                // Get values from object
+                test = jo.getString("name");
+
+            }
+*/
+
+        }
+        catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        apiResponse.setText(test);
+
     }
 
     @Override
