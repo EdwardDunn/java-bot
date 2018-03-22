@@ -185,22 +185,33 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
         for(TechMeetup tm : meetupArray){
             String summary = tm.getSummary();
             String description = tm.getDescription();
-            layout.addView(createNewTextView(summary.toString()));
-            layout.addView(createNewTextView(description.toString()));
+            AddTechMeetupView(summary, description);
         }
 
-        layout.addView(createNewTextView("test3"));
-
-        //apiResponse.setText(test);
 
     }
 
-    private TextView createNewTextView(String text){
+    private void AddTechMeetupView(String summary, String description){
+        layout.addView(createNewTextView(summary.toString(), "header"));
+        layout.addView(createNewTextView(description.toString(), "content"));
+    }
+
+    private TextView createNewTextView(String text, String type){
         final ViewGroup.LayoutParams lparams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         final TextView textView = new TextView(this);
         textView.setLayoutParams(lparams);
-        textView.setText(text);
-        textView.setTextSize(18);
+        
+        // Set font size depending on text type passed
+        if(type.equals("header")) {
+            textView.setTextSize(18);
+            textView.setText(text);
+        }else{
+            textView.setTextSize(14);
+
+            // Place a new line at the end of the content
+            textView.setText(text + "\n");
+        }
+
         textView.setTextColor(Color.BLACK);
         //textView.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.img_java_bot_foreground, 0, 0 ,0);
         return textView;
