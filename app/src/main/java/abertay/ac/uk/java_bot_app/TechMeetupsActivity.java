@@ -3,6 +3,7 @@ package abertay.ac.uk.java_bot_app;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
@@ -15,7 +16,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -57,6 +60,8 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
 
     private String currentCity;
     private TextView cityField;
+
+    private LinearLayout layout;
 
     // Progress Bar
     // setLoodingProgressBarVisibility() allows this variable to be easily set by other classes
@@ -143,6 +148,8 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
         loadingProgressBar = (ProgressBar) findViewById(R.id.tech_meetups_pb_progress_bar);
         loadingMessage = (TextView) findViewById(R.id.tech_meetups_txt_error_message);
 
+        layout = findViewById(R.id.tech_meetups_ll_meetup_layout);
+
     }
 
     public void populateAPIResponse(String response){
@@ -151,62 +158,52 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
          //Reference - https://stackoverflow.com/questions/11579693/how-to-get-json-data-from-php-server-to-android-mobile#11579742
          */
 
-        String test = "";
-        //String jsonStr = "[{\"pmid\":\"2\",\"name\":\" MANAGEMENT\",\"result\":\"1\",\"properties\":[{\"prop_id\":\"32\",\"prop_name\":\"Bonneville\",\"address\":\"122 Lakeshore\",\"city\":\"Ripley\",\"state\":\"OH\",\"zip\":\"11454\",\"lat\":\"41.123\",\"long\":\"-85.5034\"}]}]";
-        //String jsonStr = "[" + response + "]";
-
-        //String jsonStr = "{'data' : [{ 'name : 'Edward'}, { 'name' : 'Claire' }]";
+        ArrayList<TechMeetup> meetupArray = new ArrayList<TechMeetup>();
 
         try{
-            // Create JSON array for response from database
-            //JSONArray ja = new JSONArray(jsonStr);
-
-            //JSONObject jo = null;
-
             JSONObject jsonObject = new JSONObject(response);
             JSONArray jsonArray = jsonObject.getJSONArray("data");
 
             int size = jsonArray.length();
-            //ArrayList<JSONObject> meetupArray = new ArrayList<JSONObject>();
-            ArrayList<TechMeetup> meetupArray = new ArrayList<TechMeetup>();
 
             for (int i = 0; i < size; i++) {
                 JSONObject meetupObject = jsonArray.getJSONObject(i);
 
                 String summary = meetupObject.getString("summary");
                 String description = meetupObject.getString("description");
-                //String date = meetupObject.getString("date");
 
                 TechMeetup techMeetup = new TechMeetup(summary, description);
 
                 meetupArray.add(techMeetup);
-                //meetupArray.add(meetupObject);
             }
-
-            //Finally
-            JSONObject[] jsons = new JSONObject[meetupArray.size()];
-            meetupArray.toArray(jsons);
-
-
-
-
-/*
-            for(int i = 0; i < ja.length(); i++){
-                jo = ja.getJSONObject(i);
-
-                // Get values from object
-                test = jo.getString("name");
-
-            }
-*/
 
         }
         catch(JSONException e){
             e.printStackTrace();
         }
 
-        apiResponse.setText(test);
+        for(TechMeetup tm : meetupArray){
+            String summary = tm.getSummary();
+            String description = tm.getDescription();
+            layout.addView(createNewTextView(summary.toString()));
+            layout.addView(createNewTextView(description.toString()));
+        }
 
+        layout.addView(createNewTextView("test3"));
+
+        //apiResponse.setText(test);
+
+    }
+
+    private TextView createNewTextView(String text){
+        final ViewGroup.LayoutParams lparams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        final TextView textView = new TextView(this);
+        textView.setLayoutParams(lparams);
+        textView.setText(text);
+        textView.setTextSize(18);
+        textView.setTextColor(Color.BLACK);
+        //textView.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.img_java_bot_foreground, 0, 0 ,0);
+        return textView;
     }
 
     @Override
