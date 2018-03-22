@@ -25,23 +25,18 @@ import static android.content.ContentValues.TAG;
 
 public class FetchAddressIntentService extends IntentService {
 
-   // protected ResultReceiver mReceiver;
-
-
     public FetchAddressIntentService(){
         super(IntentService.class.getSimpleName());
-       // mReceiver = new ResultReceiver(new Handler());
     }
 
 
-    private void deliverResultToReceiver(int resultCode, String message) {
+    private void deliverResultToReceiver(int resultCode, String message, String city) {
         // DEBUG
-        Toast.makeText(FetchAddressIntentService.this,"entered deliverResultToReceiver", Toast.LENGTH_LONG ).show();
         Bundle bundle = new Bundle();
         bundle.putString(Constants.RESULT_DATA_KEY, message);
-        //mReceiver.send(resultCode, bundle);
         Intent intent = new Intent(FetchAddressIntentService.this, TechMeetupsActivity.class);
-        intent.putExtra("test", "blah");
+        intent.putExtra("address", "" + message);
+        intent.putExtra("city", "" + city);
         startActivity(intent);
     }
 
@@ -83,16 +78,22 @@ public class FetchAddressIntentService extends IntentService {
                     location.getLongitude(), illegalArgumentException);
         }
 
+        // Used for searching tech meetups in currently located city
+        String city = "";
+
         // Handle case where no address was found.
         if (addresses == null || addresses.size()  == 0) {
             if (errorMessage.isEmpty()) {
                 errorMessage = getString(R.string.no_address_found);
+                city = "No city found";
                 Log.e(TAG, errorMessage);
             }
-            deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage);
+            deliverResultToReceiver(Constants.FAILURE_RESULT, errorMessage, city);
         } else {
             Address address = addresses.get(0);
             ArrayList<String> addressFragments = new ArrayList<String>();
+
+           city = addresses.get(0).getLocality();
 
             // Fetch the address lines using getAddressLine,
             // join them, and send them to the thread.
@@ -102,7 +103,7 @@ public class FetchAddressIntentService extends IntentService {
             Log.i(TAG, getString(R.string.address_found));
             deliverResultToReceiver(Constants.SUCCESS_RESULT,
                     TextUtils.join(System.getProperty("line.separator"),
-                            addressFragments));
+                            addressFragments), city);
         }
         this.stopSelf();
     }

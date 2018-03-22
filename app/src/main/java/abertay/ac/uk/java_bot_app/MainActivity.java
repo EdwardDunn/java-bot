@@ -13,6 +13,7 @@ package abertay.ac.uk.java_bot_app;
  * @version 1.0
  */
 
+import android.Manifest;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -106,6 +107,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
         //requestPermissions(new String[]{Manifest.permission.INTERNET}, 5);
         //requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
+
+        // TODO - implement permissions properly
+        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 5 );
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
+        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
 
 
         //---------------Training Session Notification--------------//

@@ -25,22 +25,22 @@ public class ChatBotRemoteDatabaseHelper{
     private final String GET_CHECK_RESPONSES_FILE_NAME = "java-bot-get-check-responses.php";
 
     public void getSolutions(){
-        URL getSolutionsUrl = ChatBotRemoteDatabaseHelper.buildURL(GET_SOLUTIONS_FILE_NAME);
+        URL getSolutionsUrl = buildURL(GET_SOLUTIONS_FILE_NAME);
         new GetSolutionsTask().execute(getSolutionsUrl);
     }
 
     public void getCommonResponses(){
-        URL getCommonResponsesUrl = ChatBotRemoteDatabaseHelper.buildURL(GET_COMMON_RESPONSES_FILE_NAME);
+        URL getCommonResponsesUrl = buildURL(GET_COMMON_RESPONSES_FILE_NAME);
         new GetCommonResponsesTask().execute(getCommonResponsesUrl);
     }
 
     public void getSystemResponses(){
-        URL getSystemResponsesUrl = ChatBotRemoteDatabaseHelper.buildURL(GET_SYSTEM_RESPONSES_FILE_NAME);
+        URL getSystemResponsesUrl = buildURL(GET_SYSTEM_RESPONSES_FILE_NAME);
         new GetSystemResponsesTask().execute(getSystemResponsesUrl);
     }
 
     public void getCheckResponses(){
-        URL getCheckResponsesUrl = ChatBotRemoteDatabaseHelper.buildURL(GET_CHECK_RESPONSES_FILE_NAME);
+        URL getCheckResponsesUrl = buildURL(GET_CHECK_RESPONSES_FILE_NAME);
         new GetCheckResponsesTask().execute(getCheckResponsesUrl);
     }
 

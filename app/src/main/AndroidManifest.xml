@@ -19,12 +19,6 @@
             android:name=".FetchAddressIntentService"
             android:exported="false"/>
 
-
-        <!--<receiver android:name="AddressResultReceiver"-->
-            <!--android:enabled="true">-->
-        <!--</receiver>-->
-
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
