@@ -12,6 +12,9 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
 
     private ImageView menu;
 
+    private QuestionsSQLiteDatabaseHelper questionsDatabase;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,6 +23,12 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
         setupUIViews();
 
         menu.setOnClickListener(this);
+
+        questionsDatabase = new QuestionsSQLiteDatabaseHelper(this);
+
+        questionsDatabase.addQuestion(new Question("test solution key", "test solution"));
+
+        //questionsDatabase.emptyDatabase();
 
     }
 
