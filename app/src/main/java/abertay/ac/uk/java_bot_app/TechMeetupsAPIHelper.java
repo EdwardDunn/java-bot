@@ -21,6 +21,7 @@ public class TechMeetupsAPIHelper {
         parentActivity = context;
     }
 
+    private boolean noCitFound;
 
     // Open Tech Calender Areas
     private static final String CITY_EDINBURGH = "edinburgh";
@@ -52,7 +53,7 @@ public class TechMeetupsAPIHelper {
         new GetNearestMeetupsTask().execute(getNearestMeetups);
     }
 
-    public static URL buildURL(String city){
+    public URL buildURL(String city){
         city = city.toLowerCase();
 
         String areaCode = getOpenTechCalendarAreaCode(city);
@@ -75,6 +76,8 @@ public class TechMeetupsAPIHelper {
 
         }
         else{
+
+            noCitFound = true;
             // If not areaCode is state, return all locations
             URL url = null;
             Uri uri = Uri.parse(BASE_API_URL).buildUpon()
@@ -86,6 +89,8 @@ public class TechMeetupsAPIHelper {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
+
             return url;
         }
     }
@@ -168,14 +173,19 @@ public class TechMeetupsAPIHelper {
 
             parentActivity.setLoadingProgressBarVisibility(false);
 
+
             if(result == null) {
                 parentActivity.setLoadingMessageVisibility(true);
+
             }
             else{
                 parentActivity.populateAPIResponse(result);
                 parentActivity.setLoadingMessageVisibility(false);
             }
 
+            if(noCitFound) {
+                parentActivity.setCityNotFound(true);
+            }
         }
 
         @Override

@@ -20,7 +20,6 @@ import static android.content.ContentValues.TAG;
  *  https://developer.android.com/training/location/display-address.html#java
  */
 
-//public class FetchAddressService extends IntentService {
 public class FetchAddressService {
 
     Activity currentActivity;
@@ -28,15 +27,6 @@ public class FetchAddressService {
 
     private String city;
     private String address;
-
-    //private final TechMeetupsActivity parentActivity;
-
-    /*
-    public FetchAddressService(){
-        super(IntentService.class.getSimpleName());
-
-    }
-    */
 
     public FetchAddressService(Activity _currentActivity, Location _mLocation){
         //super(IntentService.class.getSimpleName());
@@ -50,18 +40,6 @@ public class FetchAddressService {
 
 
     private void deliverResultToTechMeetupsActivity(int resultCode, String _message, String _city) {
-        // DEBUG
-        /*
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.RESULT_DATA_KEY, message);
-        Intent intent = new Intent(FetchAddressService.this, TechMeetupsActivity.class);
-        intent.putExtra("address", "" + message);
-        intent.putExtra("city", "" + city);
-        //intent.putExtra("address", "blah");
-        //intent.putExtra("city", "blah2");
-        startActivity(intent);
-        */
-
         address = _message;
         city = _city;
 
@@ -74,24 +52,10 @@ public class FetchAddressService {
 
     }
 
-    //@Override
-    //protected void onHandleIntent(Intent intent) {
     protected void onHandleLocation(Location mlocation) {
-        // DEBUG
-        //Toast.makeText(FetchAddressService.this,"entered onHandleIntent", Toast.LENGTH_LONG ).show();
-
-        //currentActivity = intent.getData("Current activity");
-
         Geocoder geocoder = new Geocoder(currentActivity, Locale.getDefault());
 
-        //if (intent == null) {
-         //   return;
-       // }
         String errorMessage = "";
-
-        //Get the location passed to this service through an extra.
-        //Location location = intent.getParcelableExtra(
-                //Constants.LOCATION_DATA_EXTRA);
 
         Location location = mlocation;
 

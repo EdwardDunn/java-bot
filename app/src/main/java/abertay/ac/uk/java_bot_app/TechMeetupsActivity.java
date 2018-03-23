@@ -60,6 +60,15 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
     private Location mLastKnownLocation;
     private static TextView userAddress;
 
+    private static TextView cityNotFound;
+    public void setCityNotFound(Boolean visible){
+        if(visible) {
+            cityNotFound.setText(R.string.no_meet_ups);
+            cityNotFound.setVisibility(View.VISIBLE);
+        }
+    }
+
+
     private LocationRequest mLocationRequest;
 
     private TextView apiResponse;
@@ -68,8 +77,8 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
 
     private TechMeetupsAPIHelper techMeetupsAPIHelper;
 
-    private String currentCity;
-    private static TextView cityField;
+    private static String currentCity;
+    //private static TextView cityField;
 
     private LinearLayout layout;
 
@@ -97,9 +106,10 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    public static void setLocation(String address, String city){
-        userAddress.setText(address);
-        cityField.setText(city);
+    public static void setLocation(String _address, String _city){
+        // Show address on activity
+        userAddress.setText(_address);
+        currentCity = _city;
     }
 
     @Override
@@ -125,8 +135,6 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
         getLocation();
         // Get address
         fetchAddressHandler();
-        // Show address
-        populateAddressFields();
 
         techMeetupsAPIHelper = new TechMeetupsAPIHelper(this);
 
@@ -152,29 +160,19 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
 
     private void setupUIViews() {
         userAddress = (TextView) findViewById(R.id.tech_meetups_txt_user_address);
-        cityField = (TextView) findViewById(R.id.tech_meetups_txt_city);
+        //cityField = (TextView) findViewById(R.id.tech_meetups_txt_city);
         currentCity = "";
 
         menu = findViewById(R.id.tech_meetups_img_menu);
         apiResponse = findViewById(R.id.tech_meetups_txt_api_response);
 
         loadingProgressBar = (ProgressBar) findViewById(R.id.tech_meetups_pb_progress_bar);
-        loadingMessage = (TextView) findViewById(R.id.tech_meetups_txt_error_message);
+        loadingMessage = (TextView) findViewById(R.id.tech_meetups_txt_loading_message);
+
+        cityNotFound = findViewById(R.id.tech_meetups_txt_city_not_found);
+        // Set to invisible by default, called by FetchAddressService to visible if not meetups are found for your city
 
         layout = findViewById(R.id.tech_meetups_ll_meetup_layout);
-
-    }
-
-    private void populateAddressFields(){
-        if(this.getIntent().hasExtra("address")){
-            userAddress.setText(this.getIntent().getExtras().getString("address", "unknown"));
-        }
-
-        if(this.getIntent().hasExtra("city")){
-            //currentCity = (this.getIntent().getExtras().getString("city", "unknown"));
-            cityField.setText(this.getIntent().getExtras().getString("city", "unknown"));
-            currentCity = cityField.toString();
-        }
 
     }
 
@@ -469,13 +467,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
 
     //--------------------------Get Address from Location Methods-----------------------//
 
-    protected void startIntentService() {
-        //Intent intent = new Intent(this, FetchAddressService.class);
-                //intent.putExtra(FetchAddressService.Constants.RECEIVER, mResultReceiver);
-        //intent.putExtra(FetchAddressService.Constants.LOCATION_DATA_EXTRA, mLastKnownLocation);
-        //intent.putExtra("Current activity", this);
-        //startService(intent);
-
+    protected void getAddressDetails() {
         FetchAddressService fas = new FetchAddressService(this, mLastKnownLocation);
     }
 
@@ -506,7 +498,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
                         }
 
                         // Start service and update UI to reflect new location
-                        startIntentService();
+                        getAddressDetails();
                     }
                 });
     }
