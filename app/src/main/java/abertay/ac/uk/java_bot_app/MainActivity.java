@@ -21,8 +21,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -56,15 +54,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    // Error Message (when connection is not available
+    // Loading Message (when connection is not available
     // setLoadingMessageVisibility() allows this variable to be easily set by other classes (ChatBotRemoteDatabaseHelper)
-    private static TextView errorMessage;
+    private static TextView loadingMessage;
     public void setErrorMessageVisibility(Boolean visible){
         if(visible){
-            errorMessage.setVisibility(View.VISIBLE);
+            loadingMessage.setVisibility(View.VISIBLE);
         }
         else{
-            errorMessage.setVisibility(View.INVISIBLE);
+            loadingMessage.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -72,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button ask_btn;
     private EditText question_field;
     private ImageView menu;
-    private ImageView optionsMenu;
 
     // Used for Stack Overflow search if solution not found
     private String initialQuestion;
@@ -95,24 +92,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         menu.setOnClickListener(this);
 
-        optionsMenu.setOnClickListener(this);
-
         // Show ChatBot welcome message on start
         layout.addView(createNewTextView(WELCOME_MESSAGE));
 
         //-------------------Permissions----------------------------//
 
-        // DEBUG - used for testing - need to implement correctly
-        // TODO - remove
-        //requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
-        //requestPermissions(new String[]{Manifest.permission.INTERNET}, 5);
-        //requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
-
         // TODO - implement permissions properly
         requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 5 );
         requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
         requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
-
 
         //---------------Training Session Notification--------------//
 
@@ -129,9 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // TODO - for completed app set time to 7 days (604800000 milliseconds)
         // For demonstration purposes 2 minutes is used (120000 milliseconds)
         notificationTimer.schedule(notificationTask, 5000, 120000);
-
     }
-
 
     protected void onPause(){
         super.onPause();
@@ -147,13 +133,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setupUIViews(){
         loadingProgressBar = (ProgressBar) findViewById(R.id.main_pb_progress_bar);
-        errorMessage = (TextView) findViewById(R.id.main_txt_error_message);
+        loadingMessage = (TextView) findViewById(R.id.main_txt_loading_message);
 
         layout = findViewById(R.id.main_ll_question_layout);
         ask_btn = findViewById(R.id.main_btn_ask);
         question_field = findViewById(R.id.main_et_question_field);
         menu = findViewById(R.id.main_img_menu);
-        optionsMenu = findViewById(R.id.main_img_options_menu);
         questionCounter = 0;
         initialQuestion = "";
         cb = ChatBot.getInstance();
@@ -182,8 +167,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }else if (view.getId() == R.id.main_img_menu){
             showPopup(view);
-        }else if (view.getId() == R.id.main_img_options_menu){
-            // Show options menu here
         }
     }
 
@@ -197,29 +180,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         popup.inflate(R.menu.java_bot_menu);
         popup.show();
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-       MenuInflater inflater = getMenuInflater();
-       inflater.inflate(R.menu.options_menu, menu);
-       return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        // Take item click
-        switch (item.getItemId()){
-            case R.id.action_refresh:
-                //Refresh page
-                Intent refresh = new Intent(this, MainActivity.class);
-                startActivity(refresh);
-                this.finish();
-
-             default:
-                 return super.onOptionsItemSelected(item);
-        }
-    }
-
 
     /**
      * Method used provide onclick actions for menu items

@@ -112,6 +112,7 @@ public class ChatBotRemoteDatabaseHelper{
 
             if(result == null) {
                 mainActivity.setErrorMessageVisibility(true);
+                mainActivity.setLoadingProgressBarVisibility(true);
             }
             else{
                 parentActivity.populateSolutions(result);
@@ -151,6 +152,7 @@ public class ChatBotRemoteDatabaseHelper{
 
             if(result == null) {
                 mainActivity.setErrorMessageVisibility(true);
+                mainActivity.setLoadingProgressBarVisibility(true);
             }
             else{
                 parentActivity.populateCommonResponses(result);
@@ -190,6 +192,7 @@ public class ChatBotRemoteDatabaseHelper{
 
             if(result == null) {
                 mainActivity.setErrorMessageVisibility(true);
+                mainActivity.setLoadingProgressBarVisibility(true);
             }
             else{
                 parentActivity.populateSystemResponses(result);
@@ -229,6 +232,7 @@ public class ChatBotRemoteDatabaseHelper{
 
             if(result == null) {
                 mainActivity.setErrorMessageVisibility(true);
+                mainActivity.setLoadingProgressBarVisibility(true);
             }
             else{
                 parentActivity.populateCheckResponses(result);
