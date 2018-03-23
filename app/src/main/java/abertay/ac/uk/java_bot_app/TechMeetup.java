@@ -6,13 +6,12 @@ package abertay.ac.uk.java_bot_app;
 
 public class TechMeetup {
     private String summary;
-    private String description;
-    //private String date;
+    private String description;private String date;
 
-    public TechMeetup(String _summary, String _description){
+    public TechMeetup(String _summary, String _description, String _date){
         summary = _summary;
         description = _description;
-        //date = _date;
+        date = _date;
     }
 
     public String getSummary(){
@@ -23,10 +22,6 @@ public class TechMeetup {
         return description;
     }
 
-   // public String getDate(){
-    //    return date;
-   // }
-
-
+    public String getDate(){ return date; }
 
 }

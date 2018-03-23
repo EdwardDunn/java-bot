@@ -172,7 +172,12 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
                 String summary = meetupObject.getString("summary");
                 String description = meetupObject.getString("description");
 
-                TechMeetup techMeetup = new TechMeetup(summary, description);
+                // Get start time
+                String date = meetupObject.getString("start");
+                JSONObject dateJSONObject = new JSONObject(date);
+                String startDate =  dateJSONObject.getString("displaylocal");
+
+                TechMeetup techMeetup = new TechMeetup(summary, description, startDate);
 
                 meetupArray.add(techMeetup);
             }
@@ -185,14 +190,16 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
         for(TechMeetup tm : meetupArray){
             String summary = tm.getSummary();
             String description = tm.getDescription();
-            AddTechMeetupView(summary, description);
+            String date = tm.getDate();
+            AddTechMeetupView(summary, description, date);
         }
 
 
     }
 
-    private void AddTechMeetupView(String summary, String description){
+    private void AddTechMeetupView(String summary, String description, String date){
         layout.addView(createNewTextView(summary.toString(), "header"));
+        layout.addView(createNewTextView(date.toString(), "date"));
         layout.addView(createNewTextView(description.toString(), "content"));
     }
 
@@ -200,12 +207,17 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
         final ViewGroup.LayoutParams lparams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         final TextView textView = new TextView(this);
         textView.setLayoutParams(lparams);
-        
+
         // Set font size depending on text type passed
         if(type.equals("header")) {
             textView.setTextSize(18);
             textView.setText(text);
-        }else{
+        }
+        else if(type.equals("date")){
+            textView.setTextSize(16);
+            textView.setText(text);
+        }
+        else{
             textView.setTextSize(14);
 
             // Place a new line at the end of the content
