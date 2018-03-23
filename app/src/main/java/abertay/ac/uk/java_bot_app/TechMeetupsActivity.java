@@ -14,6 +14,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -169,17 +171,36 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
             for (int i = 0; i < size; i++) {
                 JSONObject meetupObject = jsonArray.getJSONObject(i);
 
-                String summary = meetupObject.getString("summary");
-                String description = meetupObject.getString("description");
+                Boolean meetupHasURL = meetupObject.has("url");
+                Boolean meetupHasAreas = meetupObject.has("areas");
 
-                // Get start time
-                String date = meetupObject.getString("start");
-                JSONObject dateJSONObject = new JSONObject(date);
-                String startDate =  dateJSONObject.getString("displaylocal");
+                if (meetupHasURL && meetupHasAreas) {
 
-                TechMeetup techMeetup = new TechMeetup(summary, description, startDate);
+                    String summary = meetupObject.getString("summary");
+                    String description = meetupObject.getString("description");
+                    String url = meetupObject.getString("url");
 
-                meetupArray.add(techMeetup);
+                    // Get city
+                    // The city in within an areas JSON array under the name title
+                    String areasJSONString = meetupObject.getString("areas");
+                    JSONArray areasJSONArray = new JSONArray(areasJSONString);
+                    String city = "";
+                    JSONObject areasJSONObject = areasJSONArray.getJSONObject(0);
+                    city = areasJSONObject.getString("title");
+
+                    //String slug = meetupObject.getString("slug");
+
+                    // Get start time
+                    String date = meetupObject.getString("start");
+                    JSONObject dateJSONObject = new JSONObject(date);
+                    String startDate = dateJSONObject.getString("displaylocal");
+
+                    TechMeetup techMeetup = new TechMeetup(summary, city, description, startDate, url);
+
+                    meetupArray.add(techMeetup);
+
+                }
+
             }
 
         }
@@ -189,18 +210,22 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
 
         for(TechMeetup tm : meetupArray){
             String summary = tm.getSummary();
+            String city = tm.getCity();
             String description = tm.getDescription();
             String date = tm.getDate();
-            AddTechMeetupView(summary, description, date);
+            String url = tm.getUrl();
+            AddTechMeetupView(summary, city, description, date, url);
         }
-
 
     }
 
-    private void AddTechMeetupView(String summary, String description, String date){
+    private void AddTechMeetupView(String summary, String city, String description, String date, String url){
         layout.addView(createNewTextView(summary.toString(), "header"));
+        layout.addView(createNewTextView(city.toString(), "city"));
         layout.addView(createNewTextView(date.toString(), "date"));
-        layout.addView(createNewTextView(description.toString(), "content"));
+        layout.addView(createNewTextView(url.toString(), "url"));
+        //layout.addView(createNewTextView(description.toString(), "content"));
+
     }
 
     private TextView createNewTextView(String text, String type){
@@ -208,18 +233,33 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
         final TextView textView = new TextView(this);
         textView.setLayoutParams(lparams);
 
-        // Set font size depending on text type passed
+        // Set font size depending on text type passed in
         if(type.equals("header")) {
             textView.setTextSize(18);
             textView.setText(text);
         }
         else if(type.equals("date")){
+            textView.setTextSize(14);
+            textView.setText(text);
+        }
+        else if (type.equals("city")){
             textView.setTextSize(16);
             textView.setText(text);
         }
+        else if(type.equals("url")){
+            textView.setTextSize(14);
+            textView.setClickable(true);
+            textView.setMovementMethod(LinkMovementMethod.getInstance());
+
+            // Make url text a link
+            text = "<a href='" + text + "'>Website</a>";
+
+            // Set bottom padding
+            textView.setPadding(0,0,0, 100);
+            textView.setText(Html.fromHtml(text));
+        }
         else{
             textView.setTextSize(14);
-
             // Place a new line at the end of the content
             textView.setText(text + "\n");
         }
