@@ -1,14 +1,11 @@
 package abertay.ac.uk.java_bot_app;
 
-import android.app.IntentService;
-import android.content.Intent;
+import android.app.Activity;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,39 +20,80 @@ import static android.content.ContentValues.TAG;
  *  https://developer.android.com/training/location/display-address.html#java
  */
 
-public class FetchAddressService extends IntentService {
+//public class FetchAddressService extends IntentService {
+public class FetchAddressService {
 
+    Activity currentActivity;
+    Location mLocation;
+
+    private String city;
+    private String address;
+
+    //private final TechMeetupsActivity parentActivity;
+
+    /*
     public FetchAddressService(){
         super(IntentService.class.getSimpleName());
+
     }
+    */
+
+    public FetchAddressService(Activity _currentActivity, Location _mLocation){
+        //super(IntentService.class.getSimpleName());
+
+        currentActivity = _currentActivity;
+        mLocation = _mLocation;
+
+        onHandleLocation(mLocation);
+   }
 
 
-    private void deliverResultToTechMeetupsActivity(int resultCode, String message, String city) {
+
+    private void deliverResultToTechMeetupsActivity(int resultCode, String _message, String _city) {
         // DEBUG
+        /*
         Bundle bundle = new Bundle();
         bundle.putString(Constants.RESULT_DATA_KEY, message);
         Intent intent = new Intent(FetchAddressService.this, TechMeetupsActivity.class);
         intent.putExtra("address", "" + message);
         intent.putExtra("city", "" + city);
+        //intent.putExtra("address", "blah");
+        //intent.putExtra("city", "blah2");
         startActivity(intent);
+        */
+
+        address = _message;
+        city = _city;
+
+        currentActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                TechMeetupsActivity.setLocation(address, city);
+            }
+        });
+
     }
 
-    @Override
-    protected void onHandleIntent(Intent intent) {
+    //@Override
+    //protected void onHandleIntent(Intent intent) {
+    protected void onHandleLocation(Location mlocation) {
         // DEBUG
-        Toast.makeText(FetchAddressService.this,"entered onHandleIntent", Toast.LENGTH_LONG ).show();
+        //Toast.makeText(FetchAddressService.this,"entered onHandleIntent", Toast.LENGTH_LONG ).show();
 
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        //currentActivity = intent.getData("Current activity");
 
-        if (intent == null) {
-            return;
-        }
+        Geocoder geocoder = new Geocoder(currentActivity, Locale.getDefault());
+
+        //if (intent == null) {
+         //   return;
+       // }
         String errorMessage = "";
 
-        // Get the location passed to this service through an extra.
-        Location location = intent.getParcelableExtra(
-                Constants.LOCATION_DATA_EXTRA);
+        //Get the location passed to this service through an extra.
+        //Location location = intent.getParcelableExtra(
+                //Constants.LOCATION_DATA_EXTRA);
 
+        Location location = mlocation;
 
         List<Address> addresses = null;
 
@@ -67,11 +105,11 @@ public class FetchAddressService extends IntentService {
                     1);
         } catch (IOException ioException) {
             // Catch network or other I/O problems.
-            errorMessage = getString(R.string.service_not_available);
+            //errorMessage = getString(R.string.service_not_available);
             Log.e(TAG, errorMessage, ioException);
         } catch (IllegalArgumentException illegalArgumentException) {
             // Catch invalid latitude or longitude values.
-            errorMessage = getString(R.string.invalid_lat_long_used);
+            //errorMessage = getString(R.string.invalid_lat_long_used);
             Log.e(TAG, errorMessage + ". " +
                     "Latitude = " + location.getLatitude() +
                     ", Longitude = " +
@@ -84,7 +122,7 @@ public class FetchAddressService extends IntentService {
         // Handle case where no address was found.
         if (addresses == null || addresses.size()  == 0) {
             if (errorMessage.isEmpty()) {
-                errorMessage = getString(R.string.no_address_found);
+                //errorMessage = getString(R.string.no_address_found);
                 city = "No city found";
                 Log.e(TAG, errorMessage);
             }
@@ -100,12 +138,12 @@ public class FetchAddressService extends IntentService {
             for(int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
                 addressFragments.add(address.getAddressLine(i));
             }
-            Log.i(TAG, getString(R.string.address_found));
+            //Log.i(TAG, getString(R.string.address_found));
             deliverResultToTechMeetupsActivity(Constants.SUCCESS_RESULT,
                     TextUtils.join(System.getProperty("line.separator"),
                             addressFragments), city);
         }
-        this.stopSelf();
+        //this.stopSelf();
     }
 
     public final class Constants {

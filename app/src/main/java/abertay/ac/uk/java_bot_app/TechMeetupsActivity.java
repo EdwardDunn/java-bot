@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
@@ -41,6 +43,10 @@ import java.util.ArrayList;
 public class TechMeetupsActivity extends AppCompatActivity implements View.OnClickListener, LocationListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, android.widget.PopupMenu.OnMenuItemClickListener {
 
+
+    public TechMeetupsActivity(){
+
+    }
     //GET LOCATION VARIABLE
     private GoogleApiClient googleAPIClient;
     private LocationManager locationManager;
@@ -52,7 +58,9 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
     protected Location mLastLocation;
     private FusedLocationProviderClient mFusedLocationClient;
     private Location mLastKnownLocation;
-    private TextView userAddress;
+    private static TextView userAddress;
+
+    private LocationRequest mLocationRequest;
 
     private TextView apiResponse;
 
@@ -61,7 +69,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
     private TechMeetupsAPIHelper techMeetupsAPIHelper;
 
     private String currentCity;
-    private TextView cityField;
+    private static TextView cityField;
 
     private LinearLayout layout;
 
@@ -89,6 +97,11 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
+    public static void setLocation(String address, String city){
+        userAddress.setText(address);
+        cityField.setText(city);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,8 +121,20 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
 
         mFusedLocationClient = new FusedLocationProviderClient(this);
 
+        // Get location
+        getLocation();
+        // Get address
+        fetchAddressHandler();
+        // Show address
+        populateAddressFields();
+
         techMeetupsAPIHelper = new TechMeetupsAPIHelper(this);
 
+        // DEBUG - TODO - remove
+        //currentCity = "Glasgow";
+
+        // Send the city retrieved from getLocation() to the techMeetupsAPIHelper
+        // This will show meetups for current city or all meetups if none in users current city
         if(currentCity.isEmpty()){
             techMeetupsAPIHelper.getTechMeetups("unknown");
         }
@@ -117,8 +142,6 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
             techMeetupsAPIHelper.getTechMeetups("" + currentCity);
         }
 
-        getLocation();
-        fetchAddressHandler();
     }
 
     @Override
@@ -129,20 +152,8 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
 
     private void setupUIViews() {
         userAddress = (TextView) findViewById(R.id.tech_meetups_txt_user_address);
-        if(this.getIntent().hasExtra("address")){
-            userAddress.setText(this.getIntent().getExtras().getString("address", "unknown"));
-        }
-
-
         cityField = (TextView) findViewById(R.id.tech_meetups_txt_city);
         currentCity = "";
-
-        if(this.getIntent().hasExtra("city")){
-            //currentCity = (this.getIntent().getExtras().getString("city", "unknown"));
-            cityField.setText(this.getIntent().getExtras().getString("city", "unknown"));
-            currentCity = cityField.toString();
-        }
-
 
         menu = findViewById(R.id.tech_meetups_img_menu);
         apiResponse = findViewById(R.id.tech_meetups_txt_api_response);
@@ -154,12 +165,27 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    public void populateAPIResponse(String response){
+    private void populateAddressFields(){
+        if(this.getIntent().hasExtra("address")){
+            userAddress.setText(this.getIntent().getExtras().getString("address", "unknown"));
+        }
 
+        if(this.getIntent().hasExtra("city")){
+            //currentCity = (this.getIntent().getExtras().getString("city", "unknown"));
+            cityField.setText(this.getIntent().getExtras().getString("city", "unknown"));
+            currentCity = cityField.toString();
+        }
+
+    }
+
+    public void populateAPIResponse(String response){
         /**
-         //Reference - https://stackoverflow.com/questions/11579693/how-to-get-json-data-from-php-server-to-android-mobile#11579742
+         //References:
+         *  https://stackoverflow.com/questions/11579693/how-to-get-json-data-from-php-server-to-android-mobile#11579742
+         *  https://stackoverflow.com/questions/9290651/make-a-hyperlink-textview-in-android
          */
 
+        // Holds list of meetups returned from the Open Tech Calendar API
         ArrayList<TechMeetup> meetupArray = new ArrayList<TechMeetup>();
 
         try{
@@ -171,6 +197,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
             for (int i = 0; i < size; i++) {
                 JSONObject meetupObject = jsonArray.getJSONObject(i);
 
+                // Only display results that have a url and areas (for address)
                 Boolean meetupHasURL = meetupObject.has("url");
                 Boolean meetupHasAreas = meetupObject.has("areas");
 
@@ -188,21 +215,17 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
                     JSONObject areasJSONObject = areasJSONArray.getJSONObject(0);
                     city = areasJSONObject.getString("title");
 
-                    //String slug = meetupObject.getString("slug");
-
                     // Get start time
                     String date = meetupObject.getString("start");
                     JSONObject dateJSONObject = new JSONObject(date);
                     String startDate = dateJSONObject.getString("displaylocal");
 
+                    // Create TechMeetup object
                     TechMeetup techMeetup = new TechMeetup(summary, city, description, startDate, url);
 
                     meetupArray.add(techMeetup);
-
                 }
-
             }
-
         }
         catch(JSONException e){
             e.printStackTrace();
@@ -224,6 +247,8 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
         layout.addView(createNewTextView(city.toString(), "city"));
         layout.addView(createNewTextView(date.toString(), "date"));
         layout.addView(createNewTextView(url.toString(), "url"));
+
+        // Currently not used but maybe needed in the future
         //layout.addView(createNewTextView(description.toString(), "content"));
 
     }
@@ -265,7 +290,6 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
         }
 
         textView.setTextColor(Color.BLACK);
-        //textView.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.img_java_bot_foreground, 0, 0 ,0);
         return textView;
     }
 
@@ -368,6 +392,32 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
             latitude = lastLocation.getLatitude();
             longitude = lastLocation.getLongitude();
         }
+        else{
+            startLocationUpdates();
+        }
+    }
+
+    protected void startLocationUpdates() {
+        // Create the location request
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(1000)
+                .setFastestInterval(5000);
+        // Request location updates
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            //return;
+            getLocation();
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleAPIClient,
+                mLocationRequest, (com.google.android.gms.location.LocationListener) this);
+        Log.d("reque", "--->>>>");
     }
 
     @Override
@@ -410,14 +460,23 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
         super.onStop();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        googleAPIClient.connect();
+    }
+
 
     //--------------------------Get Address from Location Methods-----------------------//
 
     protected void startIntentService() {
-        Intent intent = new Intent(this, FetchAddressService.class);
-        //intent.putExtra(FetchAddressService.Constants.RECEIVER, mResultReceiver);
-        intent.putExtra(FetchAddressService.Constants.LOCATION_DATA_EXTRA, mLastKnownLocation);
-        startService(intent);
+        //Intent intent = new Intent(this, FetchAddressService.class);
+                //intent.putExtra(FetchAddressService.Constants.RECEIVER, mResultReceiver);
+        //intent.putExtra(FetchAddressService.Constants.LOCATION_DATA_EXTRA, mLastKnownLocation);
+        //intent.putExtra("Current activity", this);
+        //startService(intent);
+
+        FetchAddressService fas = new FetchAddressService(this, mLastKnownLocation);
     }
 
 
