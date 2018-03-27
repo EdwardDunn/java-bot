@@ -38,7 +38,7 @@
         app:srcCompat="@drawable/icon_menu_white" />
 
     <TextView
-        android:id="@+id/buckysText"
+        android:id="@+id/training_txt_question_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -48,5 +48,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/training_txt_page_header" />
+
+    <Button
+        android:id="@+id/training_btn_show_question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:text="Show Question"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/training_txt_question_text" />
 
 </android.support.constraint.ConstraintLayout>

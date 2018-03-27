@@ -5,14 +5,22 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class TrainingActivity extends AppCompatActivity implements View.OnClickListener, android.widget.PopupMenu.OnMenuItemClickListener {
 
     private ImageView menu;
 
     private QuestionsSQLiteDatabaseHelper questionsDatabase;
+    private Button showQuestionBtn;
+    private TextView currentQuestion;
+    private ArrayList<Question> questionsList;
+    private int questionCounter;
 
 
     @Override
@@ -24,16 +32,28 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
 
         menu.setOnClickListener(this);
 
+        showQuestionBtn.setOnClickListener(this);
+
         questionsDatabase = new QuestionsSQLiteDatabaseHelper(this);
 
-        questionsDatabase.addQuestion(new Question("test solution key", "test solution"));
-
         //questionsDatabase.emptyDatabase();
+
+        questionsDatabase.addQuestion(new Question("test solution key", "test solution"));
+        questionsDatabase.addQuestion(new Question("test solution key 2", "test solution 2"));
+        questionsDatabase.addQuestion(new Question("test solution key 3", "test solution 3"));
+
+        // Populate question list with the current weeks questions asked
+        questionsList = questionsDatabase.getQuestions();
+        questionCounter = 0;
+
 
     }
 
     private void setupUIViews(){
+
         menu = findViewById(R.id.training_img_menu);
+        showQuestionBtn = findViewById(R.id.training_btn_show_question);
+        currentQuestion = findViewById(R.id.training_txt_question_text);
     }
 
     @Override
@@ -41,6 +61,28 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
         if(view.getId() == R.id.training_img_menu){
             showPopup(view);
         }
+        else if(view.getId() == R.id.training_btn_show_question){
+            showNextQuestion();
+        }
+    }
+
+    private void showNextQuestion(){
+
+        String questionToShow = "";
+
+        /*
+        for(Question q : questionsList){
+            questionToShow += q.getSolution() + q.getSolutionKey();
+        }
+        */
+
+        Question q = questionsList.get(questionCounter);
+
+        questionToShow = q.getSolution();
+
+        currentQuestion.setText(questionToShow.toString());
+
+        questionCounter++;
     }
 
     /**

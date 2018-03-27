@@ -2,8 +2,11 @@ package abertay.ac.uk.java_bot_app;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
 
 /**
  * Created by Edward Dunn on 23/03/2018.
@@ -35,12 +38,14 @@ public class QuestionsSQLiteDatabaseHelper extends SQLiteOpenHelper {
         // Creates the database if it doesn't exist and adds the "contacts" table.
         /* Execute SQL query. */
         db.execSQL(QUESTIONS_TABLE_CREATE);
+        //db.close();
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + QUESTIONS_TABLE_NAME);
         onCreate(db);
+        //db.close();
     }
 
     public void addQuestion(Question q){
@@ -56,12 +61,36 @@ public class QuestionsSQLiteDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void emptyDatabase(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DROP TABLE IF EXISTS " + QUESTIONS_TABLE_NAME);
+    public ArrayList<Question> getQuestions(){
+
+         /* Get the readable database. */
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        /* Get all contacts by querying the database. */
+        Cursor result = db.query(QUESTIONS_TABLE_NAME, COLUMN_NAMES, null, null, null, null, null, null);
+
+        /* Convert results to a list of Contact objects. */
+        ArrayList<Question> questions = new ArrayList<Question>();
+
+        for(int i = 0; i < result.getCount(); i++){
+            result.moveToPosition(i);
+            /* Create a Contact object with using data from name, email, phone columns. Add it to list. */
+            questions.add(new Question(result.getString(0), result.getString(1)));
+        }
+
+        //db.close();
+        return questions;
     }
 
-    
+
+
+    public void emptyDatabase(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE * FROM " + QUESTIONS_TABLE_NAME);
+        db.close();
+    }
+
+
     /*
     SQLiteDatabase sqLiteDatabase;
 
