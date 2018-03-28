@@ -38,16 +38,17 @@
         app:srcCompat="@drawable/icon_menu_white" />
 
     <TextView
-        android:id="@+id/training_txt_question_text"
+        android:id="@+id/training_txt_question"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="56dp"
-        android:text="TextView"
+        android:layout_marginTop="8dp"
+        android:text="@string/solution_placeholder"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/training_txt_page_header" />
+        app:layout_constraintTop_toBottomOf="@+id/training_txt_question_header" />
 
     <Button
         android:id="@+id/training_btn_show_question"
@@ -55,10 +56,49 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:text="Show Question"
+        android:layout_marginTop="100dp"
+        android:text="Show Next Question"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/training_txt_question_text" />
+        app:layout_constraintTop_toBottomOf="@+id/training_txt_question" />
+
+    <TextView
+        android:id="@+id/training_txt_solution"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/question_placeholder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/training_txt_solution_header" />
+
+    <TextView
+        android:id="@+id/training_txt_question_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/solution_header"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/training_txt_solution" />
+
+    <TextView
+        android:id="@+id/training_txt_solution_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/question_header"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/training_txt_page_header" />
 
 </android.support.constraint.ConstraintLayout>

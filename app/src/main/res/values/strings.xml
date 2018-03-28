@@ -4,7 +4,6 @@
     <string name="chat_welcome">Hey, how can i help?</string>
     <string name="enter_question">enter question</string>
     <string name="ask_button">ask</string>
-    <string name="solution_header">Solution</string>
     <string name="menu_action_training">Training</string>
     <string name="menu_action_tech_meetups">Tech Meetups</string>
     <string name="menu_action_setup">Setup</string>
@@ -14,6 +13,10 @@
     <string name="training_session_notification_title">Training Session</string>
     <string name="training_session_notification_content">Hey, a new training session is available!</string>
     <string name="training_header">Training</string>
+    <string name="question_header">Question</string>
+    <string name="solution_header">Solution</string>
+    <string name="solution_placeholder">Solution</string>
+    <string name="question_placeholder">Question</string>
     <string name="main_error_message">Connecting to database</string>
     <string name="tech_meetups_error_message">Connecting to Open Tech Calendar</string>
     <string name="service_not_available">Location service not available</string>

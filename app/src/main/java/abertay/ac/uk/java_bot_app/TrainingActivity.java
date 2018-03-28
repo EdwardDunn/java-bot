@@ -1,7 +1,10 @@
 package abertay.ac.uk.java_bot_app;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,9 +22,29 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
     private QuestionsSQLiteDatabaseHelper questionsDatabase;
     private Button showQuestionBtn;
     private TextView currentQuestion;
+    private TextView currentSolution;
     private ArrayList<Question> questionsList;
     private int questionCounter;
 
+    // TODO - sort this error
+    @SuppressLint("HandlerLeak")
+    Handler questionHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            Bundle bundle = msg.getData();
+
+            String questionText = bundle.getString("question");
+            String solutionText = bundle.getString("solution");
+
+            currentQuestion.setText(questionText);
+            currentSolution.setText(solutionText);
+
+            questionCounter++;
+        }
+
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +73,10 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void setupUIViews(){
-
         menu = findViewById(R.id.training_img_menu);
         showQuestionBtn = findViewById(R.id.training_btn_show_question);
-        currentQuestion = findViewById(R.id.training_txt_question_text);
+        currentQuestion = findViewById(R.id.training_txt_question);
+        currentSolution = findViewById(R.id.training_txt_solution);
     }
 
     @Override
@@ -67,22 +90,29 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void showNextQuestion(){
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                String questionToShow = "";
+                String solutionToShow = "";
 
-        String questionToShow = "";
+                Question q = questionsList.get(questionCounter);
 
-        /*
-        for(Question q : questionsList){
-            questionToShow += q.getSolution() + q.getSolutionKey();
-        }
-        */
+                questionToShow = q.getSolutionKey();
+                solutionToShow = q.getSolution();
 
-        Question q = questionsList.get(questionCounter);
+                Message message = questionHandler.obtainMessage();
+                Bundle bundle = new Bundle();
+                bundle.putString("question", questionToShow);
+                bundle.putString("solution", solutionToShow);
+                message.setData(bundle);
+                questionHandler.sendMessage(message);
 
-        questionToShow = q.getSolution();
+            }
+        };
 
-        currentQuestion.setText(questionToShow.toString());
-
-        questionCounter++;
+        Thread showQuestionThread = new Thread(r);
+        showQuestionThread.start();
     }
 
     /**
