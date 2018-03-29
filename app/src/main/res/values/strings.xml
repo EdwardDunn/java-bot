@@ -36,4 +36,8 @@
     <string name="setup_header">Setup</string>
     <string name="notifications_placeholder">Training Notifications</string>
     <string name="clear_data_btn">Clear Data</string>
+    <string name="remove_training_data_message">Remove all training data?</string>
+    <string name="training_data_title">Training Data</string>
+    <string name="alert_dialog_positive">yes</string>
+    <string name="alert_dialog_negative">no</string>
 </resources>
