@@ -24,8 +24,11 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
     private GestureDetectorCompat gestureDetector;
 
     private QuestionsSQLiteDatabaseHelper questionsDatabase;
+    private TextView questionHeader;
     private TextView currentQuestion;
+    private TextView solutionHeader;
     private TextView currentSolution;
+    private TextView trainingMessage;
     private ArrayList<Question> questionsList;
     private int questionCounter;
 
@@ -44,7 +47,7 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
             currentQuestion.setText(questionText);
             currentSolution.setText(solutionText);
 
-            questionCounter++;
+            //questionCounter++;
         }
 
     };
@@ -62,6 +65,14 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
 
         questionsDatabase = new QuestionsSQLiteDatabaseHelper(this);
 
+        questionCounter = 0;
+
+
+        // used for setting elements to invisible if no questions to show
+        // message displaying this will be set to visible
+        //setUIElementsVisiability(false);
+
+
         //questionsDatabase.emptyDatabase();
 
         //questionsDatabase.addQuestion(new Question("test solution key", "test solution"));
@@ -72,12 +83,17 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
         questionsList = questionsDatabase.getQuestions();
         questionCounter = 0;
 
+        showNextQuestion();
+
     }
 
     private void setupUIViews(){
         menu = findViewById(R.id.training_img_menu);
+        questionHeader = findViewById(R.id.training_txt_question_header);
         currentQuestion = findViewById(R.id.training_txt_question);
+        solutionHeader = findViewById(R.id.training_txt_solution_header);
         currentSolution = findViewById(R.id.training_txt_solution);
+        trainingMessage = findViewById(R.id.training_txt_training_message);
     }
 
     @Override
@@ -88,28 +104,75 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void showNextQuestion(){
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                String questionToShow = "";
-                String solutionToShow = "";
 
-                Question q = questionsList.get(questionCounter);
+        // if question size is o
+            // set visibility false for all components accept message saying no questions asked yet
 
-                questionToShow = q.getQuestion();
-                solutionToShow = q.getSolution();
+        // if question counter > question size
+            // set visibility of all componets to false
+            // display 'training complete' message
+            // empty database
 
-                Message message = questionHandler.obtainMessage();
-                Bundle bundle = new Bundle();
-                bundle.putString("question", questionToShow);
-                bundle.putString("solution", solutionToShow);
-                message.setData(bundle);
-                questionHandler.sendMessage(message);
+
+            if (questionsList.size() > 0) {
+
+                // Account for -1 errors
+                if (questionCounter > questionsList.size() - 1) {
+                    setUIElementsVisiability(false);
+                    trainingMessage.setText("Training complete");
+                }
+                else {
+
+                    setUIElementsVisiability(true);
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+                            String questionToShow = "";
+                            String solutionToShow = "";
+
+                            Question q = questionsList.get(questionCounter);
+
+                            questionToShow = q.getQuestion();
+                            solutionToShow = q.getSolution();
+
+                            Message message = questionHandler.obtainMessage();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("question", questionToShow);
+                            bundle.putString("solution", solutionToShow);
+                            message.setData(bundle);
+                            questionHandler.sendMessage(message);
+                            questionCounter++;
+                        }
+                    };
+                    Thread showQuestionThread = new Thread(r);
+                    showQuestionThread.start();
+
+                }
 
             }
-        };
-        Thread showQuestionThread = new Thread(r);
-        showQuestionThread.start();
+            else{
+                setUIElementsVisiability(false);
+                trainingMessage.setText("No questions asked yet");
+            }
+
+    }
+
+    private void setUIElementsVisiability(Boolean visibility){
+
+        if(visibility == false) {
+            questionHeader.setVisibility(View.INVISIBLE);
+            currentQuestion.setVisibility(View.INVISIBLE);
+            solutionHeader.setVisibility(View.INVISIBLE);
+            currentSolution.setVisibility(View.INVISIBLE);
+            trainingMessage.setVisibility(View.VISIBLE);
+        }else{
+            questionHeader.setVisibility(View.VISIBLE);
+            currentQuestion.setVisibility(View.VISIBLE);
+            currentQuestion.setVisibility(View.VISIBLE);
+            currentSolution.setVisibility(View.VISIBLE);
+            trainingMessage.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     /**

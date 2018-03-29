@@ -149,16 +149,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view){
         if(view.getId() == R.id.main_btn_ask){
             // Used to set initialQuestion variable
-            questionCounter++;
+            //questionCounter++;
 
             // Create new TextView with text entered into question field in questions layout
             String question = "";
             question  = question_field.getText().toString();
 
             // If first question asked, set initialQuestion
-            if(questionCounter == 1){
+            //if(questionCounter == 1){
                 initialQuestion = question;
-            }
+            //}
 
             getChatBotResponse(question);
 
