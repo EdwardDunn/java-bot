@@ -8,6 +8,7 @@ import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
+import android.widget.Toast;
 
 public class SetupActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -48,7 +49,6 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
             setNotificationsSwitch();
         }
         else if(view.getId() == R.id.setup_btn_clear_data){
-
             openDialog(view);
         }
     }
@@ -56,14 +56,20 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
     public void openDialog(View view){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
         alertDialogBuilder.setMessage(R.string.remove_training_data_message)
-                            .setTitle(R.string.training_data_title);
-        alertDialogBuilder.setIcon(R.drawable.icon_warning);
-        
+                            .setTitle(R.string.training_data_title)
+                            .setIcon(R.drawable.icon_warning);
+
         alertDialogBuilder.setPositiveButton(R.string.alert_dialog_positive,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        removeTrainingSessionData();
+                        try{
+                            removeTrainingSessionData();
+                            Toast.makeText(SetupActivity.this, R.string.training_data_deleted, Toast.LENGTH_SHORT).show();
+                        }catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(SetupActivity.this, R.string.problem_deleting_training_data, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
@@ -92,6 +98,5 @@ public class SetupActivity extends AppCompatActivity implements View.OnClickList
         };
         Thread emptyDbThread = new Thread(emptyDbRunnable);
         emptyDbThread.start();
-
     }
 }

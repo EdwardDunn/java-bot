@@ -40,4 +40,6 @@
     <string name="training_data_title">Training Data</string>
     <string name="alert_dialog_positive">yes</string>
     <string name="alert_dialog_negative">no</string>
+    <string name="training_data_deleted">Training data deleted</string>
+    <string name="problem_deleting_training_data">Problem deleting data, please try again</string>
 </resources>
