@@ -80,18 +80,6 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
 
         questionCounter = 0;
 
-
-        // used for setting elements to invisible if no questions to show
-        // message displaying this will be set to visible
-        //setUIElementsVisiability(false);
-
-
-        //questionsDatabase.emptyDatabase();
-
-        //questionsDatabase.addQuestion(new Question("test solution key", "test solution"));
-        //questionsDatabase.addQuestion(new Question("test solution key 2", "test solution 2"));
-        //questionsDatabase.addQuestion(new Question("test solution key 3", "test solution 3"));
-
         // Populate question list with the current weeks questions asked
         questionsList = questionsDatabase.getQuestions();
         questionCounter = 0;
