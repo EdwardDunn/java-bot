@@ -33,4 +33,6 @@
     <string name="training_message">training message</string>
     <string name="training_complete_message">Training Complete</string>
     <string name="no_question_available">No questions asked since last training session</string>
+    <string name="setup_header">Setup</string>
+    <string name="notifications_placeholder">Training Notifications</string>
 </resources>

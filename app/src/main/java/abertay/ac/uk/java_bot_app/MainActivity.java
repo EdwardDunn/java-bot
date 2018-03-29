@@ -42,6 +42,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final String WELCOME_MESSAGE = "Hey, how can I help";
     private final String WELCOME_BACK_MESSAGE = "Great, your back";
 
+    // Set notifications on or off
+    public static Boolean notifications;
+    public static void setNotificationsOnOrOff(Boolean visible){
+        if(visible){
+            notifications = true;
+
+        }else{
+            notifications = false;
+        }
+    }
+
     // Progress Bar
     // setLoodingProgressBarVisibility() allows this variable to be easily set by other classes (ChatBotRemoteDatabaseHelper)
     public static ProgressBar loadingProgressBar;
@@ -53,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             loadingProgressBar.setVisibility(View.INVISIBLE);
         }
     }
+
 
     // Loading Message (when connection is not available
     // setLoadingMessageVisibility() allows this variable to be easily set by other classes (ChatBotRemoteDatabaseHelper)
@@ -104,19 +116,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //---------------Training Session Notification--------------//
 
-        // Initialise notification object
-        notification = new NotificationCompat.Builder(this);
-        notification.setAutoCancel(true);
+        // If notifications are allowed, set to true in setNotifications
 
-        // This object is used to extend the timer class
-        NotificationTimer notificationTask = new NotificationTimer();
+        if(notifications) {
+            // Initialise notification object
+            notification = new NotificationCompat.Builder(this);
+            notification.setAutoCancel(true);
 
-        // Create timer object
-        Timer notificationTimer = new Timer();
+            // This object is used to extend the timer class
+            NotificationTimer notificationTask = new NotificationTimer();
 
-        // TODO - for completed app set time to 7 days (604800000 milliseconds)
-        // For demonstration purposes 2 minutes is used (120000 milliseconds)
-        notificationTimer.schedule(notificationTask, 5000, 120000);
+            // Create timer object
+            Timer notificationTimer = new Timer();
+
+            // TODO - for completed app set time to 7 days (604800000 milliseconds)
+            // For demonstration purposes 2 minutes is used (120000 milliseconds)
+            notificationTimer.schedule(notificationTask, 5000, 30000);
+        }
+
     }
 
     protected void onPause(){
@@ -142,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         questionCounter = 0;
         initialQuestion = "";
         cb = ChatBot.getInstance();
+        notifications = true;
 
     }
 
@@ -269,21 +287,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * Generate notification for alerting user that this weeks training session is available
      */
     public void generateNotification(){
-        //Build the notification
-        notification.setSmallIcon(R.drawable.ic_launcher_foreground);
-        notification.setWhen(System.currentTimeMillis());
-        notification.setContentTitle(getString(R.string.training_session_notification_title));
-        notification.setContentText(getString(R.string.training_session_notification_content));
 
-        // Onclick of notification, go to the training activity
-        Intent trainingIntent = new Intent(this, TrainingActivity.class);
-        // Give phone access to intent
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, trainingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        notification.setContentIntent(pendingIntent);
+        if(notifications == true) {
+            //Build the notification
+            notification.setSmallIcon(R.drawable.ic_launcher_foreground);
+            notification.setWhen(System.currentTimeMillis());
+            notification.setContentTitle(getString(R.string.training_session_notification_title));
+            notification.setContentText(getString(R.string.training_session_notification_content));
 
-        // Build notification and issues it
-        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        nm.notify(uniqueID, notification.build());
+            // Onclick of notification, go to the training activity
+            Intent trainingIntent = new Intent(this, TrainingActivity.class);
+            // Give phone access to intent
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, trainingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            notification.setContentIntent(pendingIntent);
+
+            // Build notification and issues it
+            NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            nm.notify(uniqueID, notification.build());
+        }
     }
 
 }
