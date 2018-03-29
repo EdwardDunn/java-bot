@@ -29,4 +29,5 @@
     <string name="tech_meetups_page_header">Tech Meetups</string>
     <string name="no_meet_ups">Sorry there are no meetups in your area here are some in other cities</string>
     <string name="city_placeholder">City</string>
+    <string name="swipe_notice">swipe for next question</string>
 </resources>

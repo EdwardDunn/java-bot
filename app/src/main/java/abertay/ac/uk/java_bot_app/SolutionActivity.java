@@ -32,12 +32,16 @@ public class SolutionActivity extends AppCompatActivity implements View.OnClickL
     private String solution;
     private String initialQuestion;
 
+    QuestionsSQLiteDatabaseHelper questionsDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_solution);
 
         setupUIViews();
+
+        questionsDatabase = new QuestionsSQLiteDatabaseHelper(this);
 
         ask_btn.setOnClickListener(this);
 
@@ -112,6 +116,7 @@ public class SolutionActivity extends AppCompatActivity implements View.OnClickL
             // If the returned response from ChatBot equals user is happy with solution
             // TODO - this response 'Great' would have to made in to loop checking for other positive responses if app was released (as app is for educational purposes, this will suffice)
             if (response.contains("Great")) {
+                addQuestionToDatabase();
                 layout.addView(createNewTextView(response));
             }else{
                 // If user is not happy with response, search Stack Overflow with initial question
@@ -129,6 +134,18 @@ public class SolutionActivity extends AppCompatActivity implements View.OnClickL
             //startActivity(solutionIntent);
         }
 
+    }
+
+    private void addQuestionToDatabase(){
+
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                questionsDatabase.addQuestion(new Question(initialQuestion, solution));
+            }
+        };
+        Thread updateDatabase = new Thread(r);
+        updateDatabase.start();
     }
 
 }

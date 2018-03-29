@@ -9,8 +9,8 @@ public class Question {
    private String question;
    private String solution;
 
-    public Question(String _solutionKey, String _solution){
-        question = _solutionKey;
+    public Question(String _question, String _solution){
+        question = _question;
         solution = _solution;
     }
 

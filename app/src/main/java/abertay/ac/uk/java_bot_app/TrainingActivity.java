@@ -64,9 +64,9 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
 
         //questionsDatabase.emptyDatabase();
 
-        questionsDatabase.addQuestion(new Question("test solution key", "test solution"));
-        questionsDatabase.addQuestion(new Question("test solution key 2", "test solution 2"));
-        questionsDatabase.addQuestion(new Question("test solution key 3", "test solution 3"));
+        //questionsDatabase.addQuestion(new Question("test solution key", "test solution"));
+        //questionsDatabase.addQuestion(new Question("test solution key 2", "test solution 2"));
+        //questionsDatabase.addQuestion(new Question("test solution key 3", "test solution 3"));
 
         // Populate question list with the current weeks questions asked
         questionsList = questionsDatabase.getQuestions();
@@ -108,7 +108,6 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
 
             }
         };
-
         Thread showQuestionThread = new Thread(r);
         showQuestionThread.start();
     }
