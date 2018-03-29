@@ -117,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //---------------Training Session Notification--------------//
 
         // If notifications are allowed, set to true in setNotifications
-
         if(notifications) {
             // Initialise notification object
             notification = new NotificationCompat.Builder(this);
@@ -288,6 +287,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     public void generateNotification(){
 
+        // If notifications are set to true in the setup activity training notifications switch
         if(notifications == true) {
             //Build the notification
             notification.setSmallIcon(R.drawable.ic_launcher_foreground);
