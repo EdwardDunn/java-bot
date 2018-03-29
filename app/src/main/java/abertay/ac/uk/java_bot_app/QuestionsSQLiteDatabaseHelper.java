@@ -22,7 +22,7 @@ public class QuestionsSQLiteDatabaseHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "SQLiteLabDB";
     private static final String QUESTIONS_TABLE_NAME = "questions";
-    private static final String[] COLUMN_NAMES = {"solution_key", "solution"};
+    private static final String[] COLUMN_NAMES = {"question", "solution"};
     /* Construct CREATE query string. */
     private static final String QUESTIONS_TABLE_CREATE =
             "CREATE TABLE " + QUESTIONS_TABLE_NAME + " (" +
@@ -51,7 +51,7 @@ public class QuestionsSQLiteDatabaseHelper extends SQLiteOpenHelper {
     public void addQuestion(Question q){
         /* Pack contact details in ContentValues object for database insertion. */
         ContentValues row = new ContentValues();
-        row.put(this.COLUMN_NAMES[0], q.getSolutionKey());
+        row.put(this.COLUMN_NAMES[0], q.getQuestion());
         row.put(this.COLUMN_NAMES[1], q.getSolution());
         // The first parameter is a column name, the second is a value.
 

@@ -5,22 +5,25 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.GestureDetector;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class TrainingActivity extends AppCompatActivity implements View.OnClickListener, android.widget.PopupMenu.OnMenuItemClickListener {
+public class TrainingActivity extends AppCompatActivity implements View.OnClickListener, android.widget.PopupMenu.OnMenuItemClickListener, GestureDetector.OnGestureListener {
 
     private ImageView menu;
 
+    private GestureDetectorCompat gestureDetector;
+
     private QuestionsSQLiteDatabaseHelper questionsDatabase;
-    private Button showQuestionBtn;
     private TextView currentQuestion;
     private TextView currentSolution;
     private ArrayList<Question> questionsList;
@@ -55,7 +58,7 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
 
         menu.setOnClickListener(this);
 
-        showQuestionBtn.setOnClickListener(this);
+        this.gestureDetector = new GestureDetectorCompat(this, this);
 
         questionsDatabase = new QuestionsSQLiteDatabaseHelper(this);
 
@@ -69,12 +72,10 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
         questionsList = questionsDatabase.getQuestions();
         questionCounter = 0;
 
-
     }
 
     private void setupUIViews(){
         menu = findViewById(R.id.training_img_menu);
-        showQuestionBtn = findViewById(R.id.training_btn_show_question);
         currentQuestion = findViewById(R.id.training_txt_question);
         currentSolution = findViewById(R.id.training_txt_solution);
     }
@@ -83,9 +84,6 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view){
         if(view.getId() == R.id.training_img_menu){
             showPopup(view);
-        }
-        else if(view.getId() == R.id.training_btn_show_question){
-            showNextQuestion();
         }
     }
 
@@ -98,7 +96,7 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
 
                 Question q = questionsList.get(questionCounter);
 
-                questionToShow = q.getSolutionKey();
+                questionToShow = q.getQuestion();
                 solutionToShow = q.getSolution();
 
                 Message message = questionHandler.obtainMessage();
@@ -153,5 +151,44 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
                 // If here these has been an issue
                 return false;
         }
+    }
+
+    //-------------------------------Gesture Detector Methods---------------------------------------//
+
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        showNextQuestion();
+        return true;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        this.gestureDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
     }
 }
