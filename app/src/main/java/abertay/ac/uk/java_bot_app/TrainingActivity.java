@@ -29,6 +29,7 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
     private TextView solutionHeader;
     private TextView currentSolution;
     private TextView trainingMessage;
+    private TextView swipeMessage;
     private ArrayList<Question> questionsList;
     private int questionCounter;
 
@@ -51,6 +52,7 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
 
     };
 
+    // TODO - sort this error
     @SuppressLint("HandlerLeak")
     Handler emptyDbHandler = new Handler(){
         @Override
@@ -105,6 +107,7 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
         solutionHeader = findViewById(R.id.training_txt_solution_header);
         currentSolution = findViewById(R.id.training_txt_solution);
         trainingMessage = findViewById(R.id.training_txt_training_message);
+        swipeMessage = findViewById(R.id.training_txt_swipe_notice);
     }
 
     @Override
@@ -131,7 +134,6 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
 
                     Thread emptyDatabaseThread = new Thread(emptyDbRunnable);
                     emptyDatabaseThread.start();
-
 
                 }
                 else {
@@ -163,7 +165,7 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
             }
             else{
                 setUIElementsVisiability(false);
-                trainingMessage.setText("No questions asked yet");
+                trainingMessage.setText(R.string.no_question_available);
             }
 
     }
@@ -175,12 +177,14 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
             currentQuestion.setVisibility(View.INVISIBLE);
             solutionHeader.setVisibility(View.INVISIBLE);
             currentSolution.setVisibility(View.INVISIBLE);
+            swipeMessage.setVisibility(View.INVISIBLE);
             trainingMessage.setVisibility(View.VISIBLE);
         }else{
             questionHeader.setVisibility(View.VISIBLE);
             currentQuestion.setVisibility(View.VISIBLE);
             currentQuestion.setVisibility(View.VISIBLE);
             currentSolution.setVisibility(View.VISIBLE);
+            swipeMessage.setVisibility(View.VISIBLE);
             trainingMessage.setVisibility(View.INVISIBLE);
         }
 
