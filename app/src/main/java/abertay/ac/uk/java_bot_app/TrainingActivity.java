@@ -47,9 +47,20 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
             currentQuestion.setText(questionText);
             currentSolution.setText(solutionText);
 
-            //questionCounter++;
         }
 
+    };
+
+    @SuppressLint("HandlerLeak")
+    Handler emptyDbHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+            setUIElementsVisiability(false);
+            trainingMessage.setText(R.string.training_complete_message);
+
+        }
     };
 
     @Override
@@ -105,21 +116,23 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
 
     private void showNextQuestion(){
 
-        // if question size is o
-            // set visibility false for all components accept message saying no questions asked yet
-
-        // if question counter > question size
-            // set visibility of all componets to false
-            // display 'training complete' message
-            // empty database
-
-
             if (questionsList.size() > 0) {
 
                 // Account for -1 errors
                 if (questionCounter > questionsList.size() - 1) {
-                    setUIElementsVisiability(false);
-                    trainingMessage.setText("Training complete");
+
+                    Runnable emptyDbRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            questionsDatabase.emptyDatabase();
+                            emptyDbHandler.sendEmptyMessage(0);
+                        }
+                    };
+
+                    Thread emptyDatabaseThread = new Thread(emptyDbRunnable);
+                    emptyDatabaseThread.start();
+
+
                 }
                 else {
 
@@ -146,9 +159,7 @@ public class TrainingActivity extends AppCompatActivity implements View.OnClickL
                     };
                     Thread showQuestionThread = new Thread(r);
                     showQuestionThread.start();
-
                 }
-
             }
             else{
                 setUIElementsVisiability(false);

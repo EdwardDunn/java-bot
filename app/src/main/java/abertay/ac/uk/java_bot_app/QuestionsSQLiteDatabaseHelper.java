@@ -86,7 +86,8 @@ public class QuestionsSQLiteDatabaseHelper extends SQLiteOpenHelper {
 
     public void emptyDatabase(){
         SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("DELETE * FROM " + QUESTIONS_TABLE_NAME);
+        //db.execSQL("DELETE * FROM " + QUESTIONS_TABLE_NAME);
+        db.delete(QUESTIONS_TABLE_NAME, null, null);
         db.close();
     }
 
