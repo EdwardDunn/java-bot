@@ -1,6 +1,7 @@
 package abertay.ac.uk.java_bot_app;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,13 +12,16 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 public class StackOverflowActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private String url;
     private WebView webViewer;
+    public static ProgressBar loadingProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +38,23 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
             webViewer.loadUrl(url);
         }
 
-        webViewer.setWebViewClient(new WebViewClient());
+        //webViewer.setWebViewClient(new WebViewClient());
+
+        webViewer.setWebViewClient(new WebViewClient() {
+
+                                     @Override public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                                         super.onPageStarted(view, url, favicon);
+                                         loadingProgressBar.setVisibility(ProgressBar.VISIBLE);
+                                         webViewer.setVisibility(View.INVISIBLE);
+                                     }
+
+                                     @Override public void onPageCommitVisible(WebView view, String url) {
+                                         super.onPageCommitVisible(view, url);
+                                         loadingProgressBar.setVisibility(ProgressBar.GONE);
+                                         webViewer.setVisibility(View.VISIBLE);
+                                         //isWebViewLoadingFirstPage=false;
+                                     }
+                                 });
 
         browseWeb(url);
 
@@ -55,6 +75,8 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
         url = "";
         webViewer = (WebView)findViewById(R.id.webView_webViewer);
         Log.d("debug", "entered setupUIViews");
+
+        loadingProgressBar = findViewById(R.id.stack_overflow_pb_progress_bar);
     }
 
     private void browseWeb(String address){
