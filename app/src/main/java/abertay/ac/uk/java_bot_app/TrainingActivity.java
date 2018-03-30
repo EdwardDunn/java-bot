@@ -96,6 +96,7 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
         drawer.setDrawerListener(toogle);
         toogle.syncState();
 
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -217,7 +218,7 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        //showNextQuestion();
+        showNextQuestion();
         return true;
     }
 

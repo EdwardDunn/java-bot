@@ -21,6 +21,7 @@ import android.widget.Toast;
 public class SetupActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private Switch notificationsSwitch;
+
     //Used to delete data from questions SQLite database
     private Button clearDataBtn;
 
@@ -38,7 +39,7 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
 
         questionsDatabase = new QuestionsSQLiteDatabaseHelper(this);
 
-        //-----------------------Drawer menu---------------------------------------///
+        //--------------------------------Drawer Menu---------------------------------------------//
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -75,6 +76,7 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
         }
     }
 
+    // Alert Dialog Box
     public void openDialog(View view){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
         alertDialogBuilder.setMessage(R.string.remove_training_data_message)
@@ -121,6 +123,8 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
         Thread emptyDbThread = new Thread(emptyDbRunnable);
         emptyDbThread.start();
     }
+
+    //----------------------------Drawer Menu Methods---------------------------------------------//
 
     @Override
     public void onBackPressed(){
