@@ -58,9 +58,9 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
         // Set notifications switch to check is notifications are allowed
 
         //TODO -fix
-        //if(MainActivity.notifications == true){
+        if(MainActivity.notifications == true){
             notificationsSwitch.setChecked(true);
-        //}
+        }
 
         clearDataBtn = findViewById(R.id.setup_btn_clear_data);
     }

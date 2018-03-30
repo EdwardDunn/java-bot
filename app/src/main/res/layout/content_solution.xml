@@ -1,6 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/solution_txt_page_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="89dp"
+        android:text="@string/solution_header"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/solution_txt_solution"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/solution_txt_page_header"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="37dp"
+        android:text="solution"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/solution_txt_page_header" />
+
+    <EditText
+        android:id="@+id/solution_et_question_field"
+        android:layout_width="236dp"
+        android:layout_height="35dp"
+        android:layout_alignBaseline="@+id/solution_btn_ask"
+        android:layout_alignBottom="@+id/solution_btn_ask"
+        android:layout_alignStart="@+id/solution_ll_question_layout"
+        android:background="@color/lightGray"
+        android:ems="10"
+        android:hint="@string/enter_question"
+        android:inputType="text"
+        android:outlineProvider="bounds"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="5dp"
+        android:selectAllOnFocus="false"
+        android:singleLine="false"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/solution_btn_ask"
+        android:layout_width="wrap_content"
+        android:layout_height="47dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="19dp"
+        android:layout_marginStart="13dp"
+        android:layout_toEndOf="@+id/solution_et_question_field"
+        android:text="@string/ask_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.6"
+        app:layout_constraintStart_toEndOf="@+id/solution_et_question_field" />
+
+
+    <LinearLayout
+        android:id="@+id/solution_ll_question_layout"
+        android:layout_width="352dp"
+        android:layout_height="250dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="230dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/solution_txt_solution"></LinearLayout>
+
+</RelativeLayout>

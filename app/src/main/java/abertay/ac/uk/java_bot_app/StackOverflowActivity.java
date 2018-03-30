@@ -2,12 +2,19 @@ package abertay.ac.uk.java_bot_app;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-public class StackOverflowActivity extends AppCompatActivity {
+public class StackOverflowActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private String url;
     private WebView webViewer;
@@ -30,6 +37,18 @@ public class StackOverflowActivity extends AppCompatActivity {
         webViewer.setWebViewClient(new WebViewClient());
 
         browseWeb(url);
+
+        //-----------------------Drawer menu---------------------------------------///
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toogle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toogle);
+        toogle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     private void setupUIViews(){
@@ -50,6 +69,65 @@ public class StackOverflowActivity extends AppCompatActivity {
         else{
             webViewer.loadUrl("http://www." + address);
         }
+    }
+
+
+    @Override
+    public void onBackPressed(){
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if(drawer.isDrawerOpen(GravityCompat.START)){
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        else{
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.nav_drawer, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+
+        if(id == R.id.action_settings){
+            return true;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public boolean onNavigationItemSelected(MenuItem item){
+        int id = item.getItemId();
+
+        if(id == R.id.home){
+            Intent searchIntent = new Intent(StackOverflowActivity.this, MainActivity.class);
+            startActivity(searchIntent);
+            overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+        }
+        else if (id == R.id.training){
+            Intent searchIntent = new Intent(StackOverflowActivity.this, TrainingActivity.class);
+            startActivity(searchIntent);
+            overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+        }
+        else if (id == R.id.tech_meetups){
+            Intent searchIntent = new Intent(StackOverflowActivity.this, TechMeetupsActivity.class);
+            startActivity(searchIntent);
+            overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+        }
+        else if(id == R.id.setup){
+            Intent searchIntent = new Intent(StackOverflowActivity.this, SetupActivity.class);
+            startActivity(searchIntent);
+            overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
 
