@@ -32,9 +32,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -42,7 +40,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener, android.widget.PopupMenu.OnMenuItemClickListener
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener
 {
     private ChatBot cb;
     private final String WELCOME_MESSAGE = "Hey, how can I help";
@@ -71,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
     // Loading Message (when connection is not available
     // setLoadingMessageVisibility() allows this variable to be easily set by other classes (ChatBotRemoteDatabaseHelper)
     private static TextView loadingMessage;
@@ -87,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private LinearLayout layout;
     private Button ask_btn;
     private EditText question_field;
-    private ImageView menu;
 
     // Used for Stack Overflow search if solution not found
     private String initialQuestion;
@@ -107,19 +103,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         ask_btn.setOnClickListener(this);
 
-        menu.setOnClickListener(this);
-
         // Show ChatBot welcome message on start
         layout.addView(createNewTextView(WELCOME_MESSAGE));
 
-        //-------------------Permissions----------------------------//
+        //---------------------------------Permissions---------------------------------------------//
 
         // TODO - implement permissions properly
         requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 5 );
         requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
         requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
 
-        //---------------Training Session Notification--------------//
+        //---------------------------Training Session Notification--------------------------------//
 
         // If notifications are allowed, set to true in setNotifications
         if(notifications) {
@@ -138,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             notificationTimer.schedule(notificationTask, 5000, 30000);
         }
 
-        //-----------------------Drawer menu---------------------------------------///
+        //-----------------------------Drawer Menu------------------------------------------------//
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -171,12 +165,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layout = findViewById(R.id.main_ll_question_layout);
         ask_btn = findViewById(R.id.main_btn_ask);
         question_field = findViewById(R.id.main_et_question_field);
-        menu = findViewById(R.id.main_img_menu);
         questionCounter = 0;
         initialQuestion = "";
         cb = ChatBot.getInstance();
         notifications = true;
-
     }
 
     @Override
@@ -199,52 +191,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Clear question box
             question_field.setText("");
 
-        }else if (view.getId() == R.id.main_img_menu){
-            showPopup(view);
-        }
-    }
-
-    /**
-     * Method used to show the java_bot_menu.xml file as a popup menu
-     * @param view
-     */
-    public void showPopup(View view){
-        PopupMenu popup = new PopupMenu(this,view);
-        popup.setOnMenuItemClickListener(this);
-        popup.inflate(R.menu.java_bot_menu);
-        popup.show();
-    }
-
-    /**
-     * Method used provide onclick actions for menu items
-     * @param item
-     * @return boolean
-     */
-    public boolean onMenuItemClick(MenuItem item){
-        switch (item.getItemId()){
-            case R.id.action_home:
-                Intent mainIntent = new Intent(this, MainActivity.class);
-                startActivity(mainIntent);
-                return true;
-
-            case R.id.action_training:
-                Intent trainingIntent = new Intent(this, TrainingActivity.class);
-                startActivity(trainingIntent);
-                return true;
-
-            case R.id.action_tech_meetups:
-                Intent techMeetupsIntent = new Intent(this, TechMeetupsActivity.class);
-                startActivity(techMeetupsIntent);
-                return true;
-
-            case R.id.action_setup:
-                Intent setupIntent = new Intent(this, SetupActivity.class);
-                startActivity(setupIntent);
-                return true;
-
-            default:
-                // If here these has been an issue
-                return false;
         }
     }
 
@@ -323,6 +269,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             nm.notify(uniqueID, notification.build());
         }
     }
+
+    //------------------------------Drawer Menu Methods-------------------------------------------//
 
     @Override
     public void onBackPressed(){

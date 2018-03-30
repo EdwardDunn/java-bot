@@ -17,15 +17,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class TrainingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, android.widget.PopupMenu.OnMenuItemClickListener, GestureDetector.OnGestureListener {
-
-    private ImageView menu;
+public class TrainingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, GestureDetector.OnGestureListener {
 
     private GestureDetectorCompat gestureDetector;
 
@@ -78,8 +74,6 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
 
         setupUIViews();
 
-        menu.setOnClickListener(this);
-
         this.gestureDetector = new GestureDetectorCompat(this, this);
 
         questionsDatabase = new QuestionsSQLiteDatabaseHelper(this);
@@ -90,9 +84,10 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
         questionsList = questionsDatabase.getQuestions();
         questionCounter = 0;
 
+        // Show first question on activity load
         showNextQuestion();
 
-        //-----------------------Drawer menu---------------------------------------///
+        //-----------------------Drawer Menu---------------------------------------///
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -107,7 +102,6 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
     }
 
     private void setupUIViews(){
-        menu = findViewById(R.id.training_img_menu);
         questionHeader = findViewById(R.id.training_txt_question_header);
         currentQuestion = findViewById(R.id.training_txt_question);
         solutionHeader = findViewById(R.id.training_txt_solution_header);
@@ -118,9 +112,7 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     public void onClick(View view){
-        if(view.getId() == R.id.training_img_menu){
-            showPopup(view);
-        }
+
     }
 
     private void showNextQuestion(){
@@ -140,7 +132,6 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
 
                     Thread emptyDatabaseThread = new Thread(emptyDbRunnable);
                     emptyDatabaseThread.start();
-
                 }
                 else {
 
@@ -196,46 +187,6 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
 
     }
 
-    /**
-     * Method used to show the java_bot_menu.xml file as a popup menu
-     * @param view
-     */
-    public void showPopup(View view){
-        PopupMenu popup = new PopupMenu(this,view);
-        popup.setOnMenuItemClickListener(this);
-        popup.inflate(R.menu.java_bot_menu);
-        popup.show();
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_home:
-                Intent mainIntent = new Intent(this, MainActivity.class);
-                startActivity(mainIntent);
-                return true;
-
-            case R.id.action_training:
-                Intent trainingIntent = new Intent(this, TrainingActivity.class);
-                startActivity(trainingIntent);
-                return true;
-
-            case R.id.action_tech_meetups:
-                Intent techMeetupsIntent = new Intent(this, TechMeetupsActivity.class);
-                startActivity(techMeetupsIntent);
-                return true;
-
-            case R.id.action_setup:
-                Intent setupIntent = new Intent(this, SetupActivity.class);
-                startActivity(setupIntent);
-                return true;
-
-            default:
-                // If here these has been an issue
-                return false;
-        }
-    }
-
     //-------------------------------Gesture Detector Methods---------------------------------------//
 
     @Override
@@ -255,6 +206,7 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+
         return false;
     }
 
@@ -265,7 +217,7 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        showNextQuestion();
+        //showNextQuestion();
         return true;
     }
 
@@ -275,6 +227,8 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
         return super.onTouchEvent(event);
     }
 
+
+    //---------------------------Drawer Menu Methods-----------------------------------//
 
     @Override
     public void onBackPressed(){

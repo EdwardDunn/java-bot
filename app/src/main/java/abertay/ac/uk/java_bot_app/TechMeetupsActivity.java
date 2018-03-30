@@ -27,7 +27,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,8 +45,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class TechMeetupsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, LocationListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, android.widget.PopupMenu.OnMenuItemClickListener {
-
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     public TechMeetupsActivity(){
 
@@ -73,12 +71,9 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         }
     }
 
-
     private LocationRequest mLocationRequest;
 
     private TextView apiResponse;
-
-    //private ImageView menu;
 
     private TechMeetupsAPIHelper techMeetupsAPIHelper;
 
@@ -132,8 +127,6 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
 
         setupUIViews();
 
-        //menu.setOnClickListener(this);
-
         mFusedLocationClient = new FusedLocationProviderClient(this);
 
         // Get location
@@ -180,7 +173,6 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         //cityField = (TextView) findViewById(R.id.tech_meetups_txt_city);
         currentCity = "";
 
-        //menu = findViewById(R.id.tech_meetups_img_menu);
         apiResponse = findViewById(R.id.tech_meetups_txt_api_response);
 
         loadingProgressBar = (ProgressBar) findViewById(R.id.tech_meetups_pb_progress_bar);
@@ -310,51 +302,8 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
 
     @Override
     public void onClick(View view){
-     // if (view.getId() == R.id.tech_meetups_img_menu){
-       //     showPopup(view);
-        //}
+
     }
-
-    /**
-     * Method used to show the java_bot_menu.xml file as a popup menu
-     * @param view
-     */
-    public void showPopup(View view){
-        PopupMenu popup = new PopupMenu(this,view);
-        popup.setOnMenuItemClickListener(this);
-        popup.inflate(R.menu.java_bot_menu);
-        popup.show();
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_home:
-                Intent mainIntent = new Intent(this, MainActivity.class);
-                startActivity(mainIntent);
-                return true;
-
-            case R.id.action_training:
-                Intent trainingIntent = new Intent(this, TrainingActivity.class);
-                startActivity(trainingIntent);
-                return true;
-
-            case R.id.action_tech_meetups:
-                Intent techMeetupsIntent = new Intent(this, TechMeetupsActivity.class);
-                startActivity(techMeetupsIntent);
-                return true;
-
-            case R.id.action_setup:
-                Intent setupIntent = new Intent(this, SetupActivity.class);
-                startActivity(setupIntent);
-                return true;
-
-            default:
-                // If here these has been an issue
-                return false;
-        }
-    }
-
 
     //-------------------------------Get Location Methods-------------------------------//
     public void getLocation(){
@@ -520,10 +469,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
                 });
     }
 
-
-
-
-
+    //----------------------------Drawer Menu Methods------------------------------------------//
     @Override
     public void onBackPressed(){
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -547,7 +493,6 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
 
         if(id == R.id.action_settings){
             return true;
-
         }
 
         return super.onOptionsItemSelected(item);
