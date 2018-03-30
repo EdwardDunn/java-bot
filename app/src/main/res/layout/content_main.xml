@@ -4,31 +4,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#5B7290">
 
     <ImageView
         android:id="@+id/main_img_java_bot"
-        android:layout_width="97dp"
+        android:layout_width="115dp"
         android:layout_height="100dp"
 
-        android:layout_below="@+id/main_img_menu"
-        android:layout_marginStart="22dp"
-        android:layout_marginTop="25dp"
-        android:layout_toEndOf="@+id/main_img_menu"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="77dp"
         android:contentDescription="JavaBot Image"
-        app:srcCompat="@mipmap/img_java_bot_foreground" />
+        app:srcCompat="@mipmap/icon_java_bot_3_foreground" />
 
     <TextView
         android:id="@+id/main_txt_welcome_message"
         android:layout_width="180dp"
         android:layout_height="65dp"
-        android:layout_alignBottom="@+id/main_img_java_bot"
-        android:layout_alignEnd="@+id/main_btn_ask"
-        android:layout_marginBottom="12dp"
-        android:layout_marginEnd="14dp"
+        android:layout_above="@+id/main_txt_loading_message"
+        android:layout_marginStart="11dp"
+        android:layout_toEndOf="@+id/main_img_java_bot"
         android:text="@string/welcome_messsage"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
+        android:textColor="#FFFFFF"
         android:textSize="16sp" />
 
     <EditText
@@ -47,7 +47,7 @@
         android:paddingVertical="5dp"
         android:selectAllOnFocus="false"
         android:singleLine="false"
-        android:textColor="@android:color/black" />
+        android:textColor="#000000" />
 
     <Button
         android:id="@+id/main_btn_ask"
@@ -69,14 +69,6 @@
         android:paddingHorizontal="10dp"
         android:paddingVertical="10dp"></LinearLayout>
 
-    <ImageView
-        android:id="@+id/main_img_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="10dp" />
-
     <ProgressBar
         android:id="@+id/main_pb_progress_bar"
         style="?android:attr/progressBarStyle"
@@ -89,9 +81,9 @@
         android:id="@+id/main_txt_loading_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/main_txt_welcome_message"
+        android:layout_alignBottom="@+id/main_img_java_bot"
         android:layout_centerHorizontal="true"
         android:text="@string/main_error_message"
-        android:textColor="@android:color/holo_blue_dark" />
+        android:textColor="#FFFFFF" />
 
 </RelativeLayout>

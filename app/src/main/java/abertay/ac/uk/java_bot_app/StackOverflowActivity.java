@@ -71,6 +71,7 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
         }
     }
 
+    //-----------------------------Drawer Menu Methods--------------------------------------------//
 
     @Override
     public void onBackPressed(){

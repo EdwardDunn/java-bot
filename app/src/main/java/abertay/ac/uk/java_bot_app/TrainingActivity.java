@@ -1,3 +1,7 @@
+
+//References - gesture detection with drawer menu
+// https://stackoverflow.com/questions/17882255/gestures-not-working-when-using-drawerlayout-in-android-app#19393718
+
 package abertay.ac.uk.java_bot_app;
 
 import android.annotation.SuppressLint;
@@ -49,7 +53,6 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
 
             currentQuestion.setText(questionText);
             currentSolution.setText(solutionText);
-
         }
 
     };
@@ -61,9 +64,8 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
-            setUIElementsVisiability(false);
+            setUIElementsVisibility(false);
             trainingMessage.setText(R.string.training_complete_message);
-
         }
     };
 
@@ -74,7 +76,10 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
 
         setupUIViews();
 
-        this.gestureDetector = new GestureDetectorCompat(this, this);
+        this.gestureDetector = new GestureDetectorCompat(TrainingActivity.this, TrainingActivity.this);
+
+
+
 
         questionsDatabase = new QuestionsSQLiteDatabaseHelper(this);
 
@@ -87,7 +92,7 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
         // Show first question on activity load
         showNextQuestion();
 
-        //-----------------------Drawer Menu---------------------------------------///
+        //--------------------------------Drawer Menu---------------------------------------------//
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -96,10 +101,18 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
         drawer.setDrawerListener(toogle);
         toogle.syncState();
 
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // Used to ensure gesture detector for other UI components can function correctly
+        drawer.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if (gestureDetector.onTouchEvent(event)) {
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void setupUIViews(){
@@ -112,9 +125,7 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
     }
 
     @Override
-    public void onClick(View view){
-
-    }
+    public void onClick(View view){}
 
     private void showNextQuestion(){
 
@@ -136,7 +147,7 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
                 }
                 else {
 
-                    setUIElementsVisiability(true);
+                    setUIElementsVisibility(true);
                     Runnable r = new Runnable() {
                         @Override
                         public void run() {
@@ -162,13 +173,12 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
                 }
             }
             else{
-                setUIElementsVisiability(false);
+                setUIElementsVisibility(false);
                 trainingMessage.setText(R.string.no_question_available);
             }
-
     }
 
-    private void setUIElementsVisiability(Boolean visibility){
+    private void setUIElementsVisibility(Boolean visibility){
 
         if(visibility == false) {
             questionHeader.setVisibility(View.INVISIBLE);
@@ -185,20 +195,16 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
             swipeMessage.setVisibility(View.VISIBLE);
             trainingMessage.setVisibility(View.INVISIBLE);
         }
-
     }
 
-    //-------------------------------Gesture Detector Methods---------------------------------------//
-
+    //-------------------------------Gesture Detector Methods-------------------------------------//
     @Override
     public boolean onDown(MotionEvent motionEvent) {
         return false;
     }
 
     @Override
-    public void onShowPress(MotionEvent motionEvent) {
-
-    }
+    public void onShowPress(MotionEvent motionEvent) {}
 
     @Override
     public boolean onSingleTapUp(MotionEvent motionEvent) {
@@ -207,14 +213,11 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
 
     @Override
     public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-
         return false;
     }
 
     @Override
-    public void onLongPress(MotionEvent motionEvent) {
-
-    }
+    public void onLongPress(MotionEvent motionEvent) {}
 
     @Override
     public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
@@ -228,8 +231,7 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
         return super.onTouchEvent(event);
     }
 
-
-    //---------------------------Drawer Menu Methods-----------------------------------//
+    //--------------------------------Drawer Menu Methods-----------------------------------------//
 
     @Override
     public void onBackPressed(){
@@ -256,7 +258,6 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
             return true;
 
         }
-
         return super.onOptionsItemSelected(item);
     }
 

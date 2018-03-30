@@ -174,7 +174,7 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
             overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
         }
         else if(id == R.id.setup){
-            Intent searchIntent = new Intent(SetupActivity.this, android.widget.Gallery.class);
+            Intent searchIntent = new Intent(SetupActivity.this, SetupActivity.class);
             startActivity(searchIntent);
             overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
         }

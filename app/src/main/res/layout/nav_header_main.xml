@@ -5,13 +5,13 @@
     android:gravity="bottom"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    android:background="#000000"
+    android:background="#B1BDCD"
     android:weightSum="1">
 
     <ImageView
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:src="@mipmap/img_java_bot_foreground"
+        android:src="@mipmap/icon_java_bot_3_foreground"
         android:layout_marginLeft="10dp"
         android:scaleType="centerCrop"
         android:layout_weight="0.40"/>

@@ -8,6 +8,8 @@ package abertay.ac.uk.java_bot_app;
  * References:
  *  Notifications
  *  https://www.youtube.com/watch?v=SWsuijO5NGE&list=PL6gx4Cwl9DGBsvRxJJOzG4r4k_zLKrnxl&index=61
+ *  Logo:
+ *  http://www.clipartlord.com/wp-content/uploads/2013/12/robot13.png
  *
  * @author  Edward Dunn
  * @version 1.0
@@ -21,13 +23,16 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
@@ -35,13 +40,16 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener, GestureDetector.OnGestureListener
 {
+    private GestureDetectorCompat gestureDetector;
+
     private ChatBot cb;
     private final String WELCOME_MESSAGE = "Hey, how can I help";
     private final String WELCOME_BACK_MESSAGE = "Great, your back";
@@ -106,6 +114,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Show ChatBot welcome message on start
         layout.addView(createNewTextView(WELCOME_MESSAGE));
 
+        this.gestureDetector = new GestureDetectorCompat(this, this);
+
         //---------------------------------Permissions---------------------------------------------//
 
         // TODO - implement permissions properly
@@ -159,8 +169,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setupUIViews(){
+
         loadingProgressBar = (ProgressBar) findViewById(R.id.main_pb_progress_bar);
+        // Set invisible by default, will be shown when remote database connection in progress
+        loadingProgressBar.setVisibility(View.INVISIBLE);
+
         loadingMessage = (TextView) findViewById(R.id.main_txt_loading_message);
+        // Set invisible by default, will be shown when remote database connection in progress
+        loadingMessage.setVisibility(View.INVISIBLE);
 
         layout = findViewById(R.id.main_ll_question_layout);
         ask_btn = findViewById(R.id.main_btn_ask);
@@ -168,7 +184,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         questionCounter = 0;
         initialQuestion = "";
         cb = ChatBot.getInstance();
-        notifications = true;
+
+        // Ensures notifications are not set to null every time MainActivity is called
+        if(notifications == null){
+            notifications = true;
+        }
+
     }
 
     @Override
@@ -205,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         textView.setLayoutParams(lparams);
         textView.setText(text);
         textView.setTextSize(18);
-        textView.setTextColor(Color.BLACK);
+        textView.setTextColor(Color.WHITE);
         //textView.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.img_java_bot_foreground, 0, 0 ,0);
         return textView;
     }
@@ -235,6 +256,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
     }
+
+    //-------------------------------Notification Methods-----------------------------------------//
 
     /**
      * Class used to extend TimerTask for displaying the training session notification
@@ -269,6 +292,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             nm.notify(uniqueID, notification.build());
         }
     }
+
+    //-------------------------------Gesture Detector Methods-------------------------------------//
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+        Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
+        Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        //showNextQuestion();
+        Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        this.gestureDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
+
 
     //------------------------------Drawer Menu Methods-------------------------------------------//
 
