@@ -18,7 +18,11 @@ import android.widget.Button;
 import android.widget.Switch;
 import android.widget.Toast;
 
-public class SetupActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+/**
+ * Created by edwar on 30/03/2018.
+ */
+
+public class Gallery extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private Switch notificationsSwitch;
     //Used to delete data from questions SQLite database
@@ -27,9 +31,9 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
     private QuestionsSQLiteDatabaseHelper questionsDatabase;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setup);
+    protected void onCreate(Bundle saveInstanceState){
+        super.onCreate(saveInstanceState);
+        setContentView(R.layout.activity_gallery);
 
         setupUIViews();
 
@@ -49,15 +53,15 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
     }
+
 
     private void setupUIViews(){
         notificationsSwitch = findViewById(R.id.setup_txt_notifications_switch);
 
         // Set notifications switch to check is notifications are allowed
 
-        //TODO -fix
+        // TODO - FIX
         //if(MainActivity.notifications == true){
             notificationsSwitch.setChecked(true);
         //}
@@ -78,8 +82,8 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
     public void openDialog(View view){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
         alertDialogBuilder.setMessage(R.string.remove_training_data_message)
-                            .setTitle(R.string.training_data_title)
-                            .setIcon(R.drawable.icon_warning);
+                .setTitle(R.string.training_data_title)
+                .setIcon(R.drawable.icon_warning);
 
         alertDialogBuilder.setPositiveButton(R.string.alert_dialog_positive,
                 new DialogInterface.OnClickListener() {
@@ -87,10 +91,10 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
                     public void onClick(DialogInterface dialogInterface, int i) {
                         try{
                             removeTrainingSessionData();
-                            Toast.makeText(SetupActivity.this, R.string.training_data_deleted, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Gallery.this, R.string.training_data_deleted, Toast.LENGTH_SHORT).show();
                         }catch (Exception e) {
                             e.printStackTrace();
-                            Toast.makeText(SetupActivity.this, R.string.problem_deleting_training_data, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Gallery.this, R.string.problem_deleting_training_data, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -155,22 +159,17 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
         int id = item.getItemId();
 
         if(id == R.id.home){
-            Intent searchIntent = new Intent(SetupActivity.this, MainActivity.class);
+            Intent searchIntent = new Intent(Gallery.this, MainActivity.class);
             startActivity(searchIntent);
             overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
         }
         else if (id == R.id.training){
-            Intent searchIntent = new Intent(SetupActivity.this, TrainingActivity.class);
-            startActivity(searchIntent);
-            overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-        }
-        else if (id == R.id.tech_meetups){
-            Intent searchIntent = new Intent(SetupActivity.this, TechMeetupsActivity.class);
+            Intent searchIntent = new Intent(Gallery.this, TrainingActivity.class);
             startActivity(searchIntent);
             overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
         }
         else if(id == R.id.setup){
-            Intent searchIntent = new Intent(SetupActivity.this, android.widget.Gallery.class);
+            Intent searchIntent = new Intent(Gallery.this, SetupActivity.class);
             startActivity(searchIntent);
             overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
         }
@@ -179,4 +178,5 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
 }

@@ -12,15 +12,20 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
@@ -40,7 +45,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TechMeetupsActivity extends AppCompatActivity implements View.OnClickListener, LocationListener,
+public class TechMeetupsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, LocationListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, android.widget.PopupMenu.OnMenuItemClickListener {
 
 
@@ -73,7 +78,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
 
     private TextView apiResponse;
 
-    private ImageView menu;
+    //private ImageView menu;
 
     private TechMeetupsAPIHelper techMeetupsAPIHelper;
 
@@ -127,7 +132,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
 
         setupUIViews();
 
-        menu.setOnClickListener(this);
+        //menu.setOnClickListener(this);
 
         mFusedLocationClient = new FusedLocationProviderClient(this);
 
@@ -150,6 +155,18 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
             techMeetupsAPIHelper.getTechMeetups("" + currentCity);
         }
 
+        //-----------------------Drawer menu---------------------------------------///
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toogle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toogle);
+        toogle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
     }
 
     @Override
@@ -163,7 +180,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
         //cityField = (TextView) findViewById(R.id.tech_meetups_txt_city);
         currentCity = "";
 
-        menu = findViewById(R.id.tech_meetups_img_menu);
+        //menu = findViewById(R.id.tech_meetups_img_menu);
         apiResponse = findViewById(R.id.tech_meetups_txt_api_response);
 
         loadingProgressBar = (ProgressBar) findViewById(R.id.tech_meetups_pb_progress_bar);
@@ -293,9 +310,9 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View view){
-      if (view.getId() == R.id.tech_meetups_img_menu){
-            showPopup(view);
-        }
+     // if (view.getId() == R.id.tech_meetups_img_menu){
+       //     showPopup(view);
+        //}
     }
 
     /**
@@ -504,4 +521,64 @@ public class TechMeetupsActivity extends AppCompatActivity implements View.OnCli
     }
 
 
+
+
+
+    @Override
+    public void onBackPressed(){
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if(drawer.isDrawerOpen(GravityCompat.START)){
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        else{
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.nav_drawer, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+
+        if(id == R.id.action_settings){
+            return true;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public boolean onNavigationItemSelected(MenuItem item){
+        int id = item.getItemId();
+
+        if(id == R.id.home){
+            Intent searchIntent = new Intent(TechMeetupsActivity.this, MainActivity.class);
+            startActivity(searchIntent);
+            overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+        }
+        else if (id == R.id.training){
+            Intent searchIntent = new Intent(TechMeetupsActivity.this, TrainingActivity.class);
+            startActivity(searchIntent);
+            overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+        }
+        else if (id == R.id.tech_meetups){
+            Intent searchIntent = new Intent(TechMeetupsActivity.this, TechMeetupsActivity.class);
+            startActivity(searchIntent);
+            overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+        }
+        else if(id == R.id.setup){
+            Intent searchIntent = new Intent(TechMeetupsActivity.this, SetupActivity.class);
+            startActivity(searchIntent);
+            overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/icon_home"
+            android:title="@string/menu_action_home"/>
+        <item
+            android:id="@+id/training"
+            android:icon="@drawable/icon_training"
+            android:title="Training"/>
+        <item
+            android:id="@+id/tech_meetups"
+            android:icon="@drawable/icon_tech_meetups"
+            android:title="Tech Meetups"/>
+    </group>
+
+    <item android:title="Settings">
+        <menu>
+            <item
+                android:id="@+id/setup"
+                android:icon="@drawable/icon_settings"
+                android:title="Setup"/>
+        </menu>
+    </item>
+
+</menu>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/main_img_java_bot"
+        android:layout_width="97dp"
+        android:layout_height="100dp"
+
+        android:layout_below="@+id/main_img_menu"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="25dp"
+        android:layout_toEndOf="@+id/main_img_menu"
+        android:contentDescription="JavaBot Image"
+        app:srcCompat="@mipmap/img_java_bot_foreground" />
+
+    <TextView
+        android:id="@+id/main_txt_welcome_message"
+        android:layout_width="180dp"
+        android:layout_height="65dp"
+        android:layout_alignBottom="@+id/main_img_java_bot"
+        android:layout_alignEnd="@+id/main_btn_ask"
+        android:layout_marginBottom="12dp"
+        android:layout_marginEnd="14dp"
+        android:text="@string/welcome_messsage"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/main_et_question_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/main_btn_ask"
+        android:layout_alignBottom="@+id/main_btn_ask"
+        android:layout_alignStart="@+id/main_ll_question_layout"
+        android:background="@color/lightGray"
+        android:ems="10"
+        android:hint="@string/enter_question"
+        android:inputType="text"
+        android:outlineProvider="bounds"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="5dp"
+        android:selectAllOnFocus="false"
+        android:singleLine="false"
+        android:textColor="@android:color/black" />
+
+    <Button
+        android:id="@+id/main_btn_ask"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_alignEnd="@+id/main_ll_question_layout"
+        android:layout_below="@+id/main_ll_question_layout"
+        android:layout_marginTop="11dp"
+        android:text="@string/ask_button" />
+
+    <LinearLayout
+        android:id="@+id/main_ll_question_layout"
+        android:layout_width="352dp"
+        android:layout_height="300dp"
+        android:layout_alignStart="@+id/main_img_java_bot"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="200dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="10dp"></LinearLayout>
+
+    <ImageView
+        android:id="@+id/main_img_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp" />
+
+    <ProgressBar
+        android:id="@+id/main_pb_progress_bar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="33dp"
+        android:layout_height="29dp"
+        android:layout_below="@+id/main_txt_loading_message"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/main_txt_loading_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_txt_welcome_message"
+        android:layout_centerHorizontal="true"
+        android:text="@string/main_error_message"
+        android:textColor="@android:color/holo_blue_dark" />
+
+</RelativeLayout>

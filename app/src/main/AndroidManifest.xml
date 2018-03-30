@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.NoActionBar">
 
         <activity android:name=".MainActivity"
             android:launchMode="standard">
@@ -22,6 +22,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+
         </activity>
         <activity android:name=".SolutionActivity" />
         <activity android:name=".TrainingActivity" />
@@ -43,6 +45,18 @@
             </intent-filter>
 
         </activity>
+
+        <activity android:name=".Gallery"
+        android:label="Gallery">
+
+        </activity>
+
+        <activity android:name=".FileImport"
+            android:label="FileImport" />
+
+        <activity android:name=".SlideShow"
+            android:label="SlideShow" />
+
     </application>
 
 </manifest>

@@ -42,4 +42,8 @@
     <string name="alert_dialog_negative">no</string>
     <string name="training_data_deleted">Training data deleted</string>
     <string name="problem_deleting_training_data">Problem deleting data, please try again</string>
+    <string name="menu_name">Java Bot</string>
+
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
 </resources>
