@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">java-bot-app</string>
+    <string name="app_name">Java Bot</string>
     <string name="welcome_messsage">Welcome to JavaBot, Your Helpful Assistant</string>
     <string name="chat_welcome">Hey, how can i help?</string>
     <string name="enter_question">enter question</string>
@@ -34,7 +34,7 @@
     <string name="training_complete_message">Training Complete</string>
     <string name="no_question_available">No questions asked since last training session</string>
     <string name="setup_header">Setup</string>
-    <string name="notifications_placeholder">Training Notifications</string>
+    <string name="notifications_placeholder">Training Notifications </string>
     <string name="clear_data_btn">Clear Data</string>
     <string name="remove_training_data_message">Remove all training data?</string>
     <string name="training_data_title">Training Data</string>

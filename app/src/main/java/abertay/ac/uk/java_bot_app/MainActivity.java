@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ChatBot cb;
     private final String WELCOME_MESSAGE = "Hey, how can I help";
     private final String WELCOME_BACK_MESSAGE = "Great, your back";
+    private final String NO_QUESTION_RESPONSE = "Sorry I didn't catch that";
 
     // Set notifications on or off
     public static Boolean notifications;
@@ -169,7 +170,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setupUIViews(){
-
         loadingProgressBar = (ProgressBar) findViewById(R.id.main_pb_progress_bar);
         // Set invisible by default, will be shown when remote database connection in progress
         loadingProgressBar.setVisibility(View.INVISIBLE);
@@ -189,7 +189,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(notifications == null){
             notifications = true;
         }
-
     }
 
     @Override
@@ -199,14 +198,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String question = "";
             question  = question_field.getText().toString();
 
-            // Question asked
-            initialQuestion = question;
-            layout.addView(createNewUserTextView(question));
+            if(question.isEmpty()) {
+                layout.addView(createNewBotTextView(NO_QUESTION_RESPONSE));
+            }else {
+                // Question asked
+                initialQuestion = question;
 
-            getChatBotResponse(question);
+                layout.addView(createNewUserTextView(question));
 
-            // Clear question box
-            question_field.setText("");
+                getChatBotResponse(question);
+
+                // Clear question box
+                question_field.setText("");
+            }
         }
     }
 
