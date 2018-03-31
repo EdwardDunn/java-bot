@@ -103,12 +103,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NotificationCompat.Builder notification;
     private static final int uniqueID = 001;
 
+    NotificationManager nm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         setupUIViews();
+
+        nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         ask_btn.setOnClickListener(this);
 
@@ -289,17 +293,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // If notifications are set to true in the setup activity training notifications switch
         if(notifications == true) {
+            // Onclick of notification, go to the training activity
+            Intent trainingIntent = new Intent(this, TrainingActivity.class);
+            // Give phone access to intent
+            PendingIntent trainingActivityIntent = PendingIntent.getActivity(this, 0, trainingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            notification.setContentIntent(trainingActivityIntent);
+            
             //Build the notification
             notification.setSmallIcon(R.mipmap.ic_launcher_round);
             notification.setWhen(System.currentTimeMillis());
             notification.setContentTitle(getString(R.string.training_session_notification_title));
             notification.setContentText(getString(R.string.training_session_notification_content));
-
-            // Onclick of notification, go to the training activity
-            Intent trainingIntent = new Intent(this, TrainingActivity.class);
-            // Give phone access to intent
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, trainingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            notification.setContentIntent(pendingIntent);
+            notification.addAction(R.mipmap.icon_java_bot_3_round, getString(R.string.notification_train_action), trainingActivityIntent);
 
             // Build notification and issues it
             NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
