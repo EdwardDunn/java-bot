@@ -23,7 +23,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-
         </activity>
         <activity android:name=".SolutionActivity" />
         <activity android:name=".TrainingActivity" />
@@ -46,16 +45,6 @@
 
         </activity>
 
-        <activity android:name=".Gallery"
-        android:label="Gallery">
-
-        </activity>
-
-        <activity android:name=".FileImport"
-            android:label="FileImport" />
-
-        <activity android:name=".SlideShow"
-            android:label="SlideShow" />
 
     </application>
 

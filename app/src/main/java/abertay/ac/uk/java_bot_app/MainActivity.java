@@ -290,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // If notifications are set to true in the setup activity training notifications switch
         if(notifications == true) {
             //Build the notification
-            notification.setSmallIcon(R.drawable.ic_launcher_foreground);
+            notification.setSmallIcon(R.mipmap.ic_launcher_round);
             notification.setWhen(System.currentTimeMillis());
             notification.setContentTitle(getString(R.string.training_session_notification_title));
             notification.setContentText(getString(R.string.training_session_notification_content));
