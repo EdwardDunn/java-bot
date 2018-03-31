@@ -99,7 +99,7 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
             //Create new TextView with text entered into question field in questions layout
             String question = "";
             question  = question_field.getText().toString();
-            layout.addView(createNewTextView(question));
+            layout.addView(createNewUserTextView(question));
             question_field.setText("");
             getChatBotResponse(question);
 
@@ -129,6 +129,17 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         textView.setText(text);
         textView.setTextSize(18);
         textView.setTextColor(Color.BLACK);
+        return textView;
+    }
+
+    private TextView createNewUserTextView(String text){
+        final ViewGroup.LayoutParams lparams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        final TextView textView = new TextView(this);
+        textView.setLayoutParams(lparams);
+        textView.setPadding(0,0,0,20);
+        textView.setText(text);
+        textView.setTextSize(18);
+        textView.setTextColor(Color.GREEN);
         return textView;
     }
 

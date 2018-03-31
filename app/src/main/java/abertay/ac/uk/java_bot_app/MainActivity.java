@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ask_btn.setOnClickListener(this);
 
         // Show ChatBot welcome message on start
-        layout.addView(createNewTextView(WELCOME_MESSAGE));
+        layout.addView(createNewBotTextView(WELCOME_MESSAGE));
 
         this.gestureDetector = new GestureDetectorCompat(this, this);
 
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Clear any previous ChatBot discussion
         layout.removeAllViews();
         // Display welcome back message
-        layout.addView(createNewTextView(WELCOME_BACK_MESSAGE));
+        layout.addView(createNewBotTextView(WELCOME_BACK_MESSAGE));
     }
 
     private void setupUIViews(){
@@ -195,23 +195,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onClick(View view){
         if(view.getId() == R.id.main_btn_ask){
-            // Used to set initialQuestion variable
-            //questionCounter++;
-
             // Create new TextView with text entered into question field in questions layout
             String question = "";
             question  = question_field.getText().toString();
 
-            // If first question asked, set initialQuestion
-            //if(questionCounter == 1){
-                initialQuestion = question;
-            //}
+            // Question asked
+            initialQuestion = question;
+            layout.addView(createNewUserTextView(question));
 
             getChatBotResponse(question);
 
             // Clear question box
             question_field.setText("");
-
         }
     }
 
@@ -220,14 +215,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @param text
      * @return textView
      */
-    private TextView createNewTextView(String text){
+    private TextView createNewBotTextView(String text){
         final LayoutParams lparams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         final TextView textView = new TextView(this);
         textView.setLayoutParams(lparams);
+        textView.setPadding(0,0,0,10);
         textView.setText(text);
         textView.setTextSize(18);
         textView.setTextColor(Color.WHITE);
         //textView.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.img_java_bot_foreground, 0, 0 ,0);
+        return textView;
+    }
+
+    private TextView createNewUserTextView(String text){
+        final LayoutParams lparams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        final TextView textView = new TextView(this);
+        textView.setLayoutParams(lparams);
+        textView.setPadding(0,0,0,20);
+        textView.setText(text);
+        textView.setTextSize(18);
+        textView.setTextColor(Color.GREEN);
         return textView;
     }
 
@@ -248,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // If question is not a solution type, e.g. not a programming question
         if(questionType != "solution question") {
-            layout.addView(createNewTextView(response));
+            layout.addView(createNewBotTextView(response));
         }else{
             // If question is a programming one e.g. 'how do I parse an int?'
             Intent solutionIntent = new Intent(this, SolutionActivity.class);
