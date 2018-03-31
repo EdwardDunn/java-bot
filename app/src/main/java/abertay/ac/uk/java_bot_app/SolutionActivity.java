@@ -39,6 +39,8 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
     private String solution;
     private String initialQuestion;
 
+    private String solutionkey;
+
     QuestionsSQLiteDatabaseHelper questionsDatabase;
 
     @Override
@@ -47,6 +49,8 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         setContentView(R.layout.activity_solution);
 
         setupUIViews();
+
+
 
         questionsDatabase = new QuestionsSQLiteDatabaseHelper(this);
 
@@ -76,6 +80,7 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         ask_btn = findViewById(R.id.solution_btn_ask);
         question_field = findViewById(R.id.solution_et_question_field);
         solution = "";
+        solutionkey = "";
         initialQuestion = "";
 
         cb = ChatBot.getInstance();
@@ -105,10 +110,17 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
     private void showSolution(){
         Intent intent = getIntent();
         Bundle data = intent.getExtras();
-        String passedSolution = data.getString("solution");
+
+        // Used for adding to training database
         initialQuestion = data.getString("initialQuestion");
-        solution = passedSolution;
-        solutionText.setText(passedSolution);
+
+        // Used for searching stackoverflow, better than using the actual question as the query
+        // parameter
+        solutionkey = data.getString("solution_key");
+
+        // Show solution found
+        solution = data.getString("solution");
+        solutionText.setText(solution);
     }
 
     private TextView createNewTextView(String text){
@@ -141,7 +153,7 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
                 // If user is not happy with response, search Stack Overflow with initial question
                 layout.addView(createNewTextView(response));
                 Intent stackOverflowIntent = new Intent(this, StackOverflowActivity.class);
-                stackOverflowIntent.putExtra("url", "www.stackoverflow.com/search?q=" + initialQuestion + " in java" );
+                stackOverflowIntent.putExtra("url", "www.stackoverflow.com/search?q=" + solutionkey + " in java" );
                 startActivity(stackOverflowIntent);
             }
         }else{
@@ -166,6 +178,8 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         Thread updateDatabase = new Thread(r);
         updateDatabase.start();
     }
+
+    //---------------------------Drawer Menu Methods----------------------------------------------//
 
     @Override
     public void onBackPressed(){

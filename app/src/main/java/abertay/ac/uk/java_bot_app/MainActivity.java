@@ -237,11 +237,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void getChatBotResponse(String question){
         String response = "";
+        String solutionKey = "";
         String questionType = "";
         question = question.toLowerCase();
 
         // Get response to the users question
         response = cb.askQuestion(question);
+        solutionKey = cb.getSolutionKey();
         questionType = cb.getSolutionType();
 
         // If question is not a solution type, e.g. not a programming question
@@ -251,6 +253,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // If question is a programming one e.g. 'how do I parse an int?'
             Intent solutionIntent = new Intent(this, SolutionActivity.class);
             solutionIntent.putExtra("solution", response);
+            solutionIntent.putExtra("solution_key", solutionKey);
             solutionIntent.putExtra("initialQuestion", initialQuestion);
             startActivity(solutionIntent);
         }

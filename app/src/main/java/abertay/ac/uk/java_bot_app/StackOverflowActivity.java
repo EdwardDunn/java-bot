@@ -1,3 +1,7 @@
+// References
+// Webview progress bar - https://stackoverflow.com/questions/4331094/add-a-progress-bar-in-webview#4331437
+
+
 package abertay.ac.uk.java_bot_app;
 
 import android.content.Intent;
@@ -21,7 +25,7 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
 
     private String url;
     private WebView webViewer;
-    public static ProgressBar loadingProgressBar;
+    public  ProgressBar loadingProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +41,6 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
         if(url != null){
             webViewer.loadUrl(url);
         }
-
-        //webViewer.setWebViewClient(new WebViewClient());
 
         webViewer.setWebViewClient(new WebViewClient() {
 

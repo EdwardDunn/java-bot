@@ -27,6 +27,8 @@ public class ChatBot extends Activity {
     private static HashMap<String, String> systemResponses;
     private static HashMap<String, String> checkResponses;
 
+    private static String solutionKey;
+
     private static String solutionType;
     // Getter setters for solutionType
     public static void setSolutionType(String type){
@@ -64,6 +66,7 @@ public class ChatBot extends Activity {
         systemResponses = new HashMap<String, String>();
         checkResponses = new HashMap<String, String>();
         solutionType = "";
+        solutionKey = "";
 
         chatBotRemoteDatabaseHelper = new ChatBotRemoteDatabaseHelper(this);
 
@@ -224,11 +227,12 @@ public class ChatBot extends Activity {
             }
         }
 
-        // Check if question is a system question
+        // Check if question has a solution , i.e. it is a programming question
         for(String key : solutions.keySet()){
             if(question.contains(key)){
                 // If question does match a key, set solution to value for key
                 response = solutions.get(key);
+                solutionKey = key;
                 setSolutionType(questionTypes.SOLUTION.getType());
             }
         }
@@ -240,6 +244,11 @@ public class ChatBot extends Activity {
         }
 
         return response;
+    }
+
+    // Used for stack overflow query parameter
+    public String getSolutionKey(){
+        return solutionKey;
     }
 
     /**
