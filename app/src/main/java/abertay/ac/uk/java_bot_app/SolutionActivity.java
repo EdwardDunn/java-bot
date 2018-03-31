@@ -51,7 +51,6 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         setupUIViews();
 
 
-
         questionsDatabase = new QuestionsSQLiteDatabaseHelper(this);
 
         ask_btn.setOnClickListener(this);

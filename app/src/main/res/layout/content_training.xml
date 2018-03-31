@@ -37,11 +37,14 @@
     <TextView
         android:id="@+id/training_txt_solution"
         android:layout_width="wrap_content"
-        android:layout_height="22dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/training_txt_question"
         android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="87dp"
-        android:text="@string/solution_placeholder" />
+        android:text="@string/solution_placeholder"
+        android:textAlignment="textStart" />
 
     <TextView
         android:id="@+id/training_txt_question_header"
