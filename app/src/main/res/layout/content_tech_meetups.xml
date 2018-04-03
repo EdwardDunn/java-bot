@@ -105,5 +105,4 @@
         android:textColor="@color/noTechMeetupsMessage"
         android:visibility="invisible" />
 
-
 </RelativeLayout>

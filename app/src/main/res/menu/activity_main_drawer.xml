@@ -9,19 +9,19 @@
         <item
             android:id="@+id/training"
             android:icon="@drawable/icon_training"
-            android:title="Training"/>
+            android:title="@string/menu_action_training"/>
         <item
             android:id="@+id/tech_meetups"
             android:icon="@drawable/icon_tech_meetups"
-            android:title="Tech Meetups"/>
+            android:title="@string/menu_action_tech_meetups"/>
     </group>
 
-    <item android:title="Settings">
+    <item android:title="@string/menu_action_settings">
         <menu>
             <item
                 android:id="@+id/setup"
                 android:icon="@drawable/icon_settings"
-                android:title="Setup"/>
+                android:title="@string/menu_action_setup"/>
         </menu>
     </item>
 

@@ -5,7 +5,9 @@
     <color name="colorAccent">#FF4081</color>
     <color name="lightGray">#ebebeb</color>
 
+    <!-- Main activity colors -->
     <color name="userResponse">#00ff00</color>
+    <color name="welcomeMessage">#ffffff</color>
 
     <!-- Menu colors -->
     <color name="colorNavText">#FFFFFF</color>

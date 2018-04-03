@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="20dp"
         android:layout_marginTop="77dp"
-        android:contentDescription="JavaBot Image"
+        android:contentDescription="@string/javabot_image_description"
         app:srcCompat="@mipmap/icon_java_bot_3_foreground" />
 
     <TextView
@@ -28,7 +28,7 @@
         android:layout_toEndOf="@+id/main_img_java_bot"
         android:text="@string/welcome_messsage"
         android:textAlignment="center"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/welcomeMessage"
         android:textSize="16sp" />
 
     <EditText
@@ -88,6 +88,6 @@
         android:layout_alignBottom="@+id/main_img_java_bot"
         android:layout_centerHorizontal="true"
         android:text="@string/main_error_message"
-        android:textColor="#FFFFFF" />
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>
