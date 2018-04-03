@@ -1,38 +1,54 @@
 <resources>
     <string name="app_name">Java Bot</string>
+
+    <!-- Main Activity Strings -->
     <string name="welcome_messsage">Welcome to JavaBot, Your Helpful Assistant</string>
     <string name="chat_welcome">Hey, how can i help?</string>
     <string name="enter_question">enter question</string>
     <string name="ask_button">ask</string>
+    <string name="notification_train_action">Train</string>
+    <string name="main_error_message">Connecting to database</string>
+
+    <!-- Menu Strings -->
+    <string name="menu_name">Java Bot</string>
     <string name="menu_action_training">Training</string>
     <string name="menu_action_tech_meetups">Tech Meetups</string>
     <string name="menu_action_setup">Setup</string>
     <string name="menu_action_home">Home</string>
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
     <string name="options_menu_action_refresh">option_menu_action_refresh</string>
     <string name="options_menu_action_close">options_menu_action_refresh</string>
-    <string name="training_session_notification_title">Training Session</string>
-    <string name="training_session_notification_content">Hey, a new training session is available!</string>
-    <string name="training_header">Training</string>
+
+    <!-- Solution Activity Strings -->
     <string name="question_header">Question</string>
     <string name="solution_header">Solution</string>
     <string name="solution_placeholder">Solution</string>
     <string name="question_placeholder">Question</string>
-    <string name="main_error_message">Connecting to database</string>
+
+    <!-- Tech Meetups Activity Strings -->
     <string name="tech_meetups_error_message">Connecting to Open Tech Calendar</string>
+    <string name="your_location">Your Location</string>
+    <string name="tech_meetups_page_header">Tech Meetups</string>
+    <string name="no_meet_ups">Sorry there are no meetups in your area here are some in other cities</string>
     <string name="service_not_available">Location service not available</string>
     <string name="invalid_lat_long_used">latitude or longitude invalid</string>
     <string name="no_address_found">No address found for location</string>
     <string name="address_found">Address found for location</string>
     <string name="my_address_hint">My Address</string>
     <string name="no_geocoder_available">no geocoder available</string>
-    <string name="your_location">Your Location</string>
-    <string name="tech_meetups_page_header">Tech Meetups</string>
-    <string name="no_meet_ups">Sorry there are no meetups in your area here are some in other cities</string>
     <string name="city_placeholder">City</string>
     <string name="swipe_notice">swipe for next question</string>
+
+    <!-- Training Activity Strings -->
+    <string name="training_session_notification_title">Training Session</string>
+    <string name="training_session_notification_content">Hey, a new training session is available!</string>
     <string name="training_message">training message</string>
     <string name="training_complete_message">Training Complete</string>
     <string name="no_question_available">No questions asked since last training session</string>
+    <string name="training_header">Training</string>
+
+    <!-- Setup Activity Strings -->
     <string name="setup_header">Setup</string>
     <string name="notifications_placeholder">Training Notifications </string>
     <string name="clear_data_btn">Clear Data</string>
@@ -42,9 +58,5 @@
     <string name="alert_dialog_negative">no</string>
     <string name="training_data_deleted">Training data deleted</string>
     <string name="problem_deleting_training_data">Problem deleting data, please try again</string>
-    <string name="menu_name">Java Bot</string>
 
-    <string name="navigation_drawer_open">Open Navigation Drawer</string>
-    <string name="navigation_drawer_close">Close Navigation Drawer</string>
-    <string name="notification_train_action">Train</string>
 </resources>

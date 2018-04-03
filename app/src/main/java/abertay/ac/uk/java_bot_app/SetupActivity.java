@@ -56,9 +56,8 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
     private void setupUIViews(){
         notificationsSwitch = findViewById(R.id.setup_txt_notifications_switch);
 
-        // Set notifications switch to check is notifications are allowed
+        // Set notifications switch to checked is notifications are allowed
 
-        //TODO -fix
         if(MainActivity.notifications == true){
             notificationsSwitch.setChecked(true);
         }

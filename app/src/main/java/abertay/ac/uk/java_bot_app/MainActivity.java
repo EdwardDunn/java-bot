@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Give phone access to intent
             PendingIntent trainingActivityIntent = PendingIntent.getActivity(this, 0, trainingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             notification.setContentIntent(trainingActivityIntent);
-            
+
             //Build the notification
             notification.setSmallIcon(R.mipmap.ic_launcher_round);
             notification.setWhen(System.currentTimeMillis());

@@ -4,7 +4,38 @@
     <color name="colorPrimaryDark">#303f9f</color>
     <color name="colorAccent">#FF4081</color>
     <color name="lightGray">#ebebeb</color>
-    <color name="colorShop">#00ff00</color>
-    <color name="colorShop2">#ff69b4</color>
-    <color name="colorNavText">#ffffff</color>
+
+    <color name="userResponse">#00ff00</color>
+
+    <!-- Menu colors -->
+    <color name="colorNavText">#FFFFFF</color>
+    <color name="drawerMenuMain">#663366</color>
+    <color name="drawerMenuHeader">#B1BDCD</color>
+    <color name="activityBackground">#5B7290</color>
+    <color name="appBar">#003366</color>
+
+    <!-- Setup activity colors -->
+    <color name="setupActivityHeader">#ffffff</color>
+    <color name="trainingSwitchText">#ffffff</color>
+
+    <!-- Tech meetups activity colors -->
+    <color name="techMeetupsHeader">#FFFFFF</color>
+    <color name="techMeetupsYourLocation">#FFFFFF</color>
+    <color name="techMeetupsUserAddress">#FFFFFF</color>
+    <color name="noTechMeetupsMessage">#FA8072</color>
+    <color name="connectingToDatabaseMessage">#ffffff</color>
+
+    <!-- Training activity colors -->
+    <color name="trainingActivityHeader">#ffffff</color>
+    <color name="noQuestionsAskedMessage">#ffffff</color>
+    <color name="questionPlaceHolder">#ffffff</color>
+    <color name="trainingQuestion">#ffffff</color>
+    <color name="solutionPlaceHolder">#ffffff</color>
+    <color name="trainingSolution">#ffffff</color>
+    <color name="trainingSwipeMessage">#ffffff</color>
+
+    <!-- Solution activity colors -->
+    <color name="solutionHeader">#ffffff</color>
+    <color name="solutionText">#ffffff</color>
+
 </resources>

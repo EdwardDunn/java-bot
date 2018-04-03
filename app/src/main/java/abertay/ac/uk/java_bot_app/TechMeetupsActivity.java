@@ -296,7 +296,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
             textView.setText(text + "\n");
         }
 
-        textView.setTextColor(Color.BLACK);
+        textView.setTextColor(Color.WHITE);
         return textView;
     }
 

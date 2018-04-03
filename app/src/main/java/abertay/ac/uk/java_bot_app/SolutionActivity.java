@@ -128,7 +128,7 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         textView.setLayoutParams(lparams);
         textView.setText(text);
         textView.setTextSize(18);
-        textView.setTextColor(Color.BLACK);
+        textView.setTextColor(Color.WHITE);
         return textView;
     }
 
