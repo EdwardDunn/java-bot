@@ -10,6 +10,8 @@ package abertay.ac.uk.java_bot_app;
  *  https://www.youtube.com/watch?v=SWsuijO5NGE&list=PL6gx4Cwl9DGBsvRxJJOzG4r4k_zLKrnxl&index=61
  *  Logo:
  *  http://www.clipartlord.com/wp-content/uploads/2013/12/robot13.png
+ *  Scroll to bottom of linear layout:
+ *  https://stackoverflow.com/questions/14801215/scrollview-not-scrolling-down-completely
  *
  * @author  Edward Dunn
  * @version 1.0
@@ -39,6 +41,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +52,8 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener, GestureDetector.OnGestureListener
 {
     private GestureDetectorCompat gestureDetector;
+
+    private ScrollView scrollView;
 
     private ChatBot cb;
     private final String WELCOME_MESSAGE = "Hey, how can I help";
@@ -159,6 +164,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+
     }
 
     protected void onPause(){
@@ -174,6 +181,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setupUIViews(){
+        scrollView = findViewById(R.id.scroll);
+
         loadingProgressBar = (ProgressBar) findViewById(R.id.main_pb_progress_bar);
         // Set invisible by default, will be shown when remote database connection in progress
         loadingProgressBar.setVisibility(View.INVISIBLE);
@@ -231,7 +240,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         textView.setText(text);
         textView.setTextSize(18);
         textView.setTextColor(Color.WHITE);
-        //textView.setCompoundDrawablesWithIntrinsicBounds(R.mipmap.img_java_bot_foreground, 0, 0 ,0);
+        //scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+        scrollDown();
         return textView;
     }
 
@@ -243,7 +253,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         textView.setText(text);
         textView.setTextSize(18);
         textView.setTextColor(Color.GREEN);
+        //scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+        scrollDown();
         return textView;
+    }
+
+    public void scrollDown()
+    {
+        Thread scrollThread = new Thread(){
+            public void run(){
+                try {
+                    sleep(200);
+                    MainActivity.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            scrollView.fullScroll(View.FOCUS_DOWN);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        scrollThread.start();
     }
 
     /**

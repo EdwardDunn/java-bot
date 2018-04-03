@@ -60,13 +60,16 @@
 
     <Button
         android:id="@+id/solution_btn_ask"
-        android:layout_width="wrap_content"
-        android:layout_height="47dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="19dp"
-        android:layout_marginStart="13dp"
         android:layout_toEndOf="@+id/solution_et_question_field"
+        android:background="@drawable/buttonshape"
+
         android:text="@string/ask_button"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.6"
