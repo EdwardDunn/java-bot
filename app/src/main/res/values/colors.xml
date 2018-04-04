@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3f51b5</color>
     <color name="colorPrimaryDark">#303f9f</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#ff4081</color>
     <color name="lightGray">#ebebeb</color>
 
     <!-- Main activity colors -->
@@ -12,7 +12,7 @@
     <!-- Menu colors -->
     <color name="colorNavText">#FFFFFF</color>
     <color name="drawerMenuMain">#663366</color>
-    <color name="drawerMenuHeader">#B1BDCD</color>
+    <color name="drawerMenuHeader">#b1bdcd</color>
     <color name="activityBackground">#5B7290</color>
     <color name="appBar">#003366</color>
 

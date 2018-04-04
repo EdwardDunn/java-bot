@@ -16,7 +16,8 @@
         android:theme="@style/AppTheme.NoActionBar">
 
         <activity android:name=".MainActivity"
-            android:launchMode="standard">
+            android:launchMode="standard"
+            android:windowSoftInputMode="stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

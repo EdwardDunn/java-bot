@@ -12,6 +12,8 @@ package abertay.ac.uk.java_bot_app;
  *  http://www.clipartlord.com/wp-content/uploads/2013/12/robot13.png
  *  Scroll to bottom of linear layout:
  *  https://stackoverflow.com/questions/14801215/scrollview-not-scrolling-down-completely
+ *  Close Android soft keyboard:
+ *  https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard#1109108
  *
  * @author  Edward Dunn
  * @version 1.0
@@ -20,6 +22,7 @@ package abertay.ac.uk.java_bot_app;
 import android.Manifest;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -37,6 +40,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -223,6 +227,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 // Clear question box
                 question_field.setText("");
+            }
+
+            // Close androids soft keyboard when ask button is pressed
+            View viewCheck = this.getCurrentFocus();
+            if (viewCheck != null) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         }
     }
