@@ -251,7 +251,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         textView.setText(text);
         textView.setTextSize(18);
         textView.setTextColor(Color.WHITE);
-        //scrollView.fullScroll(ScrollView.FOCUS_DOWN);
         scrollDown();
         return textView;
     }
@@ -264,7 +263,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         textView.setText(text);
         textView.setTextSize(18);
         textView.setTextColor(Color.GREEN);
-        //scrollView.fullScroll(ScrollView.FOCUS_DOWN);
         scrollDown();
         return textView;
     }

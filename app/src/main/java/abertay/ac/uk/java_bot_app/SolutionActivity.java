@@ -27,11 +27,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class SolutionActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
 
     private ChatBot cb;
+
+    private ScrollView scrollView;
 
     private TextView solutionText;
     private LinearLayout layout;
@@ -76,6 +79,7 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
     }
 
     private void setupUIViews(){
+        scrollView = findViewById(R.id.scroll_solution);
         solutionText = findViewById(R.id.solution_txt_solution);
         layout = findViewById(R.id.solution_ll_question_layout);
         ask_btn = findViewById(R.id.solution_btn_ask);
@@ -137,6 +141,7 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         textView.setText(text);
         textView.setTextSize(18);
         textView.setTextColor(Color.WHITE);
+        scrollDown();
         return textView;
     }
 
@@ -148,7 +153,27 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         textView.setText(text);
         textView.setTextSize(18);
         textView.setTextColor(Color.GREEN);
+        scrollDown();
         return textView;
+    }
+
+    public void scrollDown()
+    {
+        Thread scrollThread = new Thread(){
+            public void run(){
+                try {
+                    sleep(200);
+                    SolutionActivity.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                            scrollView.fullScroll(View.FOCUS_DOWN);
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        scrollThread.start();
     }
 
     private void getChatBotResponse(String question){

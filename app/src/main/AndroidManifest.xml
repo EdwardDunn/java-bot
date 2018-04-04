@@ -25,7 +25,8 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".SolutionActivity" />
+        <activity android:name=".SolutionActivity"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity android:name=".TrainingActivity" />
         <activity android:name=".TechMeetupsActivity"
             android:launchMode="standard"/>
