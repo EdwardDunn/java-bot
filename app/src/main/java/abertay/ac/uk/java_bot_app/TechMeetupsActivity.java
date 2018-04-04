@@ -491,7 +491,10 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
 
-        if(id == R.id.action_settings){
+        if(id == R.id.refresh){
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
             return true;
         }
 

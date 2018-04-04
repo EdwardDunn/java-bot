@@ -118,9 +118,11 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
 
-        if(id == R.id.action_settings){
+        if(id == R.id.refresh){
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
             return true;
-
         }
 
         return super.onOptionsItemSelected(item);

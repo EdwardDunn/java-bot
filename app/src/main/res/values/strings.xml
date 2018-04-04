@@ -60,6 +60,6 @@
     <string name="problem_deleting_training_data">Problem deleting data, please try again</string>
     <string name="javabot_image_description">JavaBot Image</string>
     <string name="menu_action_settings">Settings</string>
-    <string name="settings_menu_title">action_settings</string>
+    <string name="refresh_options_menu">refresh</string>
 
 </resources>

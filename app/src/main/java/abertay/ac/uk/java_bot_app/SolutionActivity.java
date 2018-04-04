@@ -9,6 +9,7 @@ package abertay.ac.uk.java_bot_app;
  * @version 1.0
  */
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -103,6 +105,12 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
             question_field.setText("");
             getChatBotResponse(question);
 
+            // Close androids soft keyboard when ask button is pressed
+            View viewCheck = this.getCurrentFocus();
+            if (viewCheck != null) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
         }
     }
 
@@ -212,9 +220,11 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
 
-        if(id == R.id.action_settings){
+        if(id == R.id.refresh){
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
             return true;
-
         }
 
         return super.onOptionsItemSelected(item);
