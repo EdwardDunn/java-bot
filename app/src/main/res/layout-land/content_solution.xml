@@ -38,12 +38,12 @@
 
     <EditText
         android:id="@+id/solution_et_question_field"
-        android:layout_width="200dp"
+        android:layout_width="350dp"
         android:layout_height="35dp"
-        android:layout_alignBaseline="@+id/solution_btn_ask"
-        android:layout_alignBottom="@+id/solution_btn_ask"
-        android:layout_alignEnd="@+id/solution_txt_solution"
-        android:layout_marginEnd="34dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="70dp"
         android:background="@drawable/rounded_rectangle"
         android:backgroundTint="@color/drawerMenuHeader"
         android:ems="10"
@@ -54,26 +54,21 @@
         android:paddingVertical="5dp"
         android:selectAllOnFocus="false"
         android:singleLine="false"
-        android:textColor="@android:color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textColor="@android:color/black" />
 
     <Button
         android:id="@+id/solution_btn_ask"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="35dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="37dp"
-        android:layout_marginStart="44dp"
-        android:layout_toEndOf="@+id/solution_txt_solution"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="400dp"
+        android:layout_marginRight="70dp"
         android:background="@drawable/buttonshape"
         android:text="@string/ask_button"
         android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.6"
-        app:layout_constraintStart_toEndOf="@+id/solution_et_question_field" />
+        android:textSize="20sp" />
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/scroll_solution"
