@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:background="@color/activityBackground">
+
+
+    <TextView
+        android:id="@+id/training_txt_page_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        android:text="@string/training_header"
+        android:textColor="@color/trainingActivityHeader"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/training_txt_training_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/training_txt_page_header"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/training_message"
+        android:textColor="@color/noQuestionsAskedMessage" />
+
+    <TextView
+        android:id="@+id/training_txt_question_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/training_txt_page_header"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/question_header"
+        android:textColor="@color/solutionPlaceHolder"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/training_txt_question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/training_txt_question_header"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="@string/question_placeholder"
+        android:textColor="@color/trainingQuestion" />
+
+    <TextView
+        android:id="@+id/training_txt_solution_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/training_txt_question"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/solution_header"
+        android:textColor="@color/solutionHeader"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/training_txt_solution"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/training_txt_solution_header"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="@string/solution_placeholder"
+        android:textColor="@color/trainingSolution" />
+
+    <TextView
+        android:id="@+id/training_txt_swipe_notice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:text="@string/swipe_notice"
+        android:textColor="@color/trainingSwipeMessage" />
+
+</RelativeLayout>
