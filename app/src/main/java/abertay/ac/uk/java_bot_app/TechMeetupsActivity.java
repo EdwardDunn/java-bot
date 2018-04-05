@@ -13,7 +13,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -50,6 +52,10 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
     public TechMeetupsActivity(){
 
     }
+
+    public static final int PERMISSIONS_LOCATION_REQUEST = 1;
+    public static final int PERMISSIONS_EXTERNAL_STORAGE_REQUEST = 2;
+
     //GET LOCATION VARIABLE
     private GoogleApiClient googleAPIClient;
     private LocationManager locationManager;
@@ -118,9 +124,11 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         setContentView(R.layout.activity_tech_meetups);
 
         // TODO - implement permissions properly
-        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 5 );
-        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
-        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
+        //requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 5 );
+        //requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
+        //requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
+
+        setupUIViews();
 
         latitude = 0.0;
         longitude = 0.0;
@@ -160,12 +168,13 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        setupUIViews();
+
     }
 
     private void setupUIViews() {
@@ -429,8 +438,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         googleAPIClient.connect();
     }
 
-
-    //--------------------------Get Address from Location Methods-----------------------//
+    //--------------------------Get Address from Location Methods---------------------------------//
 
     protected void getAddressDetails() {
         FetchAddressService fas = new FetchAddressService(this, mLastKnownLocation);
@@ -468,7 +476,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
                 });
     }
 
-    //----------------------------Drawer Menu Methods------------------------------------------//
+    //----------------------------Drawer Menu Methods---------------------------------------------//
     @Override
     public void onBackPressed(){
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -509,14 +517,10 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
             overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
         }
         else if (id == R.id.training){
-            Intent searchIntent = new Intent(TechMeetupsActivity.this, TrainingActivity.class);
-            startActivity(searchIntent);
-            overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+            requestStoragePermissions();
         }
         else if (id == R.id.tech_meetups){
-            Intent searchIntent = new Intent(TechMeetupsActivity.this, TechMeetupsActivity.class);
-            startActivity(searchIntent);
-            overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+            requestLocationsPermissions();
         }
         else if(id == R.id.setup){
             Intent searchIntent = new Intent(TechMeetupsActivity.this, SetupActivity.class);
@@ -527,5 +531,139 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    //-----------------------------Request Permissions Methods------------------------------------//
+
+    private void requestLocationsPermissions(){
+        // Check for fine and coarse location permissions
+        if (ContextCompat.checkSelfPermission(TechMeetupsActivity.this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) + ContextCompat
+                .checkSelfPermission(TechMeetupsActivity.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale
+                    (TechMeetupsActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) ||
+                    ActivityCompat.shouldShowRequestPermissionRationale
+                            (TechMeetupsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                // Show snackbar with rationale for needing permissions
+                Snackbar.make(TechMeetupsActivity.this.findViewById(android.R.id.content),
+                        "Please grant permissions to enable tech meetups near you to be shown",
+                        Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                requestPermissions(
+                                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                                        PERMISSIONS_LOCATION_REQUEST);
+                            }
+                        }).show();
+
+            } else {
+                requestPermissions(
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                        PERMISSIONS_LOCATION_REQUEST);
+            }
+        } else {
+            // Go to TechMeetups activity
+            Intent techMeetupsIntent = new Intent(TechMeetupsActivity.this, TechMeetupsActivity.class);
+            startActivity(techMeetupsIntent);
+            overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+        }
+    }
+
+    private void requestStoragePermissions(){
+        // Check for fine and coarse location permissions
+        if (ContextCompat.checkSelfPermission(TechMeetupsActivity.this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale
+                    (TechMeetupsActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+                // Show snackbar with rationale for needing permissions
+                Snackbar.make(TechMeetupsActivity.this.findViewById(android.R.id.content),
+                        "Please grant permissions to be able to use the training features",
+                        Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                requestPermissions(
+                                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                        PERMISSIONS_EXTERNAL_STORAGE_REQUEST);
+                            }
+                        }).show();
+
+            } else {
+                requestPermissions(
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                        PERMISSIONS_EXTERNAL_STORAGE_REQUEST);
+            }
+        } else {
+            // Go to TechMeetups activity
+            Intent trainingIntent = new Intent(TechMeetupsActivity.this, TrainingActivity.class);
+            startActivity(trainingIntent);
+            overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        switch (requestCode) {
+            case PERMISSIONS_LOCATION_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // Go to TechMeetups activity
+                    Intent searchIntent = new Intent(TechMeetupsActivity.this, TechMeetupsActivity.class);
+                    startActivity(searchIntent);
+                    overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+                } else {
+                    // Ask again for permissions
+                    Snackbar.make(TechMeetupsActivity.this.findViewById(android.R.id.content),
+                            "Please grant permissions to enable tech meetups near you to be shown",
+                            Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    requestPermissions(
+                                            new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                                            PERMISSIONS_LOCATION_REQUEST);
+                                }
+                            }).show();
+                }
+                return;
+            }
+            case PERMISSIONS_EXTERNAL_STORAGE_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // Go to TechMeetups activity
+                    Intent trainingIntent = new Intent(TechMeetupsActivity.this, TrainingActivity.class);
+                    startActivity(trainingIntent);
+                    overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+                } else {
+                    // Ask again for permissions
+                    Snackbar.make(TechMeetupsActivity.this.findViewById(android.R.id.content),
+                            "Please grant permissions to be able to use the training features",
+                            Snackbar.LENGTH_INDEFINITE).setAction("ENABLE",
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    requestPermissions(
+                                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                            PERMISSIONS_EXTERNAL_STORAGE_REQUEST);
+                                }
+                            }).show();
+                }
+                return;
+            }
+        }
+
     }
 }
