@@ -295,7 +295,6 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
             // Place a new line at the end of the content
             textView.setText(text + "\n");
         }
-
         textView.setTextColor(Color.WHITE);
         return textView;
     }

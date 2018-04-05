@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:background="@color/activityBackground">
+
+    <TextView
+        android:id="@+id/setup_txt_setup_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="76dp"
+        android:text="@string/setup_header"
+        android:textColor="@color/setupActivityHeader"
+        android:textSize="24sp" />
+
+    <Switch
+        android:id="@+id/setup_txt_notifications_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/setup_txt_setup_header"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="46dp"
+        android:text="@string/notifications_placeholder"
+        android:textColor="@color/trainingSwitchText"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/setup_btn_clear_data"
+        android:layout_width="115dp"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="50dp"
+
+
+        android:background="@drawable/buttonshape"
+        android:text="@string/clear_data_btn"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp" />
+
+</RelativeLayout>
