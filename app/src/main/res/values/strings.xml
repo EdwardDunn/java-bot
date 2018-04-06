@@ -6,8 +6,11 @@
     <string name="chat_welcome">Hey, how can i help?</string>
     <string name="enter_question">enter question</string>
     <string name="ask_button">ask</string>
-    <string name="notification_train_action">Train</string>
     <string name="main_error_message">Connecting to database</string>
+
+    <!-- Notifications -->
+    <string name="notification_train_action">train</string>
+    <string name="notification_dismiss_action">dismiss</string>
 
     <!-- Menu Strings -->
     <string name="menu_name">Java Bot</string>

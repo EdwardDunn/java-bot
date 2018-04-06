@@ -121,10 +121,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int questionCounter;
 
     // Used for training session notification
-    NotificationCompat.Builder notification;
-    private static final int uniqueID = 001;
+    private NotificationCompat.Builder notification;
+    private final int UNIQUE_ID = 001;
 
-    NotificationManager nm;
+    private NotificationManager nm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -184,7 +184,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
     }
 
     protected void onPause(){
@@ -362,16 +361,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             PendingIntent trainingActivityIntent = PendingIntent.getActivity(this, 0, trainingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             notification.setContentIntent(trainingActivityIntent);
 
+            Intent dismissIntent = new Intent(this, DismissNotification.class);
+            PendingIntent dismissActivityIntent = PendingIntent.getActivity(this, 0, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
             //Build the notification
+            notification.setAutoCancel(true);
             notification.setSmallIcon(R.mipmap.ic_launcher_round);
             notification.setWhen(System.currentTimeMillis());
             notification.setContentTitle(getString(R.string.training_session_notification_title));
             notification.setContentText(getString(R.string.training_session_notification_content));
             notification.addAction(R.mipmap.icon_java_bot_3_round, getString(R.string.notification_train_action), trainingActivityIntent);
+            notification.addAction(R.mipmap.icon_java_bot_3_round, getString(R.string.notification_dismiss_action), dismissActivityIntent);
 
             // Build notification and issues it
-            NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            nm.notify(uniqueID, notification.build());
+            //NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            nm.notify(UNIQUE_ID, notification.build());
         }
     }
 

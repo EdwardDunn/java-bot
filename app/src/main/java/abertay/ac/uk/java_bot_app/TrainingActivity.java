@@ -6,6 +6,7 @@ package abertay.ac.uk.java_bot_app;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -78,6 +79,9 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
         }
     };
 
+    private NotificationManager nm;
+    private final int UNIQUE_ID = 001;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,8 +91,10 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
 
         this.gestureDetector = new GestureDetectorCompat(TrainingActivity.this, TrainingActivity.this);
 
+        nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
-
+        // If there is a training notification active, cancel it
+        cancelNotification();
 
         questionsDatabase = new QuestionsSQLiteDatabaseHelper(this);
 
@@ -122,6 +128,13 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
                 return false;
             }
         });
+
+    }
+
+    public void cancelNotification(){
+        // Cancel any notifications
+        nm.cancelAll();
+        nm.cancel(UNIQUE_ID);
     }
 
     private void setupUIViews(){
