@@ -111,21 +111,38 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.solution_btn_ask){
-            //Create new TextView with text entered into question field in questions layout
-            String question = "";
-            question  = question_field.getText().toString();
-            layout.addView(createNewUserTextView(question));
-            question_field.setText("");
-            getChatBotResponse(question);
-
             // Close androids soft keyboard when ask button is pressed
             View viewCheck = this.getCurrentFocus();
             if (viewCheck != null) {
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
+
+            /* Thread used for delaying response by 200 milliseconds to allow for the soft keyboard
+            to close first. If not used the response would not be seen as the web view opens too
+            quickly */
+            Thread responseThread = new Thread(){
+                public void run(){
+                    try {
+                        sleep(200);
+                        SolutionActivity.this.runOnUiThread(new Runnable() {
+                            public void run() {
+                                String question = "";
+                                question  = question_field.getText().toString();
+                                layout.addView(createNewUserTextView(question));
+                                question_field.setText("");
+                                getChatBotResponse(question);
+                            }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            responseThread.start();
         }
     }
+
 
     private void showSolution(){
         Intent intent = getIntent();
