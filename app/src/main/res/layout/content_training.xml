@@ -6,68 +6,71 @@
     android:layout_height="match_parent"
     android:background="@color/activityBackground">
 
-
     <TextView
         android:id="@+id/training_txt_page_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/training_img_menu"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="47dp"
+        android:layout_marginTop="70dp"
         android:text="@string/training_header"
-        android:textColor="@color/trainingActivityHeader"
-        android:textSize="24sp" />
-
-    <ImageView
-        android:id="@+id/training_img_menu"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="10dp" />
+        android:textColor="@color/pageHeader"
+        android:textSize="30sp" />
 
     <TextView
-        android:id="@+id/training_txt_question"
+        android:id="@+id/training_txt_training_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/training_txt_solution_header"
+        android:layout_below="@+id/training_txt_page_header"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="13dp"
-        android:text="@string/question_placeholder"
-        android:textColor="@color/trainingQuestion" />
-
-    <TextView
-        android:id="@+id/training_txt_solution"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/training_txt_question"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="87dp"
-        android:text="@string/solution_placeholder"
-        android:textAlignment="textStart"
-        android:textColor="@color/trainingSolution" />
+        android:layout_marginTop="20dp"
+        android:text="@string/training_message"
+        android:textColor="@color/pageText" />
 
     <TextView
         android:id="@+id/training_txt_question_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/training_txt_page_header"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/solution_header"
-        android:textColor="@color/solutionPlaceHolder"
+        android:layout_marginTop="40dp"
+        android:text="@string/question_header"
+        android:textColor="@color/pageSubHeader"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/training_txt_question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/training_txt_question_header"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/question_placeholder"
+        android:textColor="@color/pageText"
         android:textSize="18sp" />
 
     <TextView
         android:id="@+id/training_txt_solution_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/training_txt_question_header"
-        android:layout_below="@+id/training_txt_training_message"
-        android:layout_marginTop="19dp"
-        android:text="@string/question_header"
-        android:textColor="@color/questionPlaceHolder"
+        android:layout_below="@+id/training_txt_question"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="@string/solution_header"
+        android:textColor="@color/pageSubHeader"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/training_txt_solution"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/training_txt_solution_header"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/solution_placeholder"
+        android:textColor="@color/pageText"
         android:textSize="18sp" />
 
     <TextView
@@ -76,18 +79,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="26dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/swipe_notice"
-        android:textColor="@color/trainingSwipeMessage" />
-
-    <TextView
-        android:id="@+id/training_txt_training_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/training_txt_page_header"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="23dp"
-        android:text="@string/training_message"
-        android:textColor="@color/noQuestionsAskedMessage" />
+        android:textColor="@color/pageText" />
 
 </RelativeLayout>

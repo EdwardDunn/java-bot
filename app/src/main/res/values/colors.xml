@@ -6,7 +6,6 @@
     <color name="lightGray">#ebebeb</color>
 
     <!-- Main activity colors -->
-    <color name="userResponse">#00ff00</color>
     <color name="welcomeMessage">#ffffff</color>
 
     <!-- Menu colors -->
@@ -15,6 +14,12 @@
     <color name="drawerMenuHeader">#b1bdcd</color>
     <color name="activityBackground">#5B7290</color>
     <color name="appBar">#003366</color>
+
+    <!-- General Page Colors -->
+    <color name="pageHeader">#663366</color>
+    <color name="pageSubHeader">#b1bdcd</color>
+    <color name="pageText">#ffffff</color>
+    <color name="userResponse">#00ff00</color>
 
     <!-- Setup activity colors -->
     <color name="setupActivityHeader">#ffffff</color>

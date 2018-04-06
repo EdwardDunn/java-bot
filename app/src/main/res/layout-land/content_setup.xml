@@ -15,8 +15,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="76dp"
         android:text="@string/setup_header"
-        android:textColor="@color/setupActivityHeader"
-        android:textSize="24sp" />
+        android:textColor="@color/pageHeader"
+        android:textSize="30sp" />
 
     <Switch
         android:id="@+id/setup_txt_notifications_switch"
@@ -26,7 +26,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="46dp"
         android:text="@string/notifications_placeholder"
-        android:textColor="@color/trainingSwitchText"
+        android:textColor="@color/pageText"
         android:textSize="18sp" />
 
     <Button
