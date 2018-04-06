@@ -24,7 +24,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp"
         android:text="@string/your_location"
-        android:textColor="@color/techMeetupsYourLocation"
+        android:textColor="@color/pageSubHeader"
         android:textSize="18sp" />
 
     <TextView
@@ -35,8 +35,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="45dp"
         android:text="@string/menu_action_tech_meetups"
-        android:textColor="@color/techMeetupsHeader"
-        android:textSize="24sp" />
+        android:textColor="@color/pageHeader"
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/tech_meetups_txt_api_response"
@@ -107,7 +107,7 @@
         android:paddingRight="20dp"
         android:text="@string/city_placeholder"
         android:textAlignment="center"
-        android:textColor="@color/noTechMeetupsMessage"
+        android:textColor="@color/pageSubHeader"
         android:visibility="invisible" />
 
 </RelativeLayout>

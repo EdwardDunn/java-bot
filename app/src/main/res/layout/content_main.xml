@@ -26,7 +26,7 @@
         android:layout_toEndOf="@+id/main_img_java_bot"
         android:text="@string/welcome_messsage"
         android:textAlignment="center"
-        android:textColor="@color/welcomeMessage"
+        android:textColor="@color/pageHeader"
         android:textSize="16sp" />
 
     <EditText

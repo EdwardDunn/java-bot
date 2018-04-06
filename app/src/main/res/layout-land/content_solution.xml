@@ -15,8 +15,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="65dp"
         android:text="@string/solution_header"
-        android:textColor="@color/solutionHeader"
-        android:textSize="24sp"
+        android:textColor="@color/pageHeader"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -30,8 +30,8 @@
         android:layout_marginTop="20dp"
         android:text="solution"
         android:textAlignment="center"
-        android:textColor="@color/solutionText"
-        android:textSize="18sp"
+        android:textColor="@color/pageSubHeader"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/solution_txt_page_header" />
