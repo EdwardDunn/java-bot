@@ -91,7 +91,7 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
                             .setTitle(R.string.training_data_title)
                             .setIcon(R.drawable.icon_warning);
 
-        alertDialogBuilder.setPositiveButton(R.string.alert_dialog_positive,
+        alertDialogBuilder.setPositiveButton(R.string.alert_dialog_training_positive,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -105,7 +105,7 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
                     }
                 });
 
-        alertDialogBuilder.setNegativeButton(R.string.alert_dialog_negative, new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton(R.string.alert_dialog_training_negative, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
             }

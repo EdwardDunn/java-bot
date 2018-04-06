@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private ScrollView scrollView;
 
+    private CheckConnection checkCon;
+
     private ChatBot cb;
     private final String WELCOME_MESSAGE = "Hey, how can I help";
     private final String WELCOME_BACK_MESSAGE = "Great, your back";
@@ -140,6 +142,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         this.gestureDetector = new GestureDetectorCompat(this, this);
 
+        //----------------------------Check Network State-----------------------------------------//
+        checkCon = new CheckConnection(this);
+        checkCon.checkConnection();
+
         //---------------------------------Permissions---------------------------------------------//
 
         // TODO - implement permissions properly
@@ -187,10 +193,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     protected void onResume(){
         super.onResume();
+        // Check connection
+        checkCon.checkConnection();
+
         // Clear any previous ChatBot discussion
         layout.removeAllViews();
         // Display welcome back message
         layout.addView(createNewBotTextView(WELCOME_BACK_MESSAGE));
+    }
+
+    protected void onStop() {
+        super.onStop();
+
     }
 
     private void setupUIViews(){
