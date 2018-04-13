@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 
 public class DismissNotification extends AppCompatActivity {
 
-    private final int UNIQUE_ID = 001;
     private NotificationManager nm;
 
     @Override
@@ -20,7 +19,6 @@ public class DismissNotification extends AppCompatActivity {
 
         nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.cancelAll();
-        nm.cancel(UNIQUE_ID);
 
     }
 }

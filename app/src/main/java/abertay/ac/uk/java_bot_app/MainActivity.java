@@ -56,6 +56,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Used for training session notification
     private NotificationCompat.Builder notification;
-    private final int UNIQUE_ID = 001;
+    //private final int UNIQUE_ID = 001;
 
     private NotificationManager nm;
 
@@ -146,22 +147,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         checkCon = new CheckConnection(this);
         checkCon.checkConnection();
 
-        //---------------------------------Permissions---------------------------------------------//
-
-        // TODO - implement permissions properly
-        //requestLocationsPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 5 );
-        //requestLocationsPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
-        //requestLocationsPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
-
-
         //---------------------------Training Session Notification--------------------------------//
 
         // If notifications are allowed, set to true in setNotifications
         if(notifications) {
-            // Initialise notification object
-            notification = new NotificationCompat.Builder(this);
-            notification.setAutoCancel(true);
-
             // This object is used to extend the timer class
             NotificationTimer notificationTask = new NotificationTimer();
 
@@ -355,27 +344,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // If notifications are set to true in the setup activity training notifications switch
         if(notifications == true) {
+
+            notification = new NotificationCompat.Builder(this);
+            notification.setAutoCancel(true);
             // Onclick of notification, go to the training activity
             Intent trainingIntent = new Intent(this, TrainingActivity.class);
-            // Give phone access to intent
             PendingIntent trainingActivityIntent = PendingIntent.getActivity(this, 0, trainingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            // Set the training activity to open on click of notification
             notification.setContentIntent(trainingActivityIntent);
 
+            // Used for dismiss action
             Intent dismissIntent = new Intent(this, DismissNotification.class);
             PendingIntent dismissActivityIntent = PendingIntent.getActivity(this, 0, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            //Build the notification
+            // Build the notification
             notification.setAutoCancel(true);
             notification.setSmallIcon(R.mipmap.ic_launcher_round);
             notification.setWhen(System.currentTimeMillis());
             notification.setContentTitle(getString(R.string.training_session_notification_title));
             notification.setContentText(getString(R.string.training_session_notification_content));
+
+            // Action buttons
             notification.addAction(R.mipmap.icon_java_bot_3_round, getString(R.string.notification_train_action), trainingActivityIntent);
             notification.addAction(R.mipmap.icon_java_bot_3_round, getString(R.string.notification_dismiss_action), dismissActivityIntent);
 
-            // Build notification and issues it
-            //NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            nm.notify(UNIQUE_ID, notification.build());
+            // Create random Id
+            Random rand = new Random();
+            int notificationId = rand.nextInt();
+
+            // Create notification
+            nm.notify(notificationId, notification.build());
         }
     }
 

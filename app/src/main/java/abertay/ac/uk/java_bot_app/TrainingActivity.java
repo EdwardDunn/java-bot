@@ -80,7 +80,7 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
     };
 
     private NotificationManager nm;
-    private final int UNIQUE_ID = 001;
+    //private final int UNIQUE_ID = 001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +134,7 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
     public void cancelNotification(){
         // Cancel any notifications
         nm.cancelAll();
-        nm.cancel(UNIQUE_ID);
+        //nm.cancel(UNIQUE_ID);
     }
 
     private void setupUIViews(){
