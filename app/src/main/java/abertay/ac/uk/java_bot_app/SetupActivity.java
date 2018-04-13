@@ -1,3 +1,12 @@
+/**
+ * SetupActivity
+ * The SetupActivity is used to allow the user to disable notifications and delete any training data
+ * held.
+ *
+ * @author  Edward Dunn
+ * @version 1.0
+ */
+
 package abertay.ac.uk.java_bot_app;
 
 import android.Manifest;
@@ -27,16 +36,20 @@ import android.widget.Toast;
 
 public class SetupActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
+    // These permissions are required for the menu (if going to the training or tech meetups activity check permissions)
     public static final int PERMISSIONS_LOCATION_REQUEST = 1;
     public static final int PERMISSIONS_EXTERNAL_STORAGE_REQUEST = 2;
 
+    // Switch used to turn on or off notifications
     private Switch notificationsSwitch;
 
     //Used to delete data from questions SQLite database
     private Button clearDataBtn;
 
+    // SQLite database used to hold training questions data
     private QuestionsSQLiteDatabaseHelper questionsDatabase;
 
+    // Used to cancel any current notifications is notifications are turned off
     private NotificationManager nm;
 
     @Override
@@ -64,14 +77,38 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+    }
+
+    protected void onResume(){
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+
+        // Stops all background threads
+        Thread[] backGroundThreads = new Thread[Thread.activeCount()];
+        Thread.enumerate(backGroundThreads);
+        for (Thread activeThread : backGroundThreads) {
+            activeThread.interrupt();
+        }
     }
 
     private void setupUIViews(){
         notificationsSwitch = findViewById(R.id.setup_txt_notifications_switch);
 
         // Set notifications switch to checked is notifications are allowed
-
         if(MainActivity.notifications == true){
             notificationsSwitch.setChecked(true);
         }
@@ -89,7 +126,7 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
         }
     }
 
-    // Alert Dialog Box
+    // Alert Dialog Box for deleting training data
     public void openDialog(View view){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
         alertDialogBuilder.setMessage(R.string.remove_training_data_message)

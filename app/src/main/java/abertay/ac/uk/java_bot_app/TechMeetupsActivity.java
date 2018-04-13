@@ -1,3 +1,19 @@
+/**
+ * TechMeetupsActivity
+ * The TechMeetupsActivity is used to show tech meetups near the users. The OpenTechCalender API
+ * is used to provide this information. The users location is requested and their current city
+ * is used to show any meet ups in their area.
+ *
+ * References:
+ * Parse JSON:
+ *  https://stackoverflow.com/questions/11579693/how-to-get-json-data-from-php-server-to-android-mobile#11579742
+ * Make text hyperlink:
+ *  https://stackoverflow.com/questions/9290651/make-a-hyperlink-textview-in-android
+ *
+ * @author  Edward Dunn
+ * @version 1.0
+ */
+
 package abertay.ac.uk.java_bot_app;
 
 import android.Manifest;
@@ -23,7 +39,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,21 +65,18 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     public TechMeetupsActivity(){
-
     }
 
     public static final int PERMISSIONS_LOCATION_REQUEST = 1;
     public static final int PERMISSIONS_EXTERNAL_STORAGE_REQUEST = 2;
 
-    //GET LOCATION VARIABLE
+    // Get location variables
     private GoogleApiClient googleAPIClient;
     private LocationManager locationManager;
-    private Double latitude;
-    private Double longitude;
-    private final int REQUEST_LOCATION = 1;
 
-    // GET ADDRESS VARIABLES
+    // Get address variables
     protected Location mLastLocation;
+    private LocationRequest mLocationRequest;
     private FusedLocationProviderClient mFusedLocationClient;
     private Location mLastKnownLocation;
     private static TextView userAddress;
@@ -77,16 +89,14 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         }
     }
 
-    private LocationRequest mLocationRequest;
-
     private TextView apiResponse;
 
     private TechMeetupsAPIHelper techMeetupsAPIHelper;
 
+    // Current city retrieved from current location
     private static String currentCity;
-    //private static TextView cityField;
 
-    private LinearLayout layout;
+    private LinearLayout techMeetupsLayout;
 
     // Progress Bar
     // setLoodingProgressBarVisibility() allows this variable to be easily set by other classes
@@ -123,22 +133,13 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tech_meetups);
 
-        // TODO - implement permissions properly
-        //requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 5 );
-        //requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
-        //requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
-
-        setupUIViews();
-
-        latitude = 0.0;
-        longitude = 0.0;
-
         setupUIViews();
 
         mFusedLocationClient = new FusedLocationProviderClient(this);
 
         // Get location
         getLocation();
+
         // Get address
         fetchAddressHandler();
 
@@ -167,8 +168,6 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
     }
 
     @Override
@@ -193,7 +192,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
 
     private void setupUIViews() {
         userAddress = (TextView) findViewById(R.id.tech_meetups_txt_user_address);
-        //cityField = (TextView) findViewById(R.id.tech_meetups_txt_city);
+
         currentCity = "";
 
         apiResponse = findViewById(R.id.tech_meetups_txt_api_response);
@@ -204,17 +203,10 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         cityNotFound = findViewById(R.id.tech_meetups_txt_city_not_found);
         // Set to invisible by default, called by FetchAddressService to visible if not meetups are found for your city
 
-        layout = findViewById(R.id.tech_meetups_ll_meetup_layout);
-
+        techMeetupsLayout = findViewById(R.id.tech_meetups_ll_meetup_layout);
     }
 
     public void populateAPIResponse(String response){
-        /**
-         //References:
-         *  https://stackoverflow.com/questions/11579693/how-to-get-json-data-from-php-server-to-android-mobile#11579742
-         *  https://stackoverflow.com/questions/9290651/make-a-hyperlink-textview-in-android
-         */
-
         // Holds list of meetups returned from the Open Tech Calendar API
         ArrayList<TechMeetup> meetupArray = new ArrayList<TechMeetup>();
 
@@ -273,14 +265,13 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
     }
 
     private void AddTechMeetupView(String summary, String city, String description, String date, String url){
-        layout.addView(createNewTextView(summary.toString(), "header"));
-        layout.addView(createNewTextView(city.toString(), "city"));
-        layout.addView(createNewTextView(date.toString(), "date"));
-        layout.addView(createNewTextView(url.toString(), "url"));
+        techMeetupsLayout.addView(createNewTextView(summary.toString(), "header"));
+        techMeetupsLayout.addView(createNewTextView(city.toString(), "city"));
+        techMeetupsLayout.addView(createNewTextView(date.toString(), "date"));
+        techMeetupsLayout.addView(createNewTextView(url.toString(), "url"));
 
         // Currently not used but maybe needed in the future
-        //layout.addView(createNewTextView(description.toString(), "content"));
-
+        //techMeetupsLayout.addView(createNewTextView(description.toString(), "content"));
     }
 
     private TextView createNewTextView(String text, String type){
@@ -327,7 +318,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
 
     }
 
-    //-------------------------------Get Location Methods-------------------------------//
+    //-------------------------------Get Location Methods-----------------------------------------//
     public void getLocation(){
         // if googleAPI client is null, initialise new instance
         if (googleAPIClient == null) {
@@ -343,7 +334,6 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
 
         // Connect to Google API
         googleAPIClient.connect();
-
     }
 
     @Override
@@ -374,9 +364,6 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         if(lastLocation != null) {
             // For address lookup - DEBUG
             mLastLocation = lastLocation;
-
-            latitude = lastLocation.getLatitude();
-            longitude = lastLocation.getLongitude();
         }
         else{
             startLocationUpdates();
@@ -389,21 +376,17 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(1000)
                 .setFastestInterval(5000);
+
         // Request location updates
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            //return;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
             getLocation();
         }
+
         LocationServices.FusedLocationApi.requestLocationUpdates(googleAPIClient,
                 mLocationRequest, (com.google.android.gms.location.LocationListener) this);
-        Log.d("reque", "--->>>>");
     }
 
     @Override
@@ -436,8 +419,6 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
 
     }
 
-
-
     @Override
     public void onStart() {
         super.onStart();
@@ -449,7 +430,6 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
     protected void getAddressDetails() {
         FetchAddressService fas = new FetchAddressService(this, mLastKnownLocation);
     }
-
 
     private void fetchAddressHandler() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)

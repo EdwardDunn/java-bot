@@ -1,8 +1,12 @@
-package abertay.ac.uk.java_bot_app;
-
 /**
- * Created by edwar on 23/02/2018.
+ * Solution Class
+ * This class is used by the ChatBot class a solution template.
+ *
+ * @author  Edward Dunn
+ * @version 1.0
  */
+
+package abertay.ac.uk.java_bot_app;
 
 public class Solution {
 

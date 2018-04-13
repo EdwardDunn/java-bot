@@ -87,6 +87,32 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
 
     }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+    }
+
+    protected void onResume(){
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+
+        // Stops all background threads
+        Thread[] backGroundThreads = new Thread[Thread.activeCount()];
+        Thread.enumerate(backGroundThreads);
+        for (Thread activeThread : backGroundThreads) {
+            activeThread.interrupt();
+        }
+    }
+
     private void setupUIViews(){
         scrollView = findViewById(R.id.scroll_solution);
         solutionText = findViewById(R.id.solution_txt_solution);
@@ -98,14 +124,6 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         initialQuestion = "";
 
         cb = ChatBot.getInstance();
-    }
-
-    protected void onPause(){
-        super.onPause();
-    }
-
-    protected void onResume(){
-        super.onResume();
     }
 
     @Override
