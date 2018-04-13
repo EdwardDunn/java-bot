@@ -15,7 +15,7 @@ public class DismissNotification extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_training);
+        //setContentView(R.layout.activity_training);
 
         nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.cancelAll();
