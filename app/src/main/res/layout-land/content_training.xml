@@ -41,38 +41,58 @@
         android:textColor="@color/pageSubHeader"
         android:textSize="24sp" />
 
-    <TextView
-        android:id="@+id/training_txt_question"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scroll_question_text"
+        android:layout_width="500dp"
+        android:layout_height="30dp"
         android:layout_below="@+id/training_txt_question_header"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:text="@string/question_placeholder"
-        android:textColor="@color/pageText"
-        android:textSize="18sp" />
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/training_txt_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/training_txt_question_header"
+            android:layout_centerHorizontal="true"
+            android:text="@string/question_placeholder"
+            android:textAlignment="center"
+            android:textColor="@color/pageText"
+            android:textSize="18sp" />
+
+    </ScrollView>
 
     <TextView
         android:id="@+id/training_txt_solution_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/training_txt_question"
+        android:layout_below="@+id/scroll_question_text"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:text="@string/solution_header"
         android:textColor="@color/pageSubHeader"
         android:textSize="24sp" />
 
-    <TextView
-        android:id="@+id/training_txt_solution"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scroll_solution_text"
+        android:layout_width="500dp"
+        android:layout_height="60dp"
         android:layout_below="@+id/training_txt_solution_header"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:text="@string/solution_placeholder"
-        android:textColor="@color/pageText"
-        android:textSize="18sp" />
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/training_txt_solution"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/training_txt_solution_header"
+            android:layout_centerHorizontal="true"
+            android:text="@string/solution_placeholder"
+            android:textAlignment="center"
+            android:textColor="@color/pageText"
+            android:textSize="18sp" />
+
+    </ScrollView>
 
     <TextView
         android:id="@+id/training_txt_swipe_notice"
@@ -80,7 +100,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/swipe_notice"
         android:textColor="@color/pageText"
         android:textSize="14sp" />
