@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Java Bot</string>
 
+    <!-- Chat Bot -->
+    <string name="chat_bot_welcome_message">Hey, how can I help?</string>
+    <string name="chat_bot_welcome_back_message">Great, your back</string>
+    <string name="chat_bot_no_question_response">Sorry I didn\'t catch that</string>
+
     <!-- Main Activity Strings -->
     <string name="welcome_messsage">Welcome to JavaBot, Your Helpful Assistant</string>
     <string name="chat_welcome">Hey, how can i help?</string>

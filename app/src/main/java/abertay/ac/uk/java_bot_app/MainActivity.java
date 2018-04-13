@@ -8,7 +8,7 @@
  *  https://www.youtube.com/watch?v=SWsuijO5NGE&list=PL6gx4Cwl9DGBsvRxJJOzG4r4k_zLKrnxl&index=61
  *  Logo:
  *  http://www.clipartlord.com/wp-content/uploads/2013/12/robot13.png
- *  Scroll to bottom of linear layout:
+ *  Scroll to bottom of linear chatBotLayout:
  *  https://stackoverflow.com/questions/14801215/scrollview-not-scrolling-down-completely
  *  Close Android soft keyboard:
  *  https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard#1109108
@@ -35,16 +35,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
@@ -54,28 +51,23 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener, GestureDetector.OnGestureListener
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,View.OnClickListener
 {
-    private GestureDetectorCompat gestureDetector;
-
+    // Permissions request unique ids
     public static final int PERMISSIONS_LOCATION_REQUEST = 1;
     public static final int PERMISSIONS_EXTERNAL_STORAGE_REQUEST = 2;
 
-    private ScrollView scrollView;
-
+    // Used to display alert dialog if no internet connection
     private CheckConnection checkCon;
 
-    private ChatBot cb;
-    private final String WELCOME_MESSAGE = "Hey, how can I help";
-    private final String WELCOME_BACK_MESSAGE = "Great, your back";
-    private final String NO_QUESTION_RESPONSE = "Sorry I didn't catch that";
+    // ChatBot object used to get responses to questions
+    private ChatBot chatBot;
 
     // Set notifications on or off
     public static Boolean notifications;
@@ -89,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     // Progress Bar
-    // setLoodingProgressBarVisibility() allows this variable to be easily set by other classes (ChatBotRemoteDatabaseHelper)
+    // Set LoadingProgressBarVisibility() allows this variable to be easily set by other classes (ChatBotRemoteDatabaseHelper)
     public static ProgressBar loadingProgressBar;
     public void setLoadingProgressBarVisibility(Boolean visible){
         if(visible){
@@ -100,10 +92,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    // Loading Message (when connection is not available
-    // setLoadingMessageVisibility() allows this variable to be easily set by other classes (ChatBotRemoteDatabaseHelper)
+    // Loading Message (when connecting to remote database to retrieve ChatBot responses)
+    // SetLoadingMessageVisibility() allows this variable to be easily set by other classes (ChatBotRemoteDatabaseHelper)
     private static TextView loadingMessage;
-    public void setErrorMessageVisibility(Boolean visible){
+    public void setLoadingMessageVisibility(Boolean visible){
         if(visible){
             loadingMessage.setVisibility(View.VISIBLE);
         }
@@ -112,19 +104,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private LinearLayout layout;
+    private LinearLayout chatBotLayout;
+    private ScrollView chatBotLayoutScrollView;
     private Button ask_btn;
     private EditText question_field;
 
     // Used for Stack Overflow search if solution not found
     private String initialQuestion;
-    // Used to set initial question
-    private int questionCounter;
 
     // Used for training session notification
     private NotificationCompat.Builder notification;
-    //private final int UNIQUE_ID = 001;
-
     private NotificationManager nm;
 
     @Override
@@ -139,9 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ask_btn.setOnClickListener(this);
 
         // Show ChatBot welcome message on start
-        layout.addView(createNewBotTextView(WELCOME_MESSAGE));
-
-        this.gestureDetector = new GestureDetectorCompat(this, this);
+        chatBotLayout.addView(createNewBotTextView(getString(R.string.chat_bot_welcome_message)));
 
         //----------------------------Check Network State-----------------------------------------//
         checkCon = new CheckConnection(this);
@@ -173,7 +160,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
     }
 
     protected void onPause(){
@@ -186,9 +172,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         checkCon.checkConnection();
 
         // Clear any previous ChatBot discussion
-        layout.removeAllViews();
+        chatBotLayout.removeAllViews();
         // Display welcome back message
-        layout.addView(createNewBotTextView(WELCOME_BACK_MESSAGE));
+        chatBotLayout.addView(createNewBotTextView(getString(R.string.chat_bot_welcome_back_message)));
     }
 
     protected void onStop() {
@@ -197,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setupUIViews(){
-        scrollView = findViewById(R.id.scroll);
+        chatBotLayoutScrollView = findViewById(R.id.scroll);
 
         loadingProgressBar = (ProgressBar) findViewById(R.id.main_pb_progress_bar);
         // Set invisible by default, will be shown when remote database connection in progress
@@ -207,12 +193,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Set invisible by default, will be shown when remote database connection in progress
         loadingMessage.setVisibility(View.INVISIBLE);
 
-        layout = findViewById(R.id.main_ll_question_layout);
+        chatBotLayout = findViewById(R.id.main_ll_question_layout);
         ask_btn = findViewById(R.id.main_btn_ask);
         question_field = findViewById(R.id.main_et_question_field);
-        questionCounter = 0;
         initialQuestion = "";
-        cb = ChatBot.getInstance();
+        chatBot = ChatBot.getInstance();
 
         // Ensures notifications are not set to null every time MainActivity is called
         if(notifications == null){
@@ -223,18 +208,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onClick(View view){
         if(view.getId() == R.id.main_btn_ask){
-            // Create new TextView with text entered into question field in questions layout
+            // Create new TextView with text entered into question field in questions chatBotLayout
             String question = "";
             question  = question_field.getText().toString();
 
             if(question.isEmpty()) {
-                layout.addView(createNewBotTextView(NO_QUESTION_RESPONSE));
+                chatBotLayout.addView(createNewBotTextView(getString(R.string.chat_bot_no_question_response)));
             }else {
                 // Question asked
                 initialQuestion = question;
 
-                layout.addView(createNewUserTextView(question));
+                // Display question asked
+                chatBotLayout.addView(createNewUserTextView(question));
 
+                // Show response to question
                 getChatBotResponse(question);
 
                 // Clear question box
@@ -279,6 +266,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return textView;
     }
 
+    /**
+     * Method used to ensure the scroll view always goes to absolute bottom, a timer is implemented
+     * to wait for a new text view to be added and then scroll to bottom.
+     */
     public void scrollDown()
     {
         Thread scrollThread = new Thread(){
@@ -287,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     sleep(200);
                     MainActivity.this.runOnUiThread(new Runnable() {
                         public void run() {
-                            scrollView.fullScroll(View.FOCUS_DOWN);
+                            chatBotLayoutScrollView.fullScroll(View.FOCUS_DOWN);
                         }
                     });
                 } catch (Exception e) {
@@ -309,13 +300,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         question = question.toLowerCase();
 
         // Get response to the users question
-        response = cb.askQuestion(question);
-        solutionKey = cb.getSolutionKey();
-        questionType = cb.getSolutionType();
+        response = chatBot.askQuestion(question);
+        solutionKey = chatBot.getSolutionKey();
+        questionType = chatBot.getSolutionType();
 
         // If question is not a solution type, e.g. not a programming question
         if(questionType != "solution question") {
-            layout.addView(createNewBotTextView(response));
+            chatBotLayout.addView(createNewBotTextView(response));
         }else{
             // If question is a programming one e.g. 'how do I parse an int?'
             Intent solutionIntent = new Intent(this, SolutionActivity.class);
@@ -338,7 +329,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Generate notification for alerting user that this weeks training session is available
+     * Method used to generate notification for alerting user that this weeks training session is available
      */
     public void generateNotification(){
         // If notifications are set to true in the setup activity training notifications switch
@@ -379,49 +370,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    //-------------------------------Gesture Detector Methods-------------------------------------//
-    @Override
-    public boolean onDown(MotionEvent motionEvent) {
-        Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
-        return true;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent motionEvent) {
-        Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent motionEvent) {
-        Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
-        return true;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
-        return true;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent motionEvent) {
-        Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        //showNextQuestion();
-        Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
-        return true;
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        this.gestureDetector.onTouchEvent(event);
-        return super.onTouchEvent(event);
-    }
-
-
     //------------------------------Drawer Menu Methods-------------------------------------------//
 
     @Override
@@ -443,6 +391,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
+        // Only a refresh option is currently used for the options menu
         int id = item.getItemId();
 
         if(id == R.id.refresh){

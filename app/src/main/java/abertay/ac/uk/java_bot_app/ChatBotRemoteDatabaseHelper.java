@@ -109,15 +109,15 @@ public class ChatBotRemoteDatabaseHelper{
         protected void onPostExecute(String result){
 
             mainActivity.setLoadingProgressBarVisibility(false);
-            mainActivity.setErrorMessageVisibility(false);
+            mainActivity.setLoadingMessageVisibility(false);
 
             if(result == null) {
-                mainActivity.setErrorMessageVisibility(true);
+                mainActivity.setLoadingMessageVisibility(true);
                 mainActivity.setLoadingProgressBarVisibility(true);
             }
             else{
                 parentActivity.populateSolutions(result);
-                //mainActivity.setErrorMessageVisibility(false);
+                //mainActivity.setLoadingMessageVisibility(false);
             }
 
         }
@@ -126,7 +126,7 @@ public class ChatBotRemoteDatabaseHelper{
         protected void onPreExecute(){
             super.onPreExecute();
             mainActivity.setLoadingProgressBarVisibility(true);
-            mainActivity.setErrorMessageVisibility(true);
+            mainActivity.setLoadingMessageVisibility(true);
         }
     }
 
@@ -151,15 +151,15 @@ public class ChatBotRemoteDatabaseHelper{
         protected void onPostExecute(String result){
 
             mainActivity.setLoadingProgressBarVisibility(false);
-            mainActivity.setErrorMessageVisibility(false);
+            mainActivity.setLoadingMessageVisibility(false);
 
             if(result == null) {
-                mainActivity.setErrorMessageVisibility(true);
+                mainActivity.setLoadingMessageVisibility(true);
                 mainActivity.setLoadingProgressBarVisibility(true);
             }
             else{
                 parentActivity.populateCommonResponses(result);
-                //mainActivity.setErrorMessageVisibility(false);
+                //mainActivity.setLoadingMessageVisibility(false);
             }
 
         }
@@ -168,7 +168,7 @@ public class ChatBotRemoteDatabaseHelper{
         protected void onPreExecute(){
             super.onPreExecute();
             mainActivity.setLoadingProgressBarVisibility(true);
-            mainActivity.setErrorMessageVisibility(true);
+            mainActivity.setLoadingMessageVisibility(true);
         }
     }
 
@@ -193,15 +193,15 @@ public class ChatBotRemoteDatabaseHelper{
         protected void onPostExecute(String result){
 
             mainActivity.setLoadingProgressBarVisibility(false);
-            mainActivity.setErrorMessageVisibility(false);
+            mainActivity.setLoadingMessageVisibility(false);
 
             if(result == null) {
-                mainActivity.setErrorMessageVisibility(true);
+                mainActivity.setLoadingMessageVisibility(true);
                 mainActivity.setLoadingProgressBarVisibility(true);
             }
             else{
                 parentActivity.populateSystemResponses(result);
-                //mainActivity.setErrorMessageVisibility(false);
+                //mainActivity.setLoadingMessageVisibility(false);
             }
 
         }
@@ -210,7 +210,7 @@ public class ChatBotRemoteDatabaseHelper{
         protected void onPreExecute(){
             super.onPreExecute();
             mainActivity.setLoadingProgressBarVisibility(true);
-            mainActivity.setErrorMessageVisibility(true);
+            mainActivity.setLoadingMessageVisibility(true);
         }
     }
 
@@ -235,15 +235,15 @@ public class ChatBotRemoteDatabaseHelper{
         protected void onPostExecute(String result){
 
             mainActivity.setLoadingProgressBarVisibility(false);
-            mainActivity.setErrorMessageVisibility(false);
+            mainActivity.setLoadingMessageVisibility(false);
 
             if(result == null) {
-                mainActivity.setErrorMessageVisibility(true);
+                mainActivity.setLoadingMessageVisibility(true);
                 mainActivity.setLoadingProgressBarVisibility(true);
             }
             else{
                 parentActivity.populateCheckResponses(result);
-                //mainActivity.setErrorMessageVisibility(false);
+                //mainActivity.setLoadingMessageVisibility(false);
             }
 
         }
@@ -252,7 +252,7 @@ public class ChatBotRemoteDatabaseHelper{
         protected void onPreExecute(){
             super.onPreExecute();
             mainActivity.setLoadingProgressBarVisibility(true);
-            mainActivity.setErrorMessageVisibility(true);
+            mainActivity.setLoadingMessageVisibility(true);
         }
     }
 }
