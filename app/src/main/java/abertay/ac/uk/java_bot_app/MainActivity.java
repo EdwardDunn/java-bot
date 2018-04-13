@@ -29,7 +29,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -59,7 +58,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -130,7 +128,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //private final int UNIQUE_ID = 001;
 
     private NotificationManager nm;
-    private int notificationCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // TODO - for completed app set time to 7 days (604800000 milliseconds)
             // For demonstration purposes 2 minutes is used (120000 milliseconds)
-            notificationTimer.schedule(notificationTask, 5000, 30000);
+            notificationTimer.schedule(notificationTask, 5000, 60000);
         }
 
         //-----------------------------Drawer Menu------------------------------------------------//
@@ -179,36 +176,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-    }
-
-    public static void setBadge(Context context, int count) {
-        String launcherClassName = getLauncherClassName(context);
-        if (launcherClassName == null) {
-            return;
-        }
-        Intent intent = new Intent("android.intent.action.BADGE_COUNT_UPDATE");
-        intent.putExtra("badge_count", count);
-        intent.putExtra("badge_count_package_name", context.getPackageName());
-        intent.putExtra("badge_count_class_name", launcherClassName);
-        context.sendBroadcast(intent);
-    }
-
-    public static String getLauncherClassName(Context context) {
-
-        PackageManager pm = context.getPackageManager();
-
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-        List<ResolveInfo> resolveInfos = pm.queryIntentActivities(intent, 0);
-        for (ResolveInfo resolveInfo : resolveInfos) {
-            String pkgName = resolveInfo.activityInfo.applicationInfo.packageName;
-            if (pkgName.equalsIgnoreCase(context.getPackageName())) {
-                String className = resolveInfo.activityInfo.name;
-                return className;
-            }
-        }
-        return null;
     }
 
     protected void onPause(){
@@ -380,8 +347,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // If notifications are set to true in the setup activity training notifications switch
         if(notifications == true) {
-            notificationCounter++;
-
             notification = new NotificationCompat.Builder(this);
             notification.setAutoCancel(true);
             // Onclick of notification, go to the training activity
@@ -414,8 +379,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             nm.notify(notificationId, notification.build());
 
             // Add badge to app icon
-            AppIconBadge iconBadge = new AppIconBadge();
-            iconBadge.addAppIconToBadge(this);
+            AppIconBadgeSetter.addAppIconBadge(this);
         }
     }
 

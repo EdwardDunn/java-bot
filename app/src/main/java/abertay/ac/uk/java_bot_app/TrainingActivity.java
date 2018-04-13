@@ -135,7 +135,7 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
         nm.cancelAll();
 
         // Remove app icon badges
-        AppIconBadge iconBadge = new AppIconBadge();
+        AppIconBadgeSetter iconBadge = new AppIconBadgeSetter();
         iconBadge.removeAllBadges(this);
     }
 
