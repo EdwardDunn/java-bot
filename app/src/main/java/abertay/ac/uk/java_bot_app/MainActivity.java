@@ -14,6 +14,8 @@
  *  https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard#1109108
  *  Permissions:
  *  https://stackoverflow.com/questions/34040355/how-to-check-the-multiple-permission-at-single-request-in-android-m
+ *  Stop threads for onDestroy():
+ *  https://stackoverflow.com/questions/9699292/how-to-stop-all-worker-threads-in-android-application
  *
  * @author  Edward Dunn
  * @version 1.0
@@ -162,10 +164,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    @Override
     protected void onPause(){
         super.onPause();
     }
 
+    @Override
     protected void onResume(){
         super.onResume();
         // Check connection
@@ -177,9 +181,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         chatBotLayout.addView(createNewBotTextView(getString(R.string.chat_bot_welcome_back_message)));
     }
 
+    @Override
     protected void onStop() {
         super.onStop();
+    }
 
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+
+        // Stops all background threads
+        Thread[] backGroundThreads = new Thread[Thread.activeCount()];
+        Thread.enumerate(backGroundThreads);
+        for (Thread activeThread : backGroundThreads) {
+                activeThread.interrupt();
+        }
     }
 
     private void setupUIViews(){
@@ -287,6 +303,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
         scrollThread.start();
+
     }
 
     /**

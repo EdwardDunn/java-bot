@@ -137,7 +137,32 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
                 return false;
             }
         });
+    }
 
+    @Override
+    protected void onPause(){
+        super.onPause();
+    }
+
+    protected void onResume(){
+        super.onResume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+
+        // Stops all background threads
+        Thread[] backGroundThreads = new Thread[Thread.activeCount()];
+        Thread.enumerate(backGroundThreads);
+        for (Thread activeThread : backGroundThreads) {
+            activeThread.interrupt();
+        }
     }
 
     public void cancelNotification(){

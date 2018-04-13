@@ -174,7 +174,21 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
     @Override
     protected void onResume() {
         super.onResume();
+    }
 
+    @Override
+    protected void onStop() {
+        // On app stop, disconnect Google API
+        googleAPIClient.disconnect();
+
+        // Empty location manager updates
+        locationManager.removeUpdates(this);
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
     }
 
     private void setupUIViews() {
@@ -422,15 +436,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
 
     }
 
-    @Override
-    protected void onStop() {
-        // On app stop, disconnect Google API
-        googleAPIClient.disconnect();
 
-        // Empty location manager updates
-        locationManager.removeUpdates(this);
-        super.onStop();
-    }
 
     @Override
     public void onStart() {
