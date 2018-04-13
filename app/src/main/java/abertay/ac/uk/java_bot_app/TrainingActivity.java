@@ -334,7 +334,14 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
             requestStoragePermissions();
         }
         else if (id == R.id.tech_meetups){
-            requestLocationsPermissions();
+            // Check network state, if no internet connection display dialog
+            CheckConnection checkCon = new CheckConnection(this);
+            Boolean connected = checkCon.checkConnection();
+
+            // Only go to TechMeetupsActivity if connected to internet
+            if(connected) {
+                requestLocationsPermissions();
+            }
         }
         else if(id == R.id.setup){
             Intent searchIntent = new Intent(TrainingActivity.this, SetupActivity.class);

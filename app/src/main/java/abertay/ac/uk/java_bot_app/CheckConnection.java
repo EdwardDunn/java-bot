@@ -21,7 +21,7 @@ public class CheckConnection {
     }
 
 
-    public void checkConnection() {
+    public Boolean checkConnection() {
         ConnectivityManager cm =
                 (ConnectivityManager) parentActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -31,7 +31,12 @@ public class CheckConnection {
 
         if (!isConnected) {
             openConnectionDialog();
+            return false;
         }
+        else{
+            return true;
+        }
+
     }
 
     // Alert Dialog Box

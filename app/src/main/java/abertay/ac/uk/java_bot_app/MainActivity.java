@@ -65,9 +65,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int PERMISSIONS_LOCATION_REQUEST = 1;
     public static final int PERMISSIONS_EXTERNAL_STORAGE_REQUEST = 2;
 
-    // Used to display alert dialog if no internet connection
-    private CheckConnection checkCon;
-
     // ChatBot object used to get responses to questions
     private ChatBot chatBot;
 
@@ -132,10 +129,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Show ChatBot welcome message on start
         chatBotLayout.addView(createNewBotTextView(getString(R.string.chat_bot_welcome_message)));
 
-        //----------------------------Check Network State-----------------------------------------//
-        checkCon = new CheckConnection(this);
-        checkCon.checkConnection();
-
         //---------------------------Training Session Notification--------------------------------//
 
         // If notifications are allowed, set to true in setNotifications
@@ -172,9 +165,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume(){
         super.onResume();
-        // Check connection
-        checkCon.checkConnection();
-
+;
         // Clear any previous ChatBot discussion
         chatBotLayout.removeAllViews();
         // Display welcome back message
@@ -433,7 +424,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             requestStoragePermissions();
         }
         else if (id == R.id.tech_meetups){
-            requestLocationsPermissions();
+            // Check network state, if no internet connection display dialog
+            CheckConnection checkCon = new CheckConnection(this);
+            Boolean connected = checkCon.checkConnection();
+
+            // Only go to TechMeetupsActivity if connected to internet
+            if(connected) {
+                requestLocationsPermissions();
+            }
         }
         else if(id == R.id.setup){
             Intent searchIntent = new Intent(MainActivity.this, SetupActivity.class);
