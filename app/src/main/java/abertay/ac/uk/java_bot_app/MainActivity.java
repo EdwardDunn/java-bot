@@ -1,5 +1,3 @@
-package abertay.ac.uk.java_bot_app;
-
 /**
  * MainActivity
  * The MainActivity class provides the chat bot features to the app.
@@ -16,12 +14,12 @@ package abertay.ac.uk.java_bot_app;
  *  https://stackoverflow.com/questions/1109022/close-hide-the-android-soft-keyboard#1109108
  *  Permissions:
  *  https://stackoverflow.com/questions/34040355/how-to-check-the-multiple-permission-at-single-request-in-android-m
- *  Notification count on app icon:
- *  https://stackoverflow.com/questions/17565307/how-to-display-count-of-notifications-in-app-launcher-icon#17565479
  *
  * @author  Edward Dunn
  * @version 1.0
  */
+
+package abertay.ac.uk.java_bot_app;
 
 import android.Manifest;
 import android.app.NotificationManager;
@@ -326,7 +324,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             solutionIntent.putExtra("initialQuestion", initialQuestion);
             startActivity(solutionIntent);
         }
-
     }
 
     //-------------------------------Notification Methods-----------------------------------------//
@@ -344,7 +341,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Generate notification for alerting user that this weeks training session is available
      */
     public void generateNotification(){
-
         // If notifications are set to true in the setup activity training notifications switch
         if(notifications == true) {
             notification = new NotificationCompat.Builder(this);
@@ -356,9 +352,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Set the training activity to open on click of notification
             notification.setContentIntent(trainingActivityIntent);
 
-            // Used for dismiss action
-            Intent dismissIntent = new Intent(this, DismissNotification.class);
-            PendingIntent dismissActivityIntent = PendingIntent.getActivity(this, 0, dismissIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            // Used with 'disable notifications' action button
+            Intent setupIntent = new Intent(this, SetupActivity.class);
+            PendingIntent setupActivityIntent = PendingIntent.getActivity(this, 0, setupIntent, PendingIntent.FLAG_UPDATE_CURRENT );
 
             // Build the notification
             notification.setAutoCancel(true);
@@ -369,7 +365,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // Action buttons
             notification.addAction(R.mipmap.icon_java_bot_3_round, getString(R.string.notification_train_action), trainingActivityIntent);
-            notification.addAction(R.mipmap.icon_java_bot_3_round, getString(R.string.notification_dismiss_action), dismissActivityIntent);
+            notification.addAction(R.mipmap.icon_java_bot_3_round, getString(R.string.notification_setup_action), setupActivityIntent);
 
             // Create random Id
             Random rand = new Random();

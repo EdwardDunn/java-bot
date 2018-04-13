@@ -10,7 +10,7 @@
 
     <!-- Notifications -->
     <string name="notification_train_action">train</string>
-    <string name="notification_dismiss_action">dismiss</string>
+    <string name="notification_setup_action">disable notifications</string>
 
     <!-- Menu Strings -->
     <string name="menu_name">Java Bot</string>

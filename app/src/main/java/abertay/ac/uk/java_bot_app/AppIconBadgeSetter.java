@@ -1,14 +1,6 @@
-package abertay.ac.uk.java_bot_app;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-
-import java.util.List;
-
 /**
  * AppIconBadgeSetter
+ * Class used to add and delete appIconBadges.
  *
  * References:
  *  Notification count on app icon:
@@ -18,11 +10,19 @@ import java.util.List;
  * @version 1.0
  */
 
+package abertay.ac.uk.java_bot_app;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+
+import java.util.List;
+
+
 public class AppIconBadgeSetter {
 
-    public AppIconBadgeSetter(){
-
-    }
+    public AppIconBadgeSetter(){}
 
     private static int iconCount;
 

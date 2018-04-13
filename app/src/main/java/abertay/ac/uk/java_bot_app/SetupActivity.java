@@ -1,6 +1,7 @@
 package abertay.ac.uk.java_bot_app;
 
 import android.Manifest;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -36,12 +37,16 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
 
     private QuestionsSQLiteDatabaseHelper questionsDatabase;
 
+    private NotificationManager nm;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
 
         setupUIViews();
+
+        nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         notificationsSwitch.setOnClickListener(this);
         clearDataBtn.setOnClickListener(this);
@@ -118,6 +123,17 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
     private void setNotificationsSwitch(){
         Boolean switchState = notificationsSwitch.isChecked();
         MainActivity.setNotificationsOnOrOff(switchState);
+
+        cancelNotifications();
+    }
+
+    public void cancelNotifications(){
+        // Cancel any notifications
+        nm.cancelAll();
+
+        // Remove app icon badges
+        AppIconBadgeSetter iconBadge = new AppIconBadgeSetter();
+        iconBadge.removeAllBadges(this);
     }
 
     private void removeTrainingSessionData(){

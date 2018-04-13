@@ -1,6 +1,15 @@
-
-//References - gesture detection with drawer menu
-// https://stackoverflow.com/questions/17882255/gestures-not-working-when-using-drawerlayout-in-android-app#19393718
+/**
+ * TrainingActivity
+ * Activity used to provide the user with the questions they have asked that week as a training session.
+ * Gesture detection methods allow the user to swipe the screen to see next question.
+ *
+ * References:
+ *  Gesture detection with drawer menu:
+ *  https://stackoverflow.com/questions/17882255/gestures-not-working-when-using-drawerlayout-in-android-app#19393718
+ *
+ * @author  Edward Dunn
+ * @version 1.0
+ */
 
 package abertay.ac.uk.java_bot_app;
 
@@ -31,6 +40,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
 
 public class TrainingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, GestureDetector.OnGestureListener {
 
