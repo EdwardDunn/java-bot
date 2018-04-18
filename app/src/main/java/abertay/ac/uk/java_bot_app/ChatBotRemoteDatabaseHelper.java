@@ -1,3 +1,13 @@
+/**
+ * ChatBotRemoteDatabaseHelper
+ * The ChatBotRemoteDatabaseHelper class provides connection methods to populate the chat bot with
+ * the required responses for normal questions and pre-set java questions like 'how do I parse an
+ * int?"
+ *
+ * @author  Edward Dunn
+ * @version 1.0
+ */
+
 package abertay.ac.uk.java_bot_app;
 
 import android.net.Uri;
@@ -18,11 +28,14 @@ public class ChatBotRemoteDatabaseHelper{
         parentActivity = context;
     }
 
+    // Remote database URLs
     public static final String BASE_API_URL = "http://edwarddunn.pipeten.co.uk/";
     private final String GET_SOLUTIONS_FILE_NAME = "java-bot-get-solutions.php";
     private final String GET_COMMON_RESPONSES_FILE_NAME = "java-bot-get-common-responses.php";
     private final String GET_SYSTEM_RESPONSES_FILE_NAME = "java-bot-get-system-responses.php";
     private final String GET_CHECK_RESPONSES_FILE_NAME = "java-bot-get-check-responses.php";
+
+    // Following methods used to return chat bot responses from remote database connection
 
     public void getSolutions(){
         URL getSolutionsUrl = buildURL(GET_SOLUTIONS_FILE_NAME);
@@ -44,8 +57,10 @@ public class ChatBotRemoteDatabaseHelper{
         new GetCheckResponsesTask().execute(getCheckResponsesUrl);
     }
 
+    /**
+     * Method used to build the URL in the correct format
+     */
     public static URL buildURL(String fileName){
-
         URL url = null;
         Uri uri = Uri.parse(BASE_API_URL).buildUpon()
                 .appendPath(fileName)
@@ -59,6 +74,9 @@ public class ChatBotRemoteDatabaseHelper{
         return url;
     }
 
+    /**
+     * Method used to retrieve JSON from remote database connection from URl passed in
+     */
     public static String getJson(URL url) throws IOException{
 
         // Create connection object
@@ -89,6 +107,9 @@ public class ChatBotRemoteDatabaseHelper{
 
     }
 
+    /**
+     * Class used to get the chat bots responses for programming questions
+     */
     public class GetSolutionsTask extends AsyncTask<URL, Void, String> {
         MainActivity mainActivity = new MainActivity();
 
@@ -117,7 +138,6 @@ public class ChatBotRemoteDatabaseHelper{
             }
             else{
                 parentActivity.populateSolutions(result);
-                //mainActivity.setLoadingMessageVisibility(false);
             }
 
         }
@@ -130,6 +150,9 @@ public class ChatBotRemoteDatabaseHelper{
         }
     }
 
+    /**
+     * Class used to get the chat bots responses for common questions like 'How are you?"
+     */
     public class GetCommonResponsesTask extends AsyncTask<URL, Void, String> {
 
         MainActivity mainActivity = new MainActivity();
@@ -159,7 +182,6 @@ public class ChatBotRemoteDatabaseHelper{
             }
             else{
                 parentActivity.populateCommonResponses(result);
-                //mainActivity.setLoadingMessageVisibility(false);
             }
 
         }
@@ -172,6 +194,10 @@ public class ChatBotRemoteDatabaseHelper{
         }
     }
 
+    /**
+     * Class used to get the chat bots responses for system questions (if "onresume" is passed in
+     * a welcome back message is returned
+     */
     public class GetSystemResponsesTask extends AsyncTask<URL, Void, String> {
 
         MainActivity mainActivity = new MainActivity();
@@ -201,7 +227,6 @@ public class ChatBotRemoteDatabaseHelper{
             }
             else{
                 parentActivity.populateSystemResponses(result);
-                //mainActivity.setLoadingMessageVisibility(false);
             }
 
         }
@@ -214,6 +239,9 @@ public class ChatBotRemoteDatabaseHelper{
         }
     }
 
+    /**
+     * Class used to get the chat bots responses checking the users response to one of it questions
+     */
     public class GetCheckResponsesTask extends AsyncTask<URL, Void, String> {
 
         MainActivity mainActivity = new MainActivity();
@@ -243,7 +271,6 @@ public class ChatBotRemoteDatabaseHelper{
             }
             else{
                 parentActivity.populateCheckResponses(result);
-                //mainActivity.setLoadingMessageVisibility(false);
             }
 
         }

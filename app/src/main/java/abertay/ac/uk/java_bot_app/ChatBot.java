@@ -1,3 +1,12 @@
+/**
+ * ChatBot
+ * The ChatBot class provides the Chat Bots functionality. It provides a public function for
+ * asking a question and connects to the database to retrieve current set of questions
+ *
+ * @author  Edward Dunn
+ * @version 1.0
+ */
+
 package abertay.ac.uk.java_bot_app;
 
 import android.app.Activity;
@@ -9,14 +18,6 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-/**
- * ChatBot
- * The ChatBot class provides the Chat Bots functionality. It provides a public function for
- * asking a question and connects to the database to retrieve current set of questions
- *
- * @author  Edward Dunn
- * @version 1.0
- */
 
 public class ChatBot extends Activity {
 
@@ -58,7 +59,7 @@ public class ChatBot extends Activity {
     private static ChatBot instance = null;
 
     /**
-     * Private Constructor (singleton pattern)
+     * Private Constructor(singleton pattern)
      */
     private ChatBot(){
         solutions = new HashMap<String, String>();
@@ -75,7 +76,6 @@ public class ChatBot extends Activity {
             chatBotRemoteDatabaseHelper.getCommonResponses();
             chatBotRemoteDatabaseHelper.getSystemResponses();
             chatBotRemoteDatabaseHelper.getCheckResponses();
-
         }
         catch (Exception e){
             Log.d("Error", e.getMessage());
@@ -203,8 +203,6 @@ public class ChatBot extends Activity {
     /**
      * Method used to evaluate the questions asked by the user, decides what type the questions is.
      * Returns the correct response after for type
-     * @param question
-     * @return response
      */
     public static String askQuestion(String question){
         String response = "";
@@ -254,8 +252,6 @@ public class ChatBot extends Activity {
     /**
      * Method used to evaluate the response to a question asked by by the chat bot.
      * The main function is to identify if the user is happy or not with the chat bots response
-     * @param responseToQuestion
-     * @return chatBotResponse
      */
     public static String checkResponseToQuestion(String responseToQuestion){
         String chatBotResponse = "";
@@ -265,8 +261,6 @@ public class ChatBot extends Activity {
                 // If question does match a key, set solution to value for key
                 chatBotResponse = checkResponses.get(key);
                 setSolutionType(questionTypes.CHECK.getType());
-            }else{
-                // TODO - if the response if not in checkResponses, send to askQuestion()
             }
         }
 
