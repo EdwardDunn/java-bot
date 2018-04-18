@@ -30,7 +30,8 @@
             android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity android:name=".TrainingActivity" />
         <activity android:name=".TechMeetupsActivity"
-            android:launchMode="standard"/>
+            android:launchMode="standard"
+            android:configChanges="orientation|screenSize"/>
         <activity android:name=".SetupActivity" />
         <activity android:name=".StackOverflowActivity">
             <intent-filter>
