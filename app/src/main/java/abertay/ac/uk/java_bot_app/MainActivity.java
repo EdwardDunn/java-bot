@@ -347,7 +347,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //-------------------------------Notification Methods-----------------------------------------//
-
     /**
      * Class used to extend TimerTask for displaying the training session notification
      */
@@ -401,7 +400,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //------------------------------Drawer Menu Methods-------------------------------------------//
-
     /**
      * Method used to control the opening and closing of drawer menu
      */
@@ -480,7 +478,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //-----------------------------Request Permissions Methods------------------------------------//
-
     /**
      * Method used to check location permissions and request if needed
      */

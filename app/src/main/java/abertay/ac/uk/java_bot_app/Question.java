@@ -1,8 +1,13 @@
+/**
+ * Question
+ * Question is a custom type used to add questions to the Questions SQLite database
+ *
+ * @author  Edward Dunn
+ * @version 1.0
+ */
+
 package abertay.ac.uk.java_bot_app;
 
-/**
- * Created by Edward Dunn on 23/03/2018.
- */
 
 public class Question {
 
