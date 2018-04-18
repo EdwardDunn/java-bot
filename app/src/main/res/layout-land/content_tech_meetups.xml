@@ -14,7 +14,7 @@
         android:layout_below="@+id/tech_meetups_txt_your_location"
         android:layout_centerHorizontal="true"
         android:text="@string/my_address_hint"
-        android:textColor="@color/techMeetupsUserAddress" />
+        android:textColor="@color/pageText" />
 
     <TextView
         android:id="@+id/tech_meetups_txt_your_location"
@@ -66,7 +66,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="37dp"
         android:text="@string/tech_meetups_error_message"
-        android:textColor="@color/connectingToDatabaseMessage" />
+        android:textColor="@color/pageText" />
 
     <ScrollView
         android:id="@+id/scrollViewMeetups"
