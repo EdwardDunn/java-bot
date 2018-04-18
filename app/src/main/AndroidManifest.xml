@@ -19,6 +19,7 @@
         <activity android:name=".MainActivity"
             android:launchMode="standard"
             android:windowSoftInputMode="stateAlwaysHidden">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,13 +27,18 @@
             </intent-filter>
 
         </activity>
+
         <activity android:name=".SolutionActivity"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:windowSoftInputMode="stateAlwaysHidden" />
+
         <activity android:name=".TrainingActivity" />
+
         <activity android:name=".TechMeetupsActivity"
             android:launchMode="standard"
             android:configChanges="orientation|screenSize"/>
+
         <activity android:name=".SetupActivity" />
+
         <activity android:name=".StackOverflowActivity">
             <intent-filter>
 
@@ -48,7 +54,6 @@
             </intent-filter>
 
         </activity>
-
 
     </application>
 

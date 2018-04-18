@@ -36,6 +36,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class SolutionActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
 
     private ChatBot cb;
@@ -64,7 +66,6 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
 
         setupUIViews();
 
-
         questionsDatabase = new QuestionsSQLiteDatabaseHelper(this);
 
         ask_btn.setOnClickListener(this);
@@ -85,6 +86,37 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        int count = layout.getChildCount();
+
+        ArrayList<String> list = new ArrayList();
+
+        for(int i = 0; i < count; i++){
+            View v = layout.getChildAt(i);
+            String s = v.toString();
+            list.add(s);
+        }
+
+        savedInstanceState.putStringArrayList("list", list);
+
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        ArrayList<String> list;
+
+        list = savedInstanceState.getStringArrayList("list");
+
+        for(String s : list){
+            createNewTextView(s.toString());
+
+            //Toast.makeText(this, s, Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

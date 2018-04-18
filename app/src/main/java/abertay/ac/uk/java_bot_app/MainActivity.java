@@ -140,8 +140,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Timer notificationTimer = new Timer();
 
             // TODO - for completed app set time to 7 days (604800000 milliseconds)
-            // For demonstration purposes 2 minutes is used (120000 milliseconds)
-            notificationTimer.schedule(notificationTask, 5000, 60000);
+            // For demonstration purposes period is reduced
+            notificationTimer.schedule(notificationTask, 20000, 20000);
         }
 
         //-----------------------------Drawer Menu------------------------------------------------//
