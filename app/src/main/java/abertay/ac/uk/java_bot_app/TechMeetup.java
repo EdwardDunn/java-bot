@@ -1,8 +1,14 @@
+/**
+ * TechMeetup
+ * The TechMeetups class is a custom type used for adding tech meetups to the layout in the
+ * TechMeetupsActivity
+ *
+ * @author  Edward Dunn
+ * @version 1.0
+ */
+
 package abertay.ac.uk.java_bot_app;
 
-/**
- * Created by Edward Dunn on 22/03/2018.
- */
 
 public class TechMeetup {
     private String summary;

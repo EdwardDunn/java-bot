@@ -1,3 +1,12 @@
+/**
+ * TechMeetupsAPIHelper
+ * The TechMeetupsAPIHelper is used to connect to the Open Tech Calender API to retrieve tech meetup
+ * details for the users current location.
+ *
+ * @author  Edward Dunn
+ * @version 1.0
+ */
+
 package abertay.ac.uk.java_bot_app;
 
 import android.net.Uri;
@@ -10,9 +19,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
-/**
- * Created by Edward Dunn on 22/03/2018.
- */
 
 public class TechMeetupsAPIHelper {
 
@@ -22,6 +28,8 @@ public class TechMeetupsAPIHelper {
     }
 
     private boolean noCitFound;
+
+    // The following strings have not been extracted here for clarity
 
     // Open Tech Calender Areas
     private static final String CITY_EDINBURGH = "edinburgh";
@@ -45,14 +53,20 @@ public class TechMeetupsAPIHelper {
     // API with area code
     public static final String BASE_API_URL_AREA = "https://opentechcalendar.co.uk/api1/area/";
 
-    // API without area code
+    // API without area code (used for returning meetups in all areas)
     public static final String BASE_API_URL = "https://opentechcalendar.co.uk/api1/";
 
+    /**
+     * Method used to call async GetNearestMeetupsTask
+     */
     public void getTechMeetups(String city){
         URL getNearestMeetups = buildURL(city);
         new GetNearestMeetupsTask().execute(getNearestMeetups);
     }
 
+    /**
+     * Method used to build the URL
+     */
     public URL buildURL(String city){
         city = city.toLowerCase();
 
@@ -95,6 +109,9 @@ public class TechMeetupsAPIHelper {
         }
     }
 
+    /**
+     * Method used to get the Open Tech Calender area code for the users current city location
+     */
     private static String getOpenTechCalendarAreaCode(String city){
         String areaCode = "";
 
@@ -123,6 +140,9 @@ public class TechMeetupsAPIHelper {
         return areaCode;
     }
 
+    /**
+     * Method used create the HTTP connection to get the JSON response from the Open Tech Calender
+     */
     public static String getJson(URL url) throws IOException {
 
         // Create connection object
@@ -144,7 +164,7 @@ public class TechMeetupsAPIHelper {
             }
         }
         catch (Exception e){
-            Log.d("Error", e.toString());
+            Log.d("Error returned Open Tech Calender API response", e.toString());
             return null;
         }
         finally {
@@ -153,6 +173,9 @@ public class TechMeetupsAPIHelper {
 
     }
 
+    /**
+     * Class used to return result from HTTP connection for getting nearest tech meetups
+     */
     public class GetNearestMeetupsTask extends AsyncTask<URL, Void, String> {
 
         @Override
@@ -172,7 +195,6 @@ public class TechMeetupsAPIHelper {
         protected void onPostExecute(String result){
 
             parentActivity.setLoadingProgressBarVisibility(false);
-
 
             if(result == null) {
                 parentActivity.setLoadingMessageVisibility(true);

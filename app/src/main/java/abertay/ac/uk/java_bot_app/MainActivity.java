@@ -443,7 +443,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Method used to set options items in drawer menu
+     * Method used to show options items in drawer menu
      */
     public boolean onNavigationItemSelected(MenuItem item){
         int id = item.getItemId();
@@ -559,7 +559,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Method used to show rationale for requested permisions and to re-request
+     * Method used to show rationale for requested permissions and to re-request
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

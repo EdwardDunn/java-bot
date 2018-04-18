@@ -33,6 +33,7 @@
     <string name="solution_header">Solution</string>
     <string name="solution_placeholder">Solution</string>
     <string name="question_placeholder">Question</string>
+    <string name="solution_success_message">Did that help?</string>
 
     <!-- Tech Meetups Activity Strings -->
     <string name="tech_meetups_error_message">Connecting to Open Tech Calendar</string>

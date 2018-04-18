@@ -1,6 +1,14 @@
-// References
-// Webview progress bar - https://stackoverflow.com/questions/4331094/add-a-progress-bar-in-webview#4331437
-
+/**
+ * StackOverflowActivity
+ * The StackOverflowActivity provides a webview for showing the Stackoverflow search done if the
+ * solution provided to the user is not enough
+ *
+ * References:
+ *  Webview progress bar - https://stackoverflow.com/questions/4331094/add-a-progress-bar-in-webview#4331437
+ *
+ * @author  Edward Dunn
+ * @version 1.0
+ */
 
 package abertay.ac.uk.java_bot_app;
 
@@ -28,7 +36,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 public class StackOverflowActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
+    // Permissions request unique ids
     public static final int PERMISSIONS_LOCATION_REQUEST = 1;
     public static final int PERMISSIONS_EXTERNAL_STORAGE_REQUEST = 2;
 
@@ -43,6 +51,7 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
 
         setupUIViews();
 
+        // Get URL
         Intent intent = getIntent();
         Bundle data = intent.getExtras();
         url = data.getString("url");
@@ -53,19 +62,19 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
 
         webViewer.setWebViewClient(new WebViewClient() {
 
-                                     @Override public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                                         super.onPageStarted(view, url, favicon);
-                                         loadingProgressBar.setVisibility(ProgressBar.VISIBLE);
-                                         webViewer.setVisibility(View.INVISIBLE);
-                                     }
+             @Override public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                 super.onPageStarted(view, url, favicon);
+                 loadingProgressBar.setVisibility(ProgressBar.VISIBLE);
+                 webViewer.setVisibility(View.INVISIBLE);
+             }
 
-                                     @Override public void onPageCommitVisible(WebView view, String url) {
-                                         super.onPageCommitVisible(view, url);
-                                         loadingProgressBar.setVisibility(ProgressBar.GONE);
-                                         webViewer.setVisibility(View.VISIBLE);
-                                         //isWebViewLoadingFirstPage=false;
-                                     }
-                                 });
+             @Override public void onPageCommitVisible(WebView view, String url) {
+                 super.onPageCommitVisible(view, url);
+                 loadingProgressBar.setVisibility(ProgressBar.GONE);
+                 webViewer.setVisibility(View.VISIBLE);
+                 //isWebViewLoadingFirstPage=false;
+             }
+         });
 
         browseWeb(url);
 
@@ -82,6 +91,9 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    /**
+     * Method used to instantiate activity elements
+     */
     private void setupUIViews(){
         url = "";
         webViewer = (WebView)findViewById(R.id.webView_webViewer);
@@ -90,6 +102,9 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
         loadingProgressBar = findViewById(R.id.stack_overflow_pb_progress_bar);
     }
 
+    /**
+     * Method used to load webview
+     */
     private void browseWeb(String address){
         Log.d("debug", "entered browseWeb");
 
@@ -105,7 +120,9 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
     }
 
     //-----------------------------Drawer Menu Methods--------------------------------------------//
-
+    /**
+     * Method used to control the opening and closing of drawer menu
+     */
     @Override
     public void onBackPressed(){
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -117,12 +134,18 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
         }
     }
 
+    /**
+     * Method used to create options menu
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.nav_drawer, menu);
         return true;
     }
 
+    /**
+     * Method used to provide a refresh button in the options menu
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
@@ -137,6 +160,9 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Method used to set options items in drawer menu
+     */
     public boolean onNavigationItemSelected(MenuItem item){
         int id = item.getItemId();
 
@@ -163,7 +189,9 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
     }
 
     //-----------------------------Request Permissions Methods------------------------------------//
-
+    /**
+     * Method used to check location permissions and request if needed
+     */
     private void requestLocationsPermissions(){
         // Check for fine and coarse location permissions
         if (ContextCompat.checkSelfPermission(StackOverflowActivity.this,
@@ -203,6 +231,9 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
         }
     }
 
+    /**
+     * Method used to check storage permissions and request if needed
+     */
     private void requestStoragePermissions(){
         // Check for fine and coarse location permissions
         if (ContextCompat.checkSelfPermission(StackOverflowActivity.this,
@@ -238,6 +269,9 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
         }
     }
 
+    /**
+     * Method used to show rationale for requested permissions and to re-request
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 

@@ -17,7 +17,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -59,46 +61,76 @@ public class QuestionsSQLiteDatabaseHelper extends SQLiteOpenHelper {
      * Method used to add a question to the questions database
      */
     public void addQuestion(Question q){
-        ContentValues row = new ContentValues();
-        // The first parameter is a column name, the second is a value.
-        row.put(this.COLUMN_NAMES[0], q.getQuestion());
-        row.put(this.COLUMN_NAMES[1], q.getSolution());
 
-        // Get writable database and insert the new row to the "questions" table
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(QUESTIONS_TABLE_NAME, null, row);
-        db.close();
+        try {
+            ContentValues row = new ContentValues();
+            // The first parameter is a column name, the second is a value.
+            row.put(this.COLUMN_NAMES[0], q.getQuestion());
+            row.put(this.COLUMN_NAMES[1], q.getSolution());
+
+            // Get writable database and insert the new row to the "questions" table
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.insert(QUESTIONS_TABLE_NAME, null, row);
+            db.close();
+
+        }catch(SQLiteException e){
+            e.printStackTrace();
+        }catch(Exception e){
+            Log.e("Error adding question from database", e.toString());
+        }
+
     }
 
     /**
      * Method used to retrieve all questions in the questions database
      */
     public ArrayList<Question> getQuestions(){
-         // Get the readable database
-        SQLiteDatabase db = this.getReadableDatabase();
 
-        // Get all questions by querying the database
-        Cursor result = db.query(QUESTIONS_TABLE_NAME, COLUMN_NAMES, null, null, null, null, null, null);
+        try {
+            // Get the readable database
+            SQLiteDatabase db = this.getReadableDatabase();
 
-        // Convert results to a list of question objects
-        ArrayList<Question> questions = new ArrayList<Question>();
+            // Get all questions by querying the database
+            Cursor result = db.query(QUESTIONS_TABLE_NAME, COLUMN_NAMES, null, null, null, null, null, null);
 
-        for(int i = 0; i < result.getCount(); i++){
-            result.moveToPosition(i);
-            // Create a question object
-            questions.add(new Question(result.getString(0), result.getString(1)));
+            // Convert results to a list of question objects
+            ArrayList<Question> questions = new ArrayList<Question>();
+
+            for (int i = 0; i < result.getCount(); i++) {
+                result.moveToPosition(i);
+                // Create a question object
+                questions.add(new Question(result.getString(0), result.getString(1)));
+            }
+
+            return questions;
+
+        }catch(SQLiteException e){
+            e.printStackTrace();
+            return null;
+        }catch(Exception e){
+            Log.e("Error getting questions from database", e.toString());
+            return null;
         }
 
-        return questions;
     }
 
     /**
      * Method used to empty database
      */
     public void emptyDatabase(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(QUESTIONS_TABLE_NAME, null, null);
-        db.close();
+
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.delete(QUESTIONS_TABLE_NAME, null, null);
+            db.close();
+            
+        }catch(SQLiteException e){
+            e.printStackTrace();
+        }
+        catch(Exception e){
+            Log.e("Error emptying database", e.toString());
+        }
+
     }
 
 }

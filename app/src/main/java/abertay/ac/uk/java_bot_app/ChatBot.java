@@ -78,7 +78,7 @@ public class ChatBot extends Activity {
             chatBotRemoteDatabaseHelper.getCheckResponses();
         }
         catch (Exception e){
-            Log.d("Error", e.getMessage());
+            Log.d("Error populating chat bot responses", e.getMessage());
         }
     }
 

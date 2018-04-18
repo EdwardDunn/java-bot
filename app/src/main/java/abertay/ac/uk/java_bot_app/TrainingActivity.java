@@ -44,12 +44,17 @@ import java.util.ArrayList;
 
 public class TrainingActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, GestureDetector.OnGestureListener {
 
+    // Used for swipe action
     private GestureDetectorCompat gestureDetector;
 
+    // Permissions request unique ids
     public static final int PERMISSIONS_LOCATION_REQUEST = 1;
     public static final int PERMISSIONS_EXTERNAL_STORAGE_REQUEST = 2;
 
+    // Used to access questions database to show training questions
     private QuestionsSQLiteDatabaseHelper questionsDatabase;
+
+    // Activity UI elements
     private TextView questionHeader;
     private TextView currentQuestion;
     private TextView solutionHeader;
@@ -59,7 +64,6 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
     private ArrayList<Question> questionsList;
     private int questionCounter;
 
-    // TODO - sort this error
     @SuppressLint("HandlerLeak")
     Handler questionHandler = new Handler(){
         @Override
@@ -77,7 +81,6 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
 
     };
 
-    // TODO - sort this error
     @SuppressLint("HandlerLeak")
     Handler emptyDbHandler = new Handler(){
         @Override
@@ -107,6 +110,7 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
 
         questionsDatabase = new QuestionsSQLiteDatabaseHelper(this);
 
+        // Set question counter to zero when activity first opens
         questionCounter = 0;
 
         // Populate question list with the current weeks questions asked
@@ -165,6 +169,10 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
+    /**
+     * Method used to cancel notifications, the training notifications shown direct to this activity
+     * so should be cancel when ever the user views this activity
+     */
     public void cancelNotification(){
         // Cancel any notifications
         nm.cancelAll();
@@ -174,6 +182,9 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
         iconBadge.removeAllBadges(this);
     }
 
+    /**
+     * Method used to instantiate activity elements
+     */
     private void setupUIViews(){
         questionHeader = findViewById(R.id.training_txt_question_header);
         currentQuestion = findViewById(R.id.training_txt_question);
@@ -183,9 +194,15 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
         swipeMessage = findViewById(R.id.training_txt_swipe_notice);
     }
 
+    /**
+     * Method used to handle onClick events
+     */
     @Override
     public void onClick(View view){}
 
+    /**
+     * Method used to show next training question
+     */
     private void showNextQuestion(){
 
             if (questionsList.size() > 0) {
@@ -193,6 +210,7 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
                 // Account for -1 errors
                 if (questionCounter > questionsList.size() - 1) {
 
+                    // If asked all questions then empty the database
                     Runnable emptyDbRunnable = new Runnable() {
                         @Override
                         public void run() {
@@ -232,11 +250,16 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
                 }
             }
             else{
+                // If no questions held in questions database
                 setUIElementsVisibility(false);
                 trainingMessage.setText(R.string.no_question_available);
             }
     }
 
+    /**
+     * Method used to control the visibility of the UI elements, if there is not questions to ask
+     * only the header and a no questions message should be shown
+     */
     private void setUIElementsVisibility(Boolean visibility){
 
         if(visibility == false) {
@@ -291,7 +314,9 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
     }
 
     //--------------------------------Drawer Menu Methods-----------------------------------------//
-
+    /**
+     * Method used to control the opening and closing of drawer menu
+     */
     @Override
     public void onBackPressed(){
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -303,12 +328,18 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
+    /**
+     * Method used to create options menu
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.nav_drawer, menu);
         return true;
     }
 
+    /**
+     * Method used to provide a refresh button in the options menu
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
@@ -322,6 +353,9 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Method used to show options items in drawer menu
+     */
     public boolean onNavigationItemSelected(MenuItem item){
         int id = item.getItemId();
 
@@ -355,7 +389,9 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
     }
 
     //-----------------------------Request Permissions Methods------------------------------------//
-
+    /**
+     * Method used to check location permissions and request if needed
+     */
     private void requestLocationsPermissions(){
         // Check for fine and coarse location permissions
         if (ContextCompat.checkSelfPermission(TrainingActivity.this,
@@ -395,6 +431,9 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
+    /**
+     * Method used to check storage permissions and request if needed
+     */
     private void requestStoragePermissions(){
         // Check for fine and coarse location permissions
         if (ContextCompat.checkSelfPermission(TrainingActivity.this,
@@ -430,6 +469,9 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
+    /**
+     * Method used to show rationale for requested permissions and to re-request
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 

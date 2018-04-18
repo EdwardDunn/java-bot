@@ -29,6 +29,7 @@ public class ChatBotRemoteDatabaseHelper{
     }
 
     // Remote database URLs
+    // Strings not extracted for clarity on the remote db used here
     public static final String BASE_API_URL = "http://edwarddunn.pipeten.co.uk/";
     private final String GET_SOLUTIONS_FILE_NAME = "java-bot-get-solutions.php";
     private final String GET_COMMON_RESPONSES_FILE_NAME = "java-bot-get-common-responses.php";

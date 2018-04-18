@@ -105,6 +105,9 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
         }
     }
 
+    /**
+     * Method used to instantiate activity elements
+     */
     private void setupUIViews(){
         notificationsSwitch = findViewById(R.id.setup_txt_notifications_switch);
 
@@ -116,6 +119,9 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
         clearDataBtn = findViewById(R.id.setup_btn_clear_data);
     }
 
+    /**
+     * Method used to handle onClick events
+     */
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.setup_txt_notifications_switch){
@@ -126,7 +132,9 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
         }
     }
 
-    // Alert Dialog Box for deleting training data
+    /**
+     * Method used to show dialog box for alerting the user that all training data will be deleted
+     */
     public void openDialog(View view){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
         alertDialogBuilder.setMessage(R.string.remove_training_data_message)
@@ -157,6 +165,9 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
         alertDialog.show();
     }
 
+    /**
+     * Method used to set the value of the notifications switch
+     */
     private void setNotificationsSwitch(){
         Boolean switchState = notificationsSwitch.isChecked();
         MainActivity.setNotificationsOnOrOff(switchState);
@@ -164,6 +175,9 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
         cancelNotifications();
     }
 
+    /**
+     * Method used to cancel all notifications if the notifications switched
+     */
     public void cancelNotifications(){
         // Cancel any notifications
         nm.cancelAll();
@@ -173,6 +187,9 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
         iconBadge.removeAllBadges(this);
     }
 
+    /**
+     * Method used to delete the training data held in the question SQLite datavbase
+     */
     private void removeTrainingSessionData(){
         Runnable emptyDbRunnable = new Runnable() {
             @Override
@@ -187,6 +204,9 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
 
     //----------------------------Drawer Menu Methods---------------------------------------------//
 
+    /**
+     * Method used to control the opening and closing of drawer menu
+     */
     @Override
     public void onBackPressed(){
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -198,12 +218,18 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
         }
     }
 
+    /**
+     * Method used to create options menu
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.nav_drawer, menu);
         return true;
     }
 
+    /**
+     * Method used to provide a refresh button in the options menu
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
@@ -218,6 +244,9 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Method used to set options items in drawer menu
+     */
     public boolean onNavigationItemSelected(MenuItem item){
         int id = item.getItemId();
 
@@ -251,7 +280,9 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
     }
 
     //-----------------------------Request Permissions Methods------------------------------------//
-
+    /**
+     * Method used to check location permissions and request if needed
+     */
     private void requestLocationsPermissions(){
         // Check for fine and coarse location permissions
         if (ContextCompat.checkSelfPermission(SetupActivity.this,
@@ -291,6 +322,9 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
         }
     }
 
+    /**
+     * Method used to check storage permissions and request if needed
+     */
     private void requestStoragePermissions(){
         // Check for fine and coarse location permissions
         if (ContextCompat.checkSelfPermission(SetupActivity.this,
@@ -326,6 +360,9 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
         }
     }
 
+    /**
+     * Method used to show rationale for requested permisions and to re-request
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 

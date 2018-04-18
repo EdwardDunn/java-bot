@@ -26,6 +26,9 @@ public class AppIconBadgeSetter {
 
     private static int iconCount;
 
+    /**
+     * Method used to add new app icon badge
+     */
     public static void addAppIconBadge(Context context){
         // Increment badge count
         iconCount++;
@@ -34,6 +37,9 @@ public class AppIconBadgeSetter {
         setBadgeCount(context, iconCount);
     }
 
+    /**
+     * Method used to remove all app icons badges
+     */
     public static void removeAllBadges(Context context){
         // Set badge count to 0
         iconCount = 0;
@@ -42,6 +48,9 @@ public class AppIconBadgeSetter {
         setBadgeCount(context, iconCount);
     }
 
+    /**
+     * Method used to set the current app icon badge count
+     */
     private static void setBadgeCount(Context context, int count) {
         // Get class name of calling activity
         String launcherClassName = getClassNameOfCaller(context);
@@ -57,6 +66,9 @@ public class AppIconBadgeSetter {
         context.sendBroadcast(badgeIntent);
     }
 
+    /**
+     * Method used to get calling class name
+     */
     private static String getClassNameOfCaller(Context context) {
         PackageManager pm = context.getPackageManager();
 

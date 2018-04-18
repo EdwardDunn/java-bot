@@ -1,5 +1,3 @@
-package abertay.ac.uk.java_bot_app;
-
 /**
  * SolutionActivity
  * The SolutionActivity provides a solution fetched from the database and displays
@@ -8,6 +6,8 @@ package abertay.ac.uk.java_bot_app;
  * @author  Edward Dunn
  * @version 1.0
  */
+
+package abertay.ac.uk.java_bot_app;
 
 import android.Manifest;
 import android.content.Context;
@@ -42,21 +42,21 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
 
     private ChatBot cb;
 
+    // These permissions are required for the menu (if going to the training or tech meetups activity check permissions
     public static final int PERMISSIONS_LOCATION_REQUEST = 1;
     public static final int PERMISSIONS_EXTERNAL_STORAGE_REQUEST = 2;
 
+    // Activity UI elements
     private ScrollView scrollView;
-
     private TextView solutionText;
     private LinearLayout layout;
-    private String SUCCESS_QUESTION = "Did that help?";
     private Button ask_btn;
     private EditText question_field;
     private String solution;
     private String initialQuestion;
-
     private String solutionkey;
 
+    // Questions database used add successful solutions
     QuestionsSQLiteDatabaseHelper questionsDatabase;
 
     @Override
@@ -70,9 +70,11 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
 
         ask_btn.setOnClickListener(this);
 
+        // Show solution passed by MainActivity
         showSolution();
 
-        layout.addView(createNewTextView(SUCCESS_QUESTION));
+        // Show initial chat bot response
+        layout.addView(createNewTextView(getString(R.string.solution_success_message)));
 
         //-----------------------Drawer menu---------------------------------------///
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -85,7 +87,6 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
     }
 
     @Override
@@ -145,6 +146,9 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
+    /**
+     * Method used to instantiate activity elements
+     */
     private void setupUIViews(){
         scrollView = findViewById(R.id.scroll_solution);
         solutionText = findViewById(R.id.solution_txt_solution);
@@ -158,6 +162,9 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         cb = ChatBot.getInstance();
     }
 
+    /**
+     * Method used to handle onClick events
+     */
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.solution_btn_ask){
@@ -195,7 +202,9 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
-
+    /**
+     * Method used to show the solution to the user
+     */
     private void showSolution(){
         Intent intent = getIntent();
         Bundle data = intent.getExtras();
@@ -203,8 +212,7 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         // Used for adding to training database
         initialQuestion = data.getString("initialQuestion");
 
-        // Used for searching stackoverflow, better than using the actual question as the query
-        // parameter
+        // Used for searching stackoverflow, better than using the actual question as the query parameter
         solutionkey = data.getString("solution_key");
 
         // Show solution found
@@ -212,6 +220,9 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         solutionText.setText(solution);
     }
 
+    /**
+     * Method used to create new TextView for chat bot response
+     */
     private TextView createNewTextView(String text){
         final ViewGroup.LayoutParams lparams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         final TextView textView = new TextView(this);
@@ -223,6 +234,9 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         return textView;
     }
 
+    /**
+     * Method used to create a new TextView for user response
+     */
     private TextView createNewUserTextView(String text){
         final ViewGroup.LayoutParams lparams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         final TextView textView = new TextView(this);
@@ -235,6 +249,10 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         return textView;
     }
 
+    /**
+     * Method used to ensure the scroll view always goes to absolute bottom, a timer is implemented
+     * to wait for a new text view to be added and then scroll to bottom.
+     */
     public void scrollDown()
     {
         Thread scrollThread = new Thread(){
@@ -254,6 +272,12 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         scrollThread.start();
     }
 
+    /**
+     * Method to used to evaluate the users response to the solution provided, if it is positive the
+     * solution and initial question will be added to the questions database for the weekly training
+     * session, if not the StackOverflow activity will be opened with the solution key as the query
+     * parameter.
+     */
     private void getChatBotResponse(String question){
         String response = "";
         String questionType = "";
@@ -289,6 +313,9 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
 
     }
 
+    /**
+     * Method to used to add successful solutions to questions database
+     */
     private void addQuestionToDatabase(){
 
         Runnable r = new Runnable() {
@@ -302,7 +329,9 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
     }
 
     //---------------------------Drawer Menu Methods----------------------------------------------//
-
+    /**
+     * Method used to control the opening and closing of drawer menu
+     */
     @Override
     public void onBackPressed(){
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -314,12 +343,18 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
+    /**
+     * Method used to create options menu
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.nav_drawer, menu);
         return true;
     }
 
+    /**
+     * Method used to provide a refresh button in the options menu
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
@@ -334,6 +369,9 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Method used to set options items in drawer menu
+     */
     public boolean onNavigationItemSelected(MenuItem item){
         int id = item.getItemId();
 
@@ -367,7 +405,9 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
     }
 
     //-----------------------------Request Permissions Methods------------------------------------//
-
+    /**
+     * Method used to check location permissions and request if needed
+     */
     private void requestLocationsPermissions(){
         // Check for fine and coarse location permissions
         if (ContextCompat.checkSelfPermission(SolutionActivity.this,
@@ -407,6 +447,9 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
+    /**
+     * Method used to check storage permissions and request if needed
+     */
     private void requestStoragePermissions(){
         // Check for fine and coarse location permissions
         if (ContextCompat.checkSelfPermission(SolutionActivity.this,
@@ -442,6 +485,9 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
+    /**
+     * Method used to show rationale for requested permissions and to re-request
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 

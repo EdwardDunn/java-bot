@@ -68,6 +68,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
     public TechMeetupsActivity(){
     }
 
+    // Permissions request unique ids
     public static final int PERMISSIONS_LOCATION_REQUEST = 1;
     public static final int PERMISSIONS_EXTERNAL_STORAGE_REQUEST = 2;
 
@@ -82,6 +83,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
     private Location mLastKnownLocation;
     private static TextView userAddress;
 
+    // Used to show a message for no tech meetups found in users city
     private static TextView cityNotFound;
     public void setCityNotFound(Boolean visible){
         if(visible) {
@@ -90,17 +92,18 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         }
     }
 
+    // Response from Open Tech Calender API
     private TextView apiResponse;
-
     private TechMeetupsAPIHelper techMeetupsAPIHelper;
 
     // Current city retrieved from current location
     private static String currentCity;
 
+    // Used to show meetups list
     private LinearLayout techMeetupsLayout;
 
     // Progress Bar
-    // setLoodingProgressBarVisibility() allows this variable to be easily set by other classes
+    // setLoadingProgressBarVisibility() allows this variable to be easily set by other classes
     public static ProgressBar loadingProgressBar;
     public void setLoadingProgressBarVisibility(Boolean visible){
         if(visible){
@@ -123,6 +126,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         }
     }
 
+    // Used by the FetchAddressService class to show the users current location
     public static void setLocation(String _address, String _city){
         // Show address on activity
         userAddress.setText(_address);
@@ -191,22 +195,24 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         super.onDestroy();
     }
 
+    /**
+     * Method used to instantiate activity elements
+     */
     private void setupUIViews() {
         userAddress = (TextView) findViewById(R.id.tech_meetups_txt_user_address);
-
         currentCity = "";
-
         apiResponse = findViewById(R.id.tech_meetups_txt_api_response);
-
         loadingProgressBar = (ProgressBar) findViewById(R.id.tech_meetups_pb_progress_bar);
         loadingMessage = (TextView) findViewById(R.id.tech_meetups_txt_loading_message);
-
         cityNotFound = findViewById(R.id.tech_meetups_txt_city_not_found);
         // Set to invisible by default, called by FetchAddressService to visible if not meetups are found for your city
 
         techMeetupsLayout = findViewById(R.id.tech_meetups_ll_meetup_layout);
     }
 
+    /**
+     * Method used to show the response from the Open Tech Calender API
+     */
     public void populateAPIResponse(String response){
         // Holds list of meetups returned from the Open Tech Calendar API
         ArrayList<TechMeetup> meetupArray = new ArrayList<TechMeetup>();
@@ -254,6 +260,7 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
             e.printStackTrace();
         }
 
+        // Display each meetup to the user
         for(TechMeetup tm : meetupArray){
             String summary = tm.getSummary();
             String city = tm.getCity();
@@ -265,6 +272,9 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
 
     }
 
+    /**
+     * Method used to show the response from the Open Tech Calender API
+     */
     private void AddTechMeetupView(String summary, String city, String description, String date, String url){
         techMeetupsLayout.addView(createNewTextView(summary.toString(), "header"));
         techMeetupsLayout.addView(createNewTextView(city.toString(), "city"));
@@ -275,6 +285,9 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         //techMeetupsLayout.addView(createNewTextView(description.toString(), "content"));
     }
 
+    /**
+     * Method used to create a TextView for each tech meetup returned from the API
+     */
     private TextView createNewTextView(String text, String type){
         final ViewGroup.LayoutParams lparams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         final TextView textView = new TextView(this);
@@ -315,12 +328,17 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         return textView;
     }
 
+    /**
+     * Method used to handle onClick events
+     */
     @Override
     public void onClick(View view){
-
     }
 
     //-------------------------------Get Location Methods-----------------------------------------//
+    /**
+     * Method used to instantiate the googleAPIClient
+     */
     public void getLocation(){
         // if googleAPI client is null, initialise new instance
         if (googleAPIClient == null) {
@@ -338,6 +356,9 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         googleAPIClient.connect();
     }
 
+    /**
+     * Method used to set criteria for the location manager
+     */
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Criteria criteria = new Criteria();
@@ -361,8 +382,6 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         // Get last location
         Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleAPIClient);
 
-        // DEBUG - Output location as toast
-        // TODO - remove debug toast
         if(lastLocation != null) {
             // For address lookup - DEBUG
             mLastLocation = lastLocation;
@@ -372,6 +391,9 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         }
     }
 
+    /**
+     * Method used to update the location
+     */
     protected void startLocationUpdates() {
         // Create the location request
         mLocationRequest = LocationRequest.create()
@@ -428,11 +450,16 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
     }
 
     //--------------------------Get Address from Location Methods---------------------------------//
-
+    /**
+     * Method used to initialise the FetchAddressService class
+     */
     protected void getAddressDetails() {
         FetchAddressService fas = new FetchAddressService(this, mLastKnownLocation);
     }
 
+    /**
+     * Method used to get the last known location of the user
+     */
     private void fetchAddressHandler() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED &&
@@ -465,6 +492,9 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
     }
 
     //----------------------------Drawer Menu Methods---------------------------------------------//
+    /**
+     * Method used to control the opening and closing of drawer menu
+     */
     @Override
     public void onBackPressed(){
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -476,12 +506,18 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         }
     }
 
+    /**
+     * Method used to create options menu
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.nav_drawer, menu);
         return true;
     }
 
+    /**
+     * Method used to provide a refresh button in the options menu
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
@@ -496,6 +532,9 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Method used to set options items in drawer menu
+     */
     public boolean onNavigationItemSelected(MenuItem item){
         int id = item.getItemId();
 
@@ -529,7 +568,9 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
     }
 
     //-----------------------------Request Permissions Methods------------------------------------//
-
+    /**
+     * Method used to check location permissions and request if needed
+     */
     private void requestLocationsPermissions(){
         // Check for fine and coarse location permissions
         if (ContextCompat.checkSelfPermission(TechMeetupsActivity.this,
@@ -569,6 +610,9 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         }
     }
 
+    /**
+     * Method used to check storage permissions and request if needed
+     */
     private void requestStoragePermissions(){
         // Check for fine and coarse location permissions
         if (ContextCompat.checkSelfPermission(TechMeetupsActivity.this,
@@ -604,6 +648,9 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
         }
     }
 
+    /**
+     * Method used to show rationale for requested permissions and to re-request
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
