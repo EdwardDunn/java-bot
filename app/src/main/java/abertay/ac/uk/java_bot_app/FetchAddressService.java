@@ -1,3 +1,17 @@
+/**
+ * FetchAddressService
+ * The FetchAddressService is used to get the users last known location, this is required by the
+ * techmeetups activity for search their city location to find nearest tech meetups. The address is
+ * then displayed using the 'runOnUIThread' method to update the activity.
+ *
+ * References:
+ * Geo Location;
+ *  https://developer.android.com/training/location/display-address.html#java
+ *
+ * @author  Edward Dunn
+ * @version 1.0
+ */
+
 package abertay.ac.uk.java_bot_app;
 
 import android.app.Activity;
@@ -14,11 +28,6 @@ import java.util.Locale;
 
 import static android.content.ContentValues.TAG;
 
-/**
- * References:
- * Geo Location;
- *  https://developer.android.com/training/location/display-address.html#java
- */
 
 public class FetchAddressService {
 
@@ -28,17 +37,19 @@ public class FetchAddressService {
     private String city;
     private String address;
 
+    /**
+     * Constructor
+     */
     public FetchAddressService(Activity _currentActivity, Location _mLocation){
-        //super(IntentService.class.getSimpleName());
-
         currentActivity = _currentActivity;
         mLocation = _mLocation;
 
         onHandleLocation(mLocation);
    }
 
-
-
+    /**
+     * Method deliver the address and city found to the techmeetups activity
+     */
     private void deliverResultToTechMeetupsActivity(int resultCode, String _message, String _city) {
         address = _message;
         city = _city;
@@ -52,6 +63,10 @@ public class FetchAddressService {
 
     }
 
+    /**
+     * Method used to get last known location, exceptions are thrown for no network connection
+     * and invalid geo locations. The address and city are returned.
+     */
     protected void onHandleLocation(Location mlocation) {
         Geocoder geocoder = new Geocoder(currentActivity, Locale.getDefault());
 
@@ -69,11 +84,9 @@ public class FetchAddressService {
                     1);
         } catch (IOException ioException) {
             // Catch network or other I/O problems.
-            //errorMessage = getString(R.string.service_not_available);
             Log.e(TAG, errorMessage, ioException);
         } catch (IllegalArgumentException illegalArgumentException) {
             // Catch invalid latitude or longitude values.
-            //errorMessage = getString(R.string.invalid_lat_long_used);
             Log.e(TAG, errorMessage + ". " +
                     "Latitude = " + location.getLatitude() +
                     ", Longitude = " +
@@ -86,7 +99,6 @@ public class FetchAddressService {
         // Handle case where no address was found.
         if (addresses == null || addresses.size()  == 0) {
             if (errorMessage.isEmpty()) {
-                //errorMessage = getString(R.string.no_address_found);
                 city = "No city found";
                 Log.e(TAG, errorMessage);
             }
@@ -102,23 +114,21 @@ public class FetchAddressService {
             for(int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
                 addressFragments.add(address.getAddressLine(i));
             }
-            //Log.i(TAG, getString(R.string.address_found));
             deliverResultToTechMeetupsActivity(Constants.SUCCESS_RESULT,
                     TextUtils.join(System.getProperty("line.separator"),
                             addressFragments), city);
         }
-        //this.stopSelf();
+
     }
 
+    /**
+     * Method used to stores constants used for holding the result of the geo location search
+     *
+     */
     public final class Constants {
         public static final int SUCCESS_RESULT = 0;
         public static final int FAILURE_RESULT = 1;
         public static final String PACKAGE_NAME =
                 "com.google.android.gms.location.sample.locationaddress";
-        public static final String RECEIVER = PACKAGE_NAME + ".RECEIVER";
-        public static final String RESULT_DATA_KEY = PACKAGE_NAME +
-                ".RESULT_DATA_KEY";
-        public static final String LOCATION_DATA_EXTRA = PACKAGE_NAME +
-                ".LOCATION_DATA_EXTRA";
     }
 }
