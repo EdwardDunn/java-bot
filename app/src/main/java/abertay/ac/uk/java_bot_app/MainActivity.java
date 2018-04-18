@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    // Activity UI elements
     private LinearLayout chatBotLayout;
     private ScrollView chatBotLayoutScrollView;
     private Button ask_btn;
@@ -122,14 +123,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setupUIViews();
 
-        nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
         ask_btn.setOnClickListener(this);
 
         // Show ChatBot welcome message on start
         chatBotLayout.addView(createNewBotTextView(getString(R.string.chat_bot_welcome_message)));
 
         //---------------------------Training Session Notification--------------------------------//
+        nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         // If notifications are allowed, set to true in setNotifications
         if(notifications) {
@@ -189,6 +189,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Method used to instantiate activity elements
+     */
     private void setupUIViews(){
         chatBotLayoutScrollView = findViewById(R.id.scroll);
 
@@ -206,12 +209,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initialQuestion = "";
         chatBot = ChatBot.getInstance();
 
-        // Ensures notifications are not set to null every time MainActivity is called
+        // Ensures notifications are NOT set to null every time MainActivity is called
         if(notifications == null){
             notifications = true;
         }
     }
 
+    /**
+     * Method used to handle onClick events
+     */
     @Override
     public void onClick(View view){
         if(view.getId() == R.id.main_btn_ask){
@@ -261,9 +267,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Method used to create new TextView on click on ask question button
-     * @param text
-     * @return textView
+     * Method used to create new TextView for chat bot response
      */
     private TextView createNewBotTextView(String text){
         final LayoutParams lparams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -277,6 +281,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return textView;
     }
 
+    /**
+     * Method used to create a new TextView for user response
+     */
     private TextView createNewUserTextView(String text){
         final LayoutParams lparams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         final TextView textView = new TextView(this);
@@ -310,15 +317,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
         scrollThread.start();
-
     }
 
     /**
      * Method to evaluate the question being asked and provide a response, including opening the solution activity
-     * @param question
      */
     private void getChatBotResponse(String question){
-
         String response = "";
         String solutionKey = "";
         String questionType = "";
@@ -361,6 +365,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(notifications == true) {
             notification = new NotificationCompat.Builder(this);
             notification.setAutoCancel(true);
+
             // Onclick of notification, go to the training activity
             Intent trainingIntent = new Intent(this, TrainingActivity.class);
             PendingIntent trainingActivityIntent = PendingIntent.getActivity(this, 0, trainingIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -397,6 +402,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //------------------------------Drawer Menu Methods-------------------------------------------//
 
+    /**
+     * Method used to control the opening and closing of drawer menu
+     */
     @Override
     public void onBackPressed(){
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -408,12 +416,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Method used to create options menu
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.nav_drawer, menu);
         return true;
     }
 
+
+    /**
+     * Method used to provide a refresh button in the options menu
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         // Only a refresh option is currently used for the options menu
@@ -429,6 +444,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Method used to set options items in drawer menu
+     */
     public boolean onNavigationItemSelected(MenuItem item){
         int id = item.getItemId();
 
@@ -463,6 +481,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //-----------------------------Request Permissions Methods------------------------------------//
 
+    /**
+     * Method used to check location permissions and request if needed
+     */
     private void requestLocationsPermissions(){
         // Check for fine and coarse location permissions
         if (ContextCompat.checkSelfPermission(MainActivity.this,
@@ -502,6 +523,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Method used to check storage permissions and request if needed
+     */
     private void requestStoragePermissions(){
         // Check for fine and coarse location permissions
         if (ContextCompat.checkSelfPermission(MainActivity.this,
@@ -537,6 +561,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Method used to show rationale for requested permisions and to re-request
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
