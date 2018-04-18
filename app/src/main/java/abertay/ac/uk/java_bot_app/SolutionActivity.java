@@ -168,20 +168,22 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
 
-            /* Thread used for delaying response by 200 milliseconds to allow for the soft keyboard
+            String question = "";
+            question  = question_field.getText().toString();
+            layout.addView(createNewUserTextView(question));
+            question_field.setText("");
+
+            /* Thread used for delaying response by 800 milliseconds to allow for the soft keyboard
             to close first. If not used the response would not be seen as the web view opens too
             quickly */
+            final String finalQuestion = question;
             Thread responseThread = new Thread(){
                 public void run(){
                     try {
-                        sleep(200);
+                        sleep(800);
                         SolutionActivity.this.runOnUiThread(new Runnable() {
                             public void run() {
-                                String question = "";
-                                question  = question_field.getText().toString();
-                                layout.addView(createNewUserTextView(question));
-                                question_field.setText("");
-                                getChatBotResponse(question);
+                                getChatBotResponse(finalQuestion);
                             }
                         });
                     } catch (Exception e) {

@@ -228,8 +228,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Display question asked
                 chatBotLayout.addView(createNewUserTextView(question));
 
-                // Show response to question
-                getChatBotResponse(question);
+                // Delay chat bot response to allow for more human like response
+                final String finalQuestion = question;
+                Thread responseThread = new Thread(){
+                    public void run(){
+                        try {
+                            sleep(800);
+                            MainActivity.this.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    // Show response to question
+                                    getChatBotResponse(finalQuestion);
+                                }
+                            });
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                responseThread.start();
 
                 // Clear question box
                 question_field.setText("");
@@ -302,6 +318,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * @param question
      */
     private void getChatBotResponse(String question){
+
         String response = "";
         String solutionKey = "";
         String questionType = "";
@@ -311,7 +328,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         response = chatBot.askQuestion(question);
         solutionKey = chatBot.getSolutionKey();
         questionType = chatBot.getSolutionType();
-
         // If question is not a solution type, e.g. not a programming question
         if(questionType != "solution question") {
             chatBotLayout.addView(createNewBotTextView(response));
@@ -323,6 +339,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             solutionIntent.putExtra("initialQuestion", initialQuestion);
             startActivity(solutionIntent);
         }
+
     }
 
     //-------------------------------Notification Methods-----------------------------------------//
