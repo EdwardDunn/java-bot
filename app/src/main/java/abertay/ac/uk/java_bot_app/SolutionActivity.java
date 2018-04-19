@@ -3,6 +3,10 @@
  * The SolutionActivity provides a solution fetched from the database and displays
  * it to the user with a small chat window at the bottom for comments on solution.
  *
+ * References
+ * Shared Preferences:
+ *   https://stackoverflow.com/questions/23024831/android-shared-preferences-example
+ *
  * @author  Edward Dunn
  * @version 1.0
  */
@@ -147,9 +151,7 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-    }
+    protected void onStop() { super.onStop(); }
 
     @Override
     protected void onDestroy(){
@@ -161,6 +163,7 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         for (Thread activeThread : backGroundThreads) {
             activeThread.interrupt();
         }
+        
     }
 
     /**

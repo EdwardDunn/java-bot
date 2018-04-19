@@ -163,14 +163,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    protected void onResume(){
-        super.onResume();
-        
-        // Clear any previous ChatBot discussion
-        chatBotLayout.removeAllViews();
-        // Display welcome back message
-        chatBotLayout.addView(createNewBotTextView(getString(R.string.chat_bot_welcome_back_message)));
-    }
+    protected void onResume() { super.onResume(); }
 
     @Override
     protected void onStop() {

@@ -72,13 +72,12 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
                  super.onPageCommitVisible(view, url);
                  loadingProgressBar.setVisibility(ProgressBar.GONE);
                  webViewer.setVisibility(View.VISIBLE);
-                 //isWebViewLoadingFirstPage=false;
              }
          });
 
         browseWeb(url);
 
-        //-----------------------Drawer menu---------------------------------------///
+        //-----------------------------------Drawer Menu------------------------------------------//
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -90,6 +89,27 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+    }
+
+    protected void onResume(){
+        super.onResume();
+
+        // Check internet connection status
+        CheckConnection cn = new CheckConnection(this);
+        cn.checkConnection();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy(){ super.onDestroy(); }
 
     /**
      * Method used to instantiate activity elements
@@ -119,7 +139,7 @@ public class StackOverflowActivity extends AppCompatActivity implements Navigati
         }
     }
 
-    //-----------------------------Drawer Menu Methods--------------------------------------------//
+    //--------------------------------Drawer Menu Methods-----------------------------------------//
     /**
      * Method used to control the opening and closing of drawer menu
      */

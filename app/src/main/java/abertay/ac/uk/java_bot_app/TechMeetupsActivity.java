@@ -176,8 +176,17 @@ public class TechMeetupsActivity extends AppCompatActivity implements Navigation
     }
 
     @Override
+    protected void onPause(){
+        super.onPause();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+
+        // Check internet connection status
+        CheckConnection cn = new CheckConnection(this);
+        cn.checkConnection();
     }
 
     @Override
