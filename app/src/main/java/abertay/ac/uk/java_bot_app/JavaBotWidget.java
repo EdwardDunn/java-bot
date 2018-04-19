@@ -25,6 +25,7 @@ import android.widget.RemoteViews;
 
 public class JavaBotWidget extends AppWidgetProvider {
 
+
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds){
 
@@ -61,6 +62,7 @@ public class JavaBotWidget extends AppWidgetProvider {
         }
 
     }
+
 
 }
 

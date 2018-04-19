@@ -14,6 +14,8 @@
 package abertay.ac.uk.java_bot_app;
 
 import android.Manifest;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,6 +40,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RemoteViews;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -337,6 +340,16 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
      * Method to used to add successful solutions to questions database
      */
     private void addQuestionToDatabase(){
+        // Update the apps widget with the current number of questions asked
+        int numberOfQuestions = questionsDatabase.questionCount();
+        // Add 1 for to ensure this question is counted
+        numberOfQuestions+= 1;
+        Context context = this;
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.java_bot_widget);
+        ComponentName thisWidget = new ComponentName(context, JavaBotWidget.class);
+        remoteViews.setTextViewText(R.id.update, String.valueOf(numberOfQuestions));
+        appWidgetManager.updateAppWidget(thisWidget, remoteViews);
 
         Runnable r = new Runnable() {
             @Override

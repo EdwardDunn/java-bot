@@ -11,6 +11,9 @@ package abertay.ac.uk.java_bot_app;
 
 import android.Manifest;
 import android.app.NotificationManager;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -31,6 +34,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RemoteViews;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -191,6 +195,14 @@ public class SetupActivity extends AppCompatActivity implements NavigationView.O
      * Method used to delete the training data held in the question SQLite datavbase
      */
     private void removeTrainingSessionData(){
+        // Set question count to zero on apps widget
+        Context context = this;
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.java_bot_widget);
+        ComponentName thisWidget = new ComponentName(context, JavaBotWidget.class);
+        remoteViews.setTextViewText(R.id.update, String.valueOf(0));
+        appWidgetManager.updateAppWidget(thisWidget, remoteViews);
+
         Runnable emptyDbRunnable = new Runnable() {
             @Override
             public void run() {

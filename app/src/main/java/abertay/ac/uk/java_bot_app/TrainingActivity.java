@@ -16,6 +16,9 @@ package abertay.ac.uk.java_bot_app;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -37,6 +40,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -209,6 +213,14 @@ public class TrainingActivity extends AppCompatActivity implements NavigationVie
 
                 // Account for -1 errors
                 if (questionCounter > questionsList.size() - 1) {
+
+                    // Set question count to zero on apps widget
+                    Context context = this;
+                    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                    RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.java_bot_widget);
+                    ComponentName thisWidget = new ComponentName(context, JavaBotWidget.class);
+                    remoteViews.setTextViewText(R.id.update, String.valueOf(0));
+                    appWidgetManager.updateAppWidget(thisWidget, remoteViews);
 
                     // If asked all questions then empty the database
                     Runnable emptyDbRunnable = new Runnable() {
