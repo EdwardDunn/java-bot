@@ -7,6 +7,9 @@
  * Add basic widget
  *   https://www.youtube.com/watch?v=eR1bUdTB8kE&t=122s
  *
+ * Update Widget
+ *   https://stackoverflow.com/questions/3455123/programmatically-update-widget-from-activity-service-receiver#7738687
+ *
  * @author  Edward Dunn
  * @version 1.0
  */
