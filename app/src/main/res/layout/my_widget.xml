@@ -1,0 +1,21 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:background="@mipmap/java_bot_widget_foreground"
+    android:padding="@dimen/widget_margin">
+
+    <TextView
+        android:id="@+id/update"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="75dp"
+        android:layout_marginTop="-55dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="Static Text"
+        android:textColor="@color/pageSubHeader" />
+
+
+</LinearLayout>

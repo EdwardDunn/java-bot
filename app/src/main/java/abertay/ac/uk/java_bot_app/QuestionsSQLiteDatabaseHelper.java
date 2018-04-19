@@ -133,4 +133,25 @@ public class QuestionsSQLiteDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public int questionCount(){
+        try {
+            String countQuery = "SELECT  * FROM " + QUESTIONS_TABLE_NAME;
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(countQuery, null);
+            int count = cursor.getCount();
+            cursor.close();
+            return count;
+
+        }catch(SQLiteException e){
+            e.printStackTrace();
+        }
+        catch(Exception e){
+            Log.e("Error emptying database", e.toString());
+        }
+
+        // Default to zero if error found
+        return 0;
+
+    }
+
 }

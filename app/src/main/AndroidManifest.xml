@@ -3,10 +3,10 @@
     package="abertay.ac.uk.java_bot_app">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -16,45 +16,46 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:launchMode="standard"
             android:windowSoftInputMode="stateAlwaysHidden">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
-        <activity android:name=".SolutionActivity"
+        <activity
+            android:name=".SolutionActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
-
         <activity android:name=".TrainingActivity" />
-
-        <activity android:name=".TechMeetupsActivity"
-            android:launchMode="standard"
-            android:configChanges="orientation|screenSize"/>
-
+        <activity
+            android:name=".TechMeetupsActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="standard" />
         <activity android:name=".SetupActivity" />
-
         <activity android:name=".StackOverflowActivity">
             <intent-filter>
-
                 <action android:name="android.intent.action.VIEW" />
-                <category
-                    android:name="android.intent.category.DEFAULT"/>
-                <category
-                    android:name="android.intent.category.BROWSABLE"/>
-                <category
-                    android:name="android.intent.category.APP_BROWSER"/>
-                <data android:scheme="http"/>
 
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.APP_BROWSER" />
+
+                <data android:scheme="http" />
             </intent-filter>
-
         </activity>
 
+        <receiver android:name=".MyWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/my_widget_info" />
+        </receiver>
     </application>
 
 </manifest>
