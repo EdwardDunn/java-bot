@@ -12,6 +12,7 @@ package abertay.ac.uk.java_bot_app;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -36,9 +37,10 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 public class SolutionActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
+
+    // Used to store question field state using shared preferences
+    public static final String PREFS_FILE_NAME = "PrefsFile";
 
     private ChatBot cb;
 
@@ -93,6 +95,12 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
     protected void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
+        // Store text in question field
+        SharedPreferences.Editor editor = getSharedPreferences(PREFS_FILE_NAME, MODE_PRIVATE).edit();
+        editor.putString("questionFieldText", question_field.getText().toString());
+        editor.apply();
+
+       /*
         int count = layout.getChildCount();
 
         ArrayList<String> list = new ArrayList();
@@ -104,11 +112,19 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
         }
 
         savedInstanceState.putStringArrayList("list", list);
+        */
 
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Restore text in question field
+        SharedPreferences prefs = getSharedPreferences(PREFS_FILE_NAME, MODE_PRIVATE);
+        String name = prefs.getString("questionFieldText", "No text entered");
+        question_field.setText(name);
+
+
+        /*
         ArrayList<String> list;
 
         list = savedInstanceState.getStringArrayList("list");
@@ -118,6 +134,7 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
 
             //Toast.makeText(this, s, Toast.LENGTH_LONG).show();
         }
+        */
     }
 
     @Override
