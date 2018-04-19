@@ -14,8 +14,7 @@
         android:layout_marginLeft="75dp"
         android:layout_marginTop="-55dp"
         android:gravity="center_horizontal|center_vertical"
-        android:text="Static Text"
+        android:text="counter"
         android:textColor="@color/pageSubHeader" />
-
 
 </LinearLayout>

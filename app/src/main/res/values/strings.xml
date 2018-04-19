@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Java Bot</string>
 
+    <string name="appwidget_text">Java Bot</string>
+    <string name="add_widget">Add Java Bot Widget</string>
+
     <!-- Chat Bot -->
     <string name="chat_bot_welcome_message">Hey, how can I help?</string>
     <string name="chat_bot_welcome_back_message">Great, your back</string>
@@ -76,7 +79,6 @@
     <string name="alert_dialog_no_connection_negative">close</string>
     <string name="alert_dialog_no_connection_title">No Network Connection</string>
     <string name="alert_dialog_no_connection_message">There is no network connection, some features of the app may not work</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
+
 
 </resources>

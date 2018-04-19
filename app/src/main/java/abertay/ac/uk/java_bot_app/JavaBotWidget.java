@@ -1,3 +1,16 @@
+/**
+ * JavaBotWidget
+ * The JavaBotWidget class controls the app widget available to users. It primary function is to
+ * show the user the number of questions they have asked since their last training session.
+ *
+ * References:
+ * Add basic widget
+ *   https://www.youtube.com/watch?v=eR1bUdTB8kE&t=122s
+ *
+ * @author  Edward Dunn
+ * @version 1.0
+ */
+
 package abertay.ac.uk.java_bot_app;
 
 import android.app.PendingIntent;
@@ -9,46 +22,40 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
 
-/**
- * Implementation of App Widget functionality.
- */
-public class MyWidget extends AppWidgetProvider {
 
-    private static final String ACTION_CLICK = "ACTION_CLICK";
+public class JavaBotWidget extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds){
 
         ComponentName thisWidget = new ComponentName(context,
-                MyWidget.class);
+                JavaBotWidget.class);
 
         int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
 
         for(int widgetId : allWidgetIds){
 
+            // Get number of questions held in questions SQLite database
             QuestionsSQLiteDatabaseHelper questionsDb = new QuestionsSQLiteDatabaseHelper(context);
             int number = questionsDb.questionCount();
             questionsDb.close();
 
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(),
-                    R.layout.my_widget);
+                    R.layout.java_bot_widget);
+            Log.w("Java Bot Widget", String.valueOf(number));
 
-            Log.w("WidgetExample", String.valueOf(number));
-
+            // Update the 'update' TextView in the widget
             remoteViews.setTextViewText(R.id.update, String.valueOf(number));
 
-            Intent intent = new Intent(context, MyWidget.class);
-
+            Intent intent = new Intent(context, JavaBotWidget.class);
             intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
 
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                     0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+            // Update onClick
             remoteViews.setOnClickPendingIntent(R.id.update, pendingIntent);
-
-
             appWidgetManager.updateAppWidget(widgetId,remoteViews);
 
         }
