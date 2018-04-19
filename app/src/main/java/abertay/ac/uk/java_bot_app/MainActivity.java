@@ -54,6 +54,7 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -116,6 +117,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NotificationCompat.Builder notification;
     private NotificationManager nm;
 
+    // Used to store conversation between user and chat bot
+    private ArrayList<String> userResponseList;
+    private ArrayList<String> chatBotResponseList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,6 +129,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setupUIViews();
 
         ask_btn.setOnClickListener(this);
+
+        userResponseList = new ArrayList<>();
+        chatBotResponseList = new ArrayList<>();
 
         // Show ChatBot welcome message on start
         chatBotLayout.addView(createNewBotTextView(getString(R.string.chat_bot_welcome_message)));
@@ -155,6 +163,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //---------------Restore Chat Bot Conversation on Orientation Change----------------------//
+        if (savedInstanceState != null) {
+            userResponseList = savedInstanceState.getStringArrayList("userResponseList");
+            chatBotResponseList = savedInstanceState.getStringArrayList("chatBotResponseList");
+
+            for(int i = 0; i < userResponseList.size(); i++){
+
+                chatBotLayout.addView(createNewUserTextView(userResponseList.get(i)));
+
+                /* Used if there is one less chat bot response compared to user questions,
+                   this may happen if solution is loaded instead of a text response */
+                if(chatBotResponseList.size() > i) {
+                    chatBotLayout.addView(createNewBotTextView(chatBotResponseList.get(i)));
+                }
+            }
+
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putStringArrayList("userResponseList", userResponseList);
+        outState.putStringArrayList("chatBotResponseList", chatBotResponseList);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -217,6 +250,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Create new TextView with text entered into question field in questions chatBotLayout
             String question = "";
             question  = question_field.getText().toString();
+
+            // Store user question
+            userResponseList.add(question);
 
             if(question.isEmpty()) {
                 chatBotLayout.addView(createNewBotTextView(getString(R.string.chat_bot_no_question_response)));
@@ -327,6 +363,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         questionType = chatBot.getSolutionType();
         // If question is not a solution type, e.g. not a programming question
         if(questionType != "solution question") {
+            // Store chat bot response
+            chatBotResponseList.add(response);
             chatBotLayout.addView(createNewBotTextView(response));
         }else{
             // If question is a programming one e.g. 'how do I parse an int?'
