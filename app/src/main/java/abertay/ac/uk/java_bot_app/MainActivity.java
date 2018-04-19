@@ -185,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        // Store chat bot conversation
         outState.putStringArrayList("userResponseList", userResponseList);
         outState.putStringArrayList("chatBotResponseList", chatBotResponseList);
         super.onSaveInstanceState(outState);

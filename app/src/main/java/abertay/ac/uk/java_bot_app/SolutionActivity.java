@@ -44,6 +44,8 @@ import android.widget.RemoteViews;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class SolutionActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
 
     // Used to store question field state using shared preferences
@@ -58,7 +60,7 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
     // Activity UI elements
     private ScrollView scrollView;
     private TextView solutionText;
-    private LinearLayout layout;
+    private LinearLayout chatBotLayout;
     private Button ask_btn;
     private EditText question_field;
     private String solution;
@@ -67,6 +69,10 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
 
     // Questions database used add successful solutions
     QuestionsSQLiteDatabaseHelper questionsDatabase;
+
+    // Used to store conversation between user and chat bot
+    private ArrayList<String> userResponseList;
+    private ArrayList<String> chatBotResponseList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +85,14 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
 
         ask_btn.setOnClickListener(this);
 
+        userResponseList = new ArrayList<>();
+        chatBotResponseList = new ArrayList<>();
+
         // Show solution passed by MainActivity
         showSolution();
 
         // Show initial chat bot response
-        layout.addView(createNewTextView(getString(R.string.solution_success_message)));
+        chatBotLayout.addView(createNewBotTextView(getString(R.string.solution_success_message)));
 
         //-----------------------Drawer menu---------------------------------------///
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -96,52 +105,38 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //---------------Restore Chat Bot Conversation on Orientation Change----------------------//
+        if (savedInstanceState != null) {
+            userResponseList = savedInstanceState.getStringArrayList("userResponseList");
+            chatBotResponseList = savedInstanceState.getStringArrayList("chatBotResponseList");
+
+            for(int i = 0; i < userResponseList.size(); i++){
+
+                chatBotLayout.addView(createNewUserTextView(userResponseList.get(i)));
+
+                /* Used if there is one less chat bot response compared to user questions,
+                   this may happen if solution is loaded instead of a text response */
+                if(chatBotResponseList.size() > i) {
+                    chatBotLayout.addView(createNewBotTextView(chatBotResponseList.get(i)));
+                }
+            }
+
+        }
     }
 
+
     @Override
-    protected void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
+    public void onSaveInstanceState(Bundle outState) {
+        // Store chat bot conversation
+        outState.putStringArrayList("userResponseList", userResponseList);
+        outState.putStringArrayList("chatBotResponseList", chatBotResponseList);
+        super.onSaveInstanceState(outState);
 
         // Store text in question field
         SharedPreferences.Editor editor = getSharedPreferences(PREFS_FILE_NAME, MODE_PRIVATE).edit();
         editor.putString("questionFieldText", question_field.getText().toString());
         editor.apply();
-
-       /*
-        int count = layout.getChildCount();
-
-        ArrayList<String> list = new ArrayList();
-
-        for(int i = 0; i < count; i++){
-            View v = layout.getChildAt(i);
-            String s = v.toString();
-            list.add(s);
-        }
-
-        savedInstanceState.putStringArrayList("list", list);
-        */
-
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        // Restore text in question field
-        SharedPreferences prefs = getSharedPreferences(PREFS_FILE_NAME, MODE_PRIVATE);
-        String name = prefs.getString("questionFieldText", "No text entered");
-        question_field.setText(name);
-
-
-        /*
-        ArrayList<String> list;
-
-        list = savedInstanceState.getStringArrayList("list");
-
-        for(String s : list){
-            createNewTextView(s.toString());
-
-            //Toast.makeText(this, s, Toast.LENGTH_LONG).show();
-        }
-        */
     }
 
     @Override
@@ -175,7 +170,7 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
     private void setupUIViews(){
         scrollView = findViewById(R.id.scroll_solution);
         solutionText = findViewById(R.id.solution_txt_solution);
-        layout = findViewById(R.id.solution_ll_question_layout);
+        chatBotLayout = findViewById(R.id.solution_ll_question_layout);
         ask_btn = findViewById(R.id.solution_btn_ask);
         question_field = findViewById(R.id.solution_et_question_field);
         solution = "";
@@ -200,7 +195,11 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
 
             String question = "";
             question  = question_field.getText().toString();
-            layout.addView(createNewUserTextView(question));
+
+            // Store user question
+            userResponseList.add(question);
+
+            chatBotLayout.addView(createNewUserTextView(question));
             question_field.setText("");
 
             /* Thread used for delaying response by 800 milliseconds to allow for the soft keyboard
@@ -246,7 +245,7 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
     /**
      * Method used to create new TextView for chat bot response
      */
-    private TextView createNewTextView(String text){
+    private TextView createNewBotTextView(String text){
         final ViewGroup.LayoutParams lparams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         final TextView textView = new TextView(this);
         textView.setLayoutParams(lparams);
@@ -316,10 +315,14 @@ public class SolutionActivity extends AppCompatActivity implements NavigationVie
             // TODO - this response 'Great' would have to made in to loop checking for other positive responses if app was released (as app is for educational purposes, this will suffice)
             if (response.contains("Great")) {
                 addQuestionToDatabase();
-                layout.addView(createNewTextView(response));
+                // Store chat bot response
+                chatBotResponseList.add(response);
+                chatBotLayout.addView(createNewBotTextView(response));
             }else{
                 // If user is not happy with response, search Stack Overflow with initial question
-                layout.addView(createNewTextView(response));
+                // Store chat bot response
+                chatBotResponseList.add(response);
+                chatBotLayout.addView(createNewBotTextView(response));
                 // Check network state, if no internet connection display dialog
                 CheckConnection checkCon = new CheckConnection(this);
                 Boolean connected = checkCon.checkConnection();
