@@ -25,7 +25,10 @@ import android.widget.RemoteViews;
 
 public class JavaBotWidget extends AppWidgetProvider {
 
-
+    /**
+     * Method to used to update the Java Bot Widget with the number of questions asked by the user
+     * since the last training session.
+     */
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds){
 
@@ -55,7 +58,7 @@ public class JavaBotWidget extends AppWidgetProvider {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                     0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            // Update onClick
+            // Update onClick (additional option)
             remoteViews.setOnClickPendingIntent(R.id.update, pendingIntent);
             appWidgetManager.updateAppWidget(widgetId,remoteViews);
 
